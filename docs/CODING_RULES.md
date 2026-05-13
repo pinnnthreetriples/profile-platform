@@ -21,6 +21,21 @@
    - Keep types close to their usage
    - Use index files sparingly
 
+5. **Code Quality**
+   - Do not duplicate code - extract to shared helpers/components
+   - Do not leave unused files, exports, or dependencies
+   - Do not disable jscpd/knip/security rules globally
+   - If false positive - disable specific rule with comment explaining why
+   - All new code must pass duplicates and deadcode checks
+
+6. **Security Patterns**
+
+- Follow eslint-plugin-security recommendations
+- Avoid unsafe regex patterns
+- Use secure random number generation
+- Sanitize user input
+- Validate all external data
+
 ## Technology Restrictions
 
 ### ❌ Do Not Use
@@ -55,8 +70,6 @@
 - pnpm
 
 ## Architecture Rules
-
-Use:
 
 - `src/app` for routes
 - `src/components` for shared UI components
