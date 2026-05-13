@@ -19,11 +19,13 @@ Added `import "server-only"` to three server-only modules:
 - ✅ `src/lib/btcpay/client.ts`
 
 **Purpose:**
+
 - Prevents accidental imports in client components
 - Throws build-time error if server-only code is imported on client
 - Enforces architectural boundaries
 
 **Package added:**
+
 ```json
 {
   "server-only": "^0.0.1"
@@ -43,6 +45,7 @@ vi.mock("server-only", () => ({}))
 ```
 
 **Why needed:**
+
 - Vitest runs in Node.js environment (not browser)
 - Tests need to import server-only modules to test them
 - Mock allows tests to run without triggering server-only error
@@ -60,6 +63,7 @@ Moved all stage completion reports to `docs/reports/`:
 - `STAGE_0.3_COMPLETE.md` → `docs/reports/`
 
 **Purpose:**
+
 - Keeps root directory clean
 - Organizes historical reports in one place
 - Easier to find and reference past work
@@ -94,6 +98,7 @@ Rules:
 #### docs/PROJECT_STRUCTURE.md
 
 Updated to reflect:
+
 - New `src/lib/env/` structure (client.ts, server.ts, shared.ts, index.ts)
 - Server-only markers on appropriate modules
 - New `docs/reports/` directory
@@ -127,9 +132,11 @@ All checks passed locally:
 ## Files Changed
 
 ### Added
+
 - `docs/reports/` directory
 
 ### Modified
+
 - `package.json` (added server-only dependency)
 - `src/lib/env/server.ts` (added server-only import)
 - `src/lib/supabase/server.ts` (added server-only import)
@@ -139,6 +146,7 @@ All checks passed locally:
 - `docs/PROJECT_STRUCTURE.md` (updated structure and conventions)
 
 ### Moved
+
 - All `STAGE_*.md` files → `docs/reports/`
 
 ## Architectural Benefits
