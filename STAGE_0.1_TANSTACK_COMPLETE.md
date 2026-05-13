@@ -9,14 +9,17 @@ TanStack Query and smooth page transitions have been successfully added to Stage
 ### 1. TanStack Query
 
 #### Dependencies Installed
+
 - ✅ `@tanstack/react-query@5.100.10`
 - ✅ `@tanstack/react-query-devtools@5.100.10` (dev)
 
 **NOT installed (as per requirements):**
+
 - ❌ `@tanstack/router` - Using Next.js App Router
 - ❌ `@tanstack/react-table` - Will add later for admin/payment tables
 
 #### Query Provider Setup
+
 - ✅ Created `src/app/providers.tsx`
 - ✅ Configured QueryClient with sensible defaults:
   - `staleTime: 60 * 1000` (1 minute)
@@ -27,6 +30,7 @@ TanStack Query and smooth page transitions have been successfully added to Stage
 - ✅ Wrapped app in `<Providers>` in `src/app/layout.tsx`
 
 #### Query Keys Structure
+
 - ✅ Created `src/lib/query/keys.ts`
 - ✅ Centralized query keys for:
   - `auth.session`
@@ -34,6 +38,7 @@ TanStack Query and smooth page transitions have been successfully added to Stage
   - `payment.current`, `payment.byId(paymentId)`, `payment.status(paymentId)`
 
 #### Placeholder Queries
+
 - ✅ Created `src/features/profile/queries.ts`
   - `currentProfileQueryOptions()` - Returns placeholder profile data
 - ✅ Created `src/features/payment/queries.ts`
@@ -44,11 +49,13 @@ TanStack Query and smooth page transitions have been successfully added to Stage
 ### 2. Smooth Page Transitions
 
 #### Template Setup
+
 - ✅ Created `src/app/template.tsx`
 - ✅ Wraps all routes with `<PageTransition>`
 - ✅ Automatic smooth transitions on route changes
 
 #### Enhanced PageTransition Component
+
 - ✅ Updated `src/components/motion/PageTransition.tsx`
 - ✅ Improved animation:
   - Fade in: `opacity: 0 → 1`
@@ -58,6 +65,7 @@ TanStack Query and smooth page transitions have been successfully added to Stage
   - Easing: `easeOut`
 
 #### Loading State
+
 - ✅ Created `src/app/loading.tsx`
 - ✅ Technical placeholder for route loading
 - ✅ Shows "Loading..." text
@@ -65,7 +73,9 @@ TanStack Query and smooth page transitions have been successfully added to Stage
 ### 3. Documentation Updates
 
 #### AGENTS.md
+
 Added TanStack rules:
+
 1. Use TanStack Query only for server state, caching, refetching, and mutations
 2. Do not use TanStack Query for simple local UI state
 3. Do not install TanStack Router (Next.js App Router is the router)
@@ -74,7 +84,9 @@ Added TanStack rules:
 6. Payment status polling must use TanStack Query only after real payment flow is implemented
 
 #### docs/PROJECT_STRUCTURE.md
+
 Updated structure:
+
 - Added `src/app/providers.tsx` - App-level client providers
 - Added `src/app/template.tsx` - Smooth route transition wrapper
 - Added `src/app/loading.tsx` - Route loading placeholder
@@ -82,13 +94,16 @@ Updated structure:
 - Added `queries.ts` to profile and payment features
 
 #### docs/CODING_RULES.md
+
 Added rules:
+
 - Use TanStack Query for async server state
 - Do not use it for local UI state
 - Keep query keys centralized
 - Do not use TanStack Router
 
 #### docs/QUALITY_GATE.md
+
 - TanStack Query passes all quality checks (typecheck, tests, build)
 
 ## Files Created (8)
@@ -167,12 +182,12 @@ src/
 new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 60 * 1000,        // 1 minute
-      refetchOnWindowFocus: false,  // Don't refetch on window focus
-      retry: 1,                     // Retry once on failure
+      staleTime: 60 * 1000, // 1 minute
+      refetchOnWindowFocus: false, // Don't refetch on window focus
+      retry: 1, // Retry once on failure
     },
     mutations: {
-      retry: 0,                     // Don't retry mutations
+      retry: 0, // Don't retry mutations
     },
   },
 })
@@ -191,6 +206,7 @@ transition={{ duration: 0.22, ease: "easeOut" }}
 ## What Was NOT Implemented (By Design)
 
 As per requirements:
+
 - ❌ Real Supabase queries (Stage 1+)
 - ❌ Real payment queries (Stage 3+)
 - ❌ Payment status polling (Stage 4+)
@@ -241,6 +257,7 @@ f3fd395 - docs: Add Stage 0.1 completion report
 ## Next Steps
 
 Stage 0.1 is now **COMPLETE** with:
+
 - ✅ Quality Gate (Prettier, ESLint, TypeScript, Vitest, Playwright)
 - ✅ GitHub Actions CI/CD
 - ✅ Security scanning (Gitleaks, CodeQL)
@@ -248,6 +265,7 @@ Stage 0.1 is now **COMPLETE** with:
 - ✅ Smooth page transitions
 
 Ready to proceed to **Stage 1 - Supabase Auth**:
+
 - Setup Supabase project
 - Create users table
 - Implement register/login/logout with TanStack Query
