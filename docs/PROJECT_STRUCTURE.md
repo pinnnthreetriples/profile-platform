@@ -73,33 +73,44 @@ docs/
 ## Key Directories
 
 ### `src/app/`
+
 Next.js App Router pages and layouts. Uses route groups for organization:
+
 - `(public)` - Public pages (landing)
 - `(auth)` - Authentication pages
 - `(dashboard)` - Protected pages
 
 ### `src/components/`
+
 Reusable React components:
+
 - `ui/` - shadcn/ui components
 - `layout/` - Layout components (Header, Footer, Container)
 - `motion/` - Motion.dev animation components
 
 ### `src/features/`
+
 Business logic organized by feature:
+
 - Each feature has its own types and constants
 - Keeps business logic separate from UI
 
 ### `src/lib/`
+
 Technical integrations and utilities:
+
 - `supabase/` - Supabase client setup
 - `btcpay/` - BTCPay Server integration
 - `env.ts` - Environment variable validation
 - `utils.ts` - Shared utilities
 
 ### `supabase/`
+
 Supabase-specific files:
+
 - `functions/` - Edge Functions (serverless functions)
 - `migrations/` - Database migrations
 
 ### `docs/`
+
 Project documentation

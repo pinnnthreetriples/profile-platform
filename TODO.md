@@ -1,6 +1,7 @@
 # TODO
 
 ## Stage 0 — Skeleton ✅
+
 - [x] Create Next.js app
 - [x] Install dependencies
 - [x] Setup shadcn/ui
@@ -13,7 +14,23 @@
 - [x] Create Edge Function stubs
 - [x] Create docs
 
+## Stage 0.1 — Quality Gate ✅
+
+- [x] Prettier
+- [x] ESLint with unused-imports
+- [x] Vitest
+- [x] Playwright
+- [x] GitHub Actions CI
+- [x] GitHub Actions E2E
+- [x] Gitleaks
+- [x] CodeQL
+- [x] Dependency Review
+- [x] Dependabot
+- [x] AGENTS.md
+- [x] QUALITY_GATE.md
+
 ## Stage 1 — Supabase Auth
+
 - [ ] Setup Supabase project
 - [ ] Create users table
 - [ ] Implement register
@@ -23,6 +40,7 @@
 - [ ] Add auth context
 
 ## Stage 2 — Profiles
+
 - [ ] Create profiles table
 - [ ] Setup RLS policies
 - [ ] Implement profile page
@@ -30,6 +48,7 @@
 - [ ] Link profile to auth
 
 ## Stage 3 — Payments
+
 - [ ] Create payments table
 - [ ] Setup BTCPay Server
 - [ ] Implement create-payment function
@@ -38,6 +57,7 @@
 - [ ] Handle payment redirect
 
 ## Stage 4 — Webhooks
+
 - [ ] Implement webhook verification
 - [ ] Handle payment status updates
 - [ ] Create payment_events table
@@ -46,6 +66,7 @@
 - [ ] Add retry logic
 
 ## Stage 5 — UI Polish
+
 - [ ] Add Motion animations
 - [ ] Improve responsive design
 - [ ] Add loading states
@@ -55,6 +76,7 @@
 - [ ] Improve accessibility
 
 ## Future Enhancements
+
 - [ ] Add admin panel
 - [ ] Add analytics
 - [ ] Add email notifications

@@ -1,6 +1,12 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import Link from "next/link"
 
 export default function PaymentSuccessPage() {
   return (
@@ -11,14 +17,12 @@ export default function PaymentSuccessPage() {
           <CardDescription>Payment success placeholder</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <p className="text-sm text-muted-foreground">
-            Your payment was successful.
-          </p>
+          <p className="text-sm text-muted-foreground">Your payment was successful.</p>
           <Button asChild className="w-full">
             <Link href="/profile">Go to Profile</Link>
           </Button>
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

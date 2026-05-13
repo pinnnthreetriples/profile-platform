@@ -23,36 +23,43 @@ flowchart TD
 ## Step-by-Step Flow
 
 ### 1. User Initiates Payment
+
 - User clicks "Pay with USDT" button on profile page
 - Frontend redirects to `/payment` page
 
 ### 2. Create Payment Invoice
+
 - Frontend calls `create-payment` Edge Function
 - Edge Function creates invoice in BTCPay Server
 - BTCPay returns invoice ID and checkout URL
 
 ### 3. User Pays
+
 - User is redirected to BTCPay checkout page
 - BTCPay displays QR code for USDT payment
 - User scans QR and sends USDT
 
 ### 4. Payment Confirmation
+
 - BTCPay detects payment on blockchain
 - BTCPay sends webhook to `btcpay-webhook` Edge Function
 - Webhook verifies signature and updates payment status
 
 ### 5. Update User Access
+
 - Edge Function updates `payments` table in Supabase
 - Edge Function updates user profile with payment status
 - User gets access to paid features
 
 ### 6. User Redirect
+
 - BTCPay redirects user to success/cancel page
 - Frontend displays payment status
 
 ## Payment States
 
 ### Invoice States (BTCPay)
+
 - `new` - Invoice created, waiting for payment
 - `processing` - Payment detected, waiting for confirmations
 - `settled` - Payment confirmed, invoice complete
@@ -60,6 +67,7 @@ flowchart TD
 - `invalid` - Invalid payment or error
 
 ### Payment States (Database)
+
 - `pending` - Payment initiated, waiting for confirmation
 - `paid` - Payment confirmed and settled
 - `failed` - Payment failed or invalid
@@ -69,17 +77,20 @@ flowchart TD
 ## Security Considerations
 
 ### Webhook Verification
+
 - Verify webhook signature using `BTCPAY_WEBHOOK_SECRET`
 - Reject webhooks with invalid signatures
 - Log all webhook attempts
 
 ### Payment Validation
+
 - Never trust frontend payment status
 - Always verify payment status from BTCPay
 - Check payment amount matches expected amount
 - Verify payment currency and network
 
 ### Access Control
+
 - Only grant access after payment is `settled`
 - Implement idempotency for webhook processing
 - Handle duplicate webhooks gracefully
@@ -87,11 +98,13 @@ flowchart TD
 ## Error Handling
 
 ### Payment Failures
+
 - User cancels payment → redirect to `/payment/cancel`
 - Payment expires → update status to `expired`
 - Invalid payment → update status to `failed`
 
 ### Webhook Failures
+
 - Log webhook errors
 - Retry failed webhook processing
 - Alert admin on repeated failures
@@ -99,6 +112,7 @@ flowchart TD
 ## Testing (Future Stages)
 
 ### Test Scenarios
+
 1. Successful payment flow
 2. Cancelled payment
 3. Expired payment
@@ -107,6 +121,7 @@ flowchart TD
 6. Network errors
 
 ### Test Networks
+
 - Use BTCPay testnet for development
 - Test with small amounts on mainnet before production
 - Verify all supported networks (Polygon, Tron, Ethereum)
@@ -114,29 +129,35 @@ flowchart TD
 ## Implementation Stages
 
 ### Stage 0 (Current)
+
 - ✅ Skeleton structure
 - ✅ Placeholder pages
 - ✅ Edge Function stubs
 
 ### Stage 1
+
 - Supabase authentication
 - Protected routes
 
 ### Stage 2
+
 - User profiles
 - Profile page with payment status
 
 ### Stage 3
+
 - Real BTCPay integration
 - Create payment invoices
 - Payment page with checkout
 
 ### Stage 4
+
 - Webhook verification
 - Payment status updates
 - Payment events logging
 
 ### Stage 5
+
 - UI polish
 - Error handling
 - Loading states

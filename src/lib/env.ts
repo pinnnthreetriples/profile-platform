@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "zod"
 
 const envSchema = z.object({
   // App
@@ -20,27 +20,27 @@ const envSchema = z.object({
   // Payment
   NEXT_PUBLIC_PAYMENT_CURRENCY: z.enum(["USDT"]),
   NEXT_PUBLIC_PAYMENT_NETWORK: z.enum(["polygon", "tron", "ethereum"]),
-});
+})
 
-export type Env = z.infer<typeof envSchema>;
+export type Env = z.infer<typeof envSchema>
 
 // Validate env on module load (only in Node.js environment)
-let env: Env | undefined;
+let env: Env | undefined
 
 if (typeof window === "undefined") {
   try {
-    env = envSchema.parse(process.env);
+    env = envSchema.parse(process.env)
   } catch (error) {
-    console.warn("Environment validation failed:", error);
+    console.warn("Environment validation failed:", error)
     // On Stage 0, env might not be fully configured yet
   }
 }
 
 export function getEnv(): Env {
   if (!env) {
-    throw new Error("Environment not initialized");
+    throw new Error("Environment not initialized")
   }
-  return env;
+  return env
 }
 
 // Helper to safely get public env vars on client
@@ -51,5 +51,5 @@ export function getPublicEnv() {
     supabaseAnonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "",
     paymentCurrency: process.env.NEXT_PUBLIC_PAYMENT_CURRENCY || "USDT",
     paymentNetwork: process.env.NEXT_PUBLIC_PAYMENT_NETWORK || "polygon",
-  };
+  }
 }

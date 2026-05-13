@@ -7,6 +7,7 @@ Stage 0 (Skeleton) has been successfully completed. The project is now ready for
 ## What Was Done
 
 ### ✅ Project Setup
+
 - Created Next.js 15 project with App Router
 - Configured TypeScript with strict mode
 - Set up Tailwind CSS
@@ -14,6 +15,7 @@ Stage 0 (Skeleton) has been successfully completed. The project is now ready for
 - Initialized git repository
 
 ### ✅ Dependencies Installed
+
 - **Framework:** Next.js 15.5.18
 - **React:** 19.2.6
 - **TypeScript:** 5.9.3
@@ -26,6 +28,7 @@ Stage 0 (Skeleton) has been successfully completed. The project is now ready for
 - **Utils:** clsx, tailwind-merge
 
 ### ✅ Folder Structure Created
+
 ```
 src/
 ├── app/                    # Next.js pages
@@ -60,6 +63,7 @@ docs/
 ```
 
 ### ✅ Placeholder Pages Created
+
 - `/` - Landing page with Login/Register buttons
 - `/login` - Login form placeholder (disabled)
 - `/register` - Register form placeholder (disabled)
@@ -69,23 +73,27 @@ docs/
 - `/payment/cancel` - Cancel page
 
 ### ✅ Environment Configuration
+
 - Created `.env.example` with all required variables
 - Created `.env.local` with placeholder values
 - Implemented `src/lib/env.ts` with Zod validation
 - Separated public and private environment variables
 
 ### ✅ Supabase Setup
+
 - Created `supabase/` folder structure
 - Created `supabase/functions/` with Edge Function stubs
 - Created `supabase/migrations/` folder
 - Implemented Supabase client stubs (browser & server)
 
 ### ✅ BTCPay Setup
+
 - Created `src/lib/btcpay/client.ts` stub
 - Created `src/lib/btcpay/types.ts` with TypeScript types
 - Implemented placeholder `createBtcpayInvoice()` function
 
 ### ✅ Documentation Created
+
 - **README.md** - Project overview, installation, commands
 - **TODO.md** - Stage roadmap with checkboxes
 - **docs/PROJECT_STRUCTURE.md** - Detailed folder structure
@@ -93,6 +101,7 @@ docs/
 - **docs/PAYMENT_FLOW.md** - Payment flow with Mermaid diagram
 
 ### ✅ Quality Checks
+
 - ✅ `pnpm dev` - Server starts successfully on http://localhost:3000
 - ✅ `pnpm lint` - No ESLint errors
 - ✅ All pages accessible
@@ -101,6 +110,7 @@ docs/
 ## Verification
 
 ### Commands Tested
+
 ```bash
 # Install dependencies
 pnpm install ✅
@@ -115,6 +125,7 @@ pnpm lint ✅
 ```
 
 ### Pages Verified
+
 - ✅ http://localhost:3000 - Landing page
 - ✅ http://localhost:3000/login - Login page
 - ✅ http://localhost:3000/register - Register page
@@ -126,6 +137,7 @@ pnpm lint ✅
 ## Environment Variables
 
 ### Required for Stage 1+
+
 Copy `.env.example` to `.env.local` and fill in real values:
 
 ```bash
@@ -161,6 +173,7 @@ These will be implemented in later stages (see TODO.md).
 See [TODO.md](TODO.md) for the complete roadmap.
 
 **Stage 1 - Supabase Auth:**
+
 - Setup Supabase project
 - Create users table
 - Implement register/login/logout
@@ -170,6 +183,7 @@ See [TODO.md](TODO.md) for the complete roadmap.
 ## Notes
 
 ### Supabase CLI
+
 Supabase CLI is not installed on this system. To use local Supabase:
 
 ```bash
@@ -186,7 +200,9 @@ supabase start
 For Stage 0, this is optional. You can use Supabase Cloud directly.
 
 ### Motion.dev
+
 Motion.dev (v12.38.0) is installed and ready to use. Two reusable components are available:
+
 - `FadeIn` - Simple fade-in animation
 - `PageTransition` - Page transition wrapper
 
@@ -195,6 +211,7 @@ Use sparingly for UI polish in later stages.
 ## Git
 
 Initial commit created:
+
 ```
 commit 27f77d3
 feat: Stage 0 - Initial project skeleton

@@ -50,8 +50,20 @@ pnpm build
 # Start production server
 pnpm start
 
-# Run linter
-pnpm lint
+# Code quality
+pnpm format          # Format code
+pnpm format:check    # Check formatting
+pnpm lint            # Lint code
+pnpm typecheck       # Type check
+
+# Testing
+pnpm test            # Run unit tests
+pnpm test:watch      # Run tests in watch mode
+pnpm test:coverage   # Run tests with coverage
+pnpm test:e2e        # Run E2E tests
+
+# Quality gate (run all checks)
+pnpm quality
 ```
 
 ## Supabase
@@ -94,36 +106,45 @@ See [docs/PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md) for detailed structur
 
 ## Stage Roadmap
 
-### ✅ Stage 0 - Skeleton (Current)
+### ✅ Stage 0 - Skeleton
+
 - Project setup
 - Dependencies installed
 - Folder structure created
 - Placeholder pages
 - Environment configuration
 - Documentation
+- Quality gate (Prettier, ESLint, TypeScript, Vitest, Playwright)
+- GitHub Actions CI/CD
+- Security scanning (Gitleaks, CodeQL)
 
 ### 🔲 Stage 1 - Supabase Auth
+
 - User registration
 - User login
 - User logout
 - Protected routes
 
 ### 🔲 Stage 2 - Profiles
+
 - Profiles table
 - RLS policies
 - Profile page
 
 ### 🔲 Stage 3 - Payments
+
 - Payments table
 - create-payment function
 - BTCPay invoice creation
 
 ### 🔲 Stage 4 - Webhooks
+
 - Webhook verification
 - Payment status updates
 - Payment events table
 
 ### 🔲 Stage 5 - UI Polish
+
 - Motion animations
 - Responsive design
 - Loading states
@@ -133,6 +154,8 @@ See [docs/PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md) for detailed structur
 - [Project Structure](docs/PROJECT_STRUCTURE.md)
 - [Coding Rules](docs/CODING_RULES.md)
 - [Payment Flow](docs/PAYMENT_FLOW.md)
+- [Quality Gate](docs/QUALITY_GATE.md)
+- [Agent Guidelines](AGENTS.md)
 
 ## License
 

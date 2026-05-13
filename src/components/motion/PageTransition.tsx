@@ -1,11 +1,11 @@
-"use client";
+"use client"
 
-import { motion } from "motion/react";
-import type { ReactNode } from "react";
+import { motion } from "motion/react"
+import type { ReactNode } from "react"
 
 type PageTransitionProps = {
-  children: ReactNode;
-};
+  children: ReactNode
+}
 
 export function PageTransition({ children }: PageTransitionProps) {
   return (
@@ -16,5 +16,5 @@ export function PageTransition({ children }: PageTransitionProps) {
     >
       {children}
     </motion.main>
-  );
+  )
 }

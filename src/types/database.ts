@@ -5,6 +5,6 @@ export type Database = {
   public: {
     Tables: {
       // Placeholder
-    };
-  };
-};
+    }
+  }
+}

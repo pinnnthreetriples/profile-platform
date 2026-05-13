@@ -41,3 +41,8 @@ next-env.d.ts
 # supabase
 .branches
 .temp
+
+# testing
+playwright-report
+test-results
+coverage

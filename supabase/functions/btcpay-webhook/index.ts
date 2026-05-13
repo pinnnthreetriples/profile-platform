@@ -10,5 +10,5 @@ Deno.serve(async () => {
         "Content-Type": "application/json",
       },
     }
-  );
-});
+  )
+})

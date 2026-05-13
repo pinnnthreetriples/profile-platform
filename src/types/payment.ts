@@ -1,12 +1,7 @@
-export type PaymentStatus =
-  | "pending"
-  | "paid"
-  | "failed"
-  | "expired"
-  | "cancelled";
+export type PaymentStatus = "pending" | "paid" | "failed" | "expired" | "cancelled"
 
-export type PaymentProvider = "btcpay";
+export type PaymentProvider = "btcpay"
 
-export type PaymentCurrency = "USDT";
+export type PaymentCurrency = "USDT"
 
-export type PaymentNetwork = "polygon" | "tron" | "ethereum";
+export type PaymentNetwork = "polygon" | "tron" | "ethereum"

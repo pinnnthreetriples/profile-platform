@@ -1,5 +1,11 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
 
 export default function PaymentPage() {
   return (
@@ -15,11 +21,9 @@ export default function PaymentPage() {
             <p className="text-sm text-muted-foreground">USDT payment card</p>
             <p className="text-sm text-muted-foreground">BTCPay checkout placeholder</p>
           </div>
-          <Button disabled>
-            Create Invoice (disabled)
-          </Button>
+          <Button disabled>Create Invoice (disabled)</Button>
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

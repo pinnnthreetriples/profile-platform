@@ -45,6 +45,7 @@
 ## Technology Restrictions
 
 ### ❌ Do Not Use
+
 - WordPress
 - PHP
 - WooCommerce
@@ -52,6 +53,7 @@
 - Class components (use functional components)
 
 ### ✅ Use
+
 - Next.js App Router
 - TypeScript
 - Tailwind CSS
@@ -63,21 +65,23 @@
 ## Code Style
 
 ### Naming Conventions
+
 - Components: PascalCase (`UserProfile.tsx`)
 - Functions: camelCase (`createPayment()`)
 - Constants: UPPER_SNAKE_CASE (`PAYMENT_ROUTES`)
 - Types: PascalCase (`PaymentStatus`)
 
 ### File Structure
+
 ```typescript
 // 1. Imports
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
 
 // 2. Types
 type Props = {
-  userId: string;
-};
+  userId: string
+}
 
 // 3. Component
 export function MyComponent({ userId }: Props) {
@@ -86,6 +90,7 @@ export function MyComponent({ userId }: Props) {
 ```
 
 ### TypeScript Best Practices
+
 - Use `type` for object shapes
 - Use `interface` for extendable contracts
 - Export types that are used in multiple files
@@ -94,6 +99,7 @@ export function MyComponent({ userId }: Props) {
 ## Environment Variables
 
 ### Public (Frontend Safe)
+
 ```
 NEXT_PUBLIC_APP_URL
 NEXT_PUBLIC_SUPABASE_URL
@@ -103,6 +109,7 @@ NEXT_PUBLIC_PAYMENT_NETWORK
 ```
 
 ### Private (Server-Side Only)
+
 ```
 SUPABASE_SERVICE_ROLE_KEY
 BTCPAY_SERVER_URL
