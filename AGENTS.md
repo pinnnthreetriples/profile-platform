@@ -47,10 +47,16 @@ This project uses:
 Run:
 
 ```bash
+pnpm quality:ci
+```
+
+Or individually:
+
+```bash
 pnpm format:check
 pnpm lint
 pnpm typecheck
-pnpm test
+pnpm test:ci
 pnpm build
 ```
 
@@ -59,6 +65,21 @@ If Playwright is installed:
 ```bash
 pnpm test:e2e
 ```
+
+## Environment validation
+
+1. Use `getClientEnv()` from `@/lib/env` in client components.
+2. Use `getServerEnv()` from `@/lib/env/server` in server components/API routes.
+3. Never import `@/lib/env/server` in client components.
+4. Environment validation is strict - no fallbacks or console.warn.
+5. All env vars must be defined in `.env.local` for development.
+
+## Supabase clients
+
+1. Use `createSupabaseBrowserClient()` for client components.
+2. Use `createSupabaseServerClient()` for server components/API routes.
+3. Do not create singleton clients - always call factory functions.
+4. Clients use validated environment variables.
 
 ## Architecture
 

@@ -63,7 +63,19 @@ pnpm test:coverage   # Run tests with coverage
 pnpm test:e2e        # Run E2E tests
 
 # Quality gate (run all checks)
-pnpm quality
+pnpm quality:ci
+```
+
+## Node.js Version
+
+This project requires Node.js >= 20.19.0 and pnpm >= 10.30.3.
+
+Use nvm or similar to switch versions:
+
+```bash
+nvm use
+# or
+nvm install 20.19.0
 ```
 
 ## Supabase
@@ -114,9 +126,26 @@ See [docs/PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md) for detailed structur
 - Placeholder pages
 - Environment configuration
 - Documentation
-- Quality gate (Prettier, ESLint, TypeScript, Vitest, Playwright)
+
+### ✅ Stage 0.1 - Quality Gate
+
+- Prettier, ESLint, TypeScript
+- Vitest unit tests
+- Playwright E2E tests
 - GitHub Actions CI/CD
-- Security scanning (Gitleaks, CodeQL)
+- Security scanning (Gitleaks, Semgrep)
+- TanStack Query foundation
+- Smooth page transitions
+
+### ✅ Stage 0.2 - Hardening
+
+- Version pinning (Node.js 20.19.0, pnpm 10.30.3)
+- Strict environment validation
+- Supabase client factories
+- Real unit tests (20 tests)
+- Expanded E2E tests (7 tests)
+- CI fixes (all workflows passing)
+- Branch protection ready
 
 ### 🔲 Stage 1 - Supabase Auth
 
