@@ -76,7 +76,12 @@ pnpm deadcode
    - Run: `pnpm deadcode`
 
 3. **eslint-plugin-security** - Security linting
-   - Detects unsafe patterns
+   - Current security linting uses core ESLint security rules:
+     - `no-eval`
+     - `no-implied-eval`
+     - `no-new-func`
+     - `no-script-url`
+   - Full `eslint-plugin-security` recommended config is deferred until stable ESLint 9 flat config compatibility is confirmed
    - Integrated in `pnpm lint`
 
 ### Code quality rules
@@ -117,6 +122,25 @@ Use:
 - `supabase/functions` for Edge Functions
 - `supabase/migrations` for SQL migrations
 
+## Feature module convention
+
+Each feature in `src/features/` should follow this structure:
+
+- `components/` - Feature-specific UI components
+- `schemas.ts` - Zod schemas for validation
+- `types.ts` - TypeScript types
+- `constants.ts` - Feature constants
+- `actions.ts` - Server Actions (if needed)
+- `queries.ts` - TanStack Query options
+- `server.ts` - Server-only logic (with `import "server-only"`)
+
+Rules:
+
+1. Keep `page.tsx` files thin - delegate to feature modules
+2. Business logic belongs in feature modules, not in page components
+3. Server-only code must have `import "server-only"` at the top
+4. Do not mix client and server logic in the same file
+
 ## Stage 0 restrictions
 
 Do not implement:
@@ -129,3 +153,33 @@ Do not implement:
 - production database schema
 - admin panel
 - final UI design
+
+## Stage discipline
+
+Agents must only implement the requested stage.
+
+Examples:
+
+- Stage 1: auth only. Do not implement real payments.
+- Stage 2: profiles only. Do not implement BTCPay.
+- Stage 3: payment creation only. Do not implement webhook settlement unless requested.
+- Stage 4: webhook verification and payment status updates.
+
+If the user asks for one stage, do not preemptively build future stages.
+
+## No weakening policy
+
+Agents must not weaken checks to make CI green.
+
+Forbidden:
+
+- removing tests instead of fixing code
+- changing E2E tests to weaker assertions without approval
+- lowering jscpd threshold without approval
+- removing `pnpm deadcode`
+- removing `pnpm duplicates`
+- disabling lint rules globally
+- removing Gitleaks, Semgrep, or Dependency Audit
+- changing required GitHub checks without approval
+
+If a check fails, fix the root cause, not the check.

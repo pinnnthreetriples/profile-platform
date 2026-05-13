@@ -35,27 +35,42 @@ src/
 │
 ├── features/                # Business logic modules
 │   ├── auth/                # Auth feature
-│   │   ├── types.ts
-│   │   └── constants.ts
+│   │   ├── components/      # Feature-specific components
+│   │   ├── schemas.ts       # Zod validation schemas
+│   │   ├── types.ts         # TypeScript types
+│   │   ├── constants.ts     # Feature constants
+│   │   ├── actions.ts       # Server Actions (if needed)
+│   │   ├── queries.ts       # TanStack Query options
+│   │   └── server.ts        # Server-only logic (server-only)
 │   ├── profile/             # Profile feature
+│   │   ├── components/
+│   │   ├── schemas.ts
 │   │   ├── types.ts
 │   │   ├── constants.ts
-│   │   └── queries.ts       # TanStack Query options
+│   │   ├── queries.ts
+│   │   └── server.ts        # (server-only)
 │   └── payment/             # Payment feature
+│       ├── components/
+│       ├── schemas.ts
 │       ├── types.ts
 │       ├── constants.ts
-│       └── queries.ts       # TanStack Query options
+│       ├── queries.ts
+│       └── server.ts        # (server-only)
 │
 ├── lib/                     # Technical utilities
+│   ├── env/                 # Environment validation
+│   │   ├── index.ts         # Public exports
+│   │   ├── client.ts        # Client-side env (browser-safe)
+│   │   ├── server.ts        # Server-side env (server-only)
+│   │   └── shared.ts        # Shared schemas
 │   ├── supabase/            # Supabase clients
 │   │   ├── client.ts        # Browser client
-│   │   └── server.ts        # Server client
+│   │   └── server.ts        # Server client (server-only)
 │   ├── btcpay/              # BTCPay integration
-│   │   ├── client.ts        # BTCPay client
+│   │   ├── client.ts        # BTCPay client (server-only)
 │   │   └── types.ts         # BTCPay types
 │   ├── query/               # TanStack Query utilities
 │   │   └── keys.ts          # Query keys
-│   ├── env.ts               # Environment validation
 │   └── utils.ts             # Utility functions
 │
 └── types/                   # Shared TypeScript types
@@ -72,10 +87,33 @@ supabase/
     └── .gitkeep
 
 docs/
+├── reports/                 # Stage completion reports
+│   ├── STAGE_0_COMPLETE.md
+│   ├── STAGE_0.1_COMPLETE.md
+│   ├── STAGE_0.1_TANSTACK_COMPLETE.md
+│   ├── STAGE_0.2_COMPLETE.md
+│   ├── STAGE_0.2.1_COMPLETE.md
+│   ├── STAGE_0.2_PR_SUMMARY.md
+│   ├── STAGE_0.3_COMPLETE.md
+│   └── STAGE_0.4_COMPLETE.md
+├── adr/                     # Architecture Decision Records
+│   ├── 0001-core-stack.md
+│   ├── 0002-quality-gate.md
+│   └── 0003-payment-architecture.md
 ├── PROJECT_STRUCTURE.md     # This file
 ├── CODING_RULES.md          # Coding standards
+├── QUALITY_GATE.md          # Quality checks
+├── ENVIRONMENT.md           # Environment guide
 └── PAYMENT_FLOW.md          # Payment flow documentation
 ```
+
+## Important Note for Agents
+
+The tree describes the intended professional structure.
+
+**Do not create empty files only to match the tree.**
+
+Create feature files only when real logic is added.
 
 ## Key Directories
 
@@ -101,6 +139,33 @@ Business logic organized by feature:
 
 - Each feature has its own types and constants
 - Keeps business logic separate from UI
+
+**Feature modules must contain business logic and feature-specific UI.**
+
+**Shared UI goes to `src/components`.**
+
+**Technical integrations go to `src/lib`.**
+
+**Route-level composition goes to `src/app`.**
+
+**Feature module convention:**
+
+Each feature should follow this structure:
+
+- `components/` - Feature-specific UI components
+- `schemas.ts` - Zod schemas for validation
+- `types.ts` - TypeScript types
+- `constants.ts` - Feature constants
+- `actions.ts` - Server Actions (if needed)
+- `queries.ts` - TanStack Query options
+- `server.ts` - Server-only logic (must have `import "server-only"`)
+
+**Rules:**
+
+1. Keep `page.tsx` files thin - delegate to feature modules
+2. Business logic belongs in feature modules, not in page components
+3. Server-only code must have `import "server-only"` at the top
+4. Do not mix client and server logic in the same file
 
 ### `src/lib/`
 
