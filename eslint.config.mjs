@@ -19,13 +19,7 @@ const eslintConfig = [
       "test-results/**",
       "supabase/.branches/**",
       "supabase/.temp/**",
-      "next.config.ts",
       "next-env.d.ts",
-      "postcss.config.mjs",
-      "tailwind.config.ts",
-      "vitest.config.ts",
-      "playwright.config.ts",
-      "eslint.config.mjs",
     ],
   },
   ...compat.extends("next/core-web-vitals"),
@@ -35,6 +29,10 @@ const eslintConfig = [
     },
     rules: {
       "unused-imports/no-unused-imports": "error",
+      // Security rules (manually added from eslint-plugin-security)
+      "no-eval": "error",
+      "no-implied-eval": "error",
+      "no-new-func": "error",
     },
   },
 ]

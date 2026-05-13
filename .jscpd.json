@@ -1,0 +1,17 @@
+{
+  "threshold": 2,
+  "minLines": 8,
+  "minTokens": 50,
+  "reporters": ["console"],
+  "ignore": [
+    "**/node_modules/**",
+    "**/.next/**",
+    "**/coverage/**",
+    "**/playwright-report/**",
+    "**/test-results/**",
+    "**/supabase/.temp/**",
+    "**/supabase/.branches/**",
+    "**/pnpm-lock.yaml",
+    "**/*.md"
+  ]
+}

@@ -42,6 +42,21 @@
    - Keep types close to their usage
    - Use index files sparingly
 
+9. **Code Quality**
+   - Do not duplicate code - extract to shared helpers/components
+   - Do not leave unused files, exports, or dependencies
+   - Do not disable jscpd/knip/security rules globally
+   - If false positive - disable specific rule with comment explaining why
+   - All new code must pass duplicates and deadcode checks
+
+10. **Security Patterns**
+
+- Follow eslint-plugin-security recommendations
+- Avoid unsafe regex patterns
+- Use secure random number generation
+- Sanitize user input
+- Validate all external data
+
 ## Technology Restrictions
 
 ### ❌ Do Not Use
@@ -53,6 +68,8 @@
 - Class components (use functional components)
 - TanStack Router (use Next.js App Router)
 - TanStack Query for local UI state
+- Duplicated code (extract to shared helpers/components)
+- Unused files, exports, or dependencies
 
 ### ✅ Use
 
@@ -70,6 +87,38 @@
    - Do not use it for local UI state
    - Keep query keys centralized in `src/lib/query/keys.ts`
    - Do not use TanStack Router (Next.js App Router is the router)
+
+## Quality Tools
+
+### jscpd (Code Duplication Detection)
+
+```bash
+pnpm duplicates
+```
+
+- Detects copy-paste code
+- Threshold: 2%
+- Min lines: 8
+- Forces extraction to shared code
+
+### Knip (Dead Code Detection)
+
+```bash
+pnpm deadcode
+```
+
+- Finds unused files
+- Finds unused exports
+- Finds unused dependencies
+- Keeps codebase clean
+
+### eslint-plugin-security
+
+Integrated in `pnpm lint`
+
+- Detects unsafe patterns
+- Enforces secure coding
+- Catches security issues early
 
 ## Code Style
 
