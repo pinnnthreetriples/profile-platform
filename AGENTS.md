@@ -117,6 +117,25 @@ Use:
 - `supabase/functions` for Edge Functions
 - `supabase/migrations` for SQL migrations
 
+## Feature module convention
+
+Each feature in `src/features/` should follow this structure:
+
+- `components/` - Feature-specific UI components
+- `schemas.ts` - Zod schemas for validation
+- `types.ts` - TypeScript types
+- `constants.ts` - Feature constants
+- `actions.ts` - Server Actions (if needed)
+- `queries.ts` - TanStack Query options
+- `server.ts` - Server-only logic (with `import "server-only"`)
+
+Rules:
+
+1. Keep `page.tsx` files thin - delegate to feature modules
+2. Business logic belongs in feature modules, not in page components
+3. Server-only code must have `import "server-only"` at the top
+4. Do not mix client and server logic in the same file
+
 ## Stage 0 restrictions
 
 Do not implement:
