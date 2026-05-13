@@ -51,6 +51,8 @@
 - WooCommerce
 - jQuery
 - Class components (use functional components)
+- TanStack Router (use Next.js App Router)
+- TanStack Query for local UI state
 
 ### ✅ Use
 
@@ -61,6 +63,13 @@
 - Motion.dev
 - Supabase
 - BTCPay Server
+- TanStack Query (for server state only)
+
+9. **TanStack Query**
+   - Use TanStack Query for async server state
+   - Do not use it for local UI state
+   - Keep query keys centralized in `src/lib/query/keys.ts`
+   - Do not use TanStack Router (Next.js App Router is the router)
 
 ## Code Style
 

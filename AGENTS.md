@@ -33,6 +33,15 @@ This project uses:
 13. Do not add unnecessary dependencies.
 14. Respect existing folder structure.
 
+## TanStack rules
+
+1. Use TanStack Query only for server state, caching, refetching, and mutations.
+2. Do not use TanStack Query for simple local UI state.
+3. Do not install TanStack Router. Next.js App Router is the router.
+4. Do not install TanStack Table until admin/payment tables are needed.
+5. Query keys must be centralized in `src/lib/query/keys.ts`.
+6. Payment status polling must use TanStack Query only after real payment flow is implemented.
+
 ## Required checks before finishing
 
 Run:

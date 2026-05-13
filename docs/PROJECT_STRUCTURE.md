@@ -17,6 +17,9 @@ src/
 │   ├── (dashboard)/         # Protected routes
 │   │   ├── profile/         # Profile page
 │   │   └── payment/         # Payment pages
+│   ├── providers.tsx        # App-level client providers
+│   ├── template.tsx         # Smooth route transition wrapper
+│   ├── loading.tsx          # Route loading placeholder
 │   ├── layout.tsx           # Root layout
 │   └── globals.css          # Global styles
 │
@@ -36,10 +39,12 @@ src/
 │   │   └── constants.ts
 │   ├── profile/             # Profile feature
 │   │   ├── types.ts
-│   │   └── constants.ts
+│   │   ├── constants.ts
+│   │   └── queries.ts       # TanStack Query options
 │   └── payment/             # Payment feature
 │       ├── types.ts
-│       └── constants.ts
+│       ├── constants.ts
+│       └── queries.ts       # TanStack Query options
 │
 ├── lib/                     # Technical utilities
 │   ├── supabase/            # Supabase clients
@@ -48,6 +53,8 @@ src/
 │   ├── btcpay/              # BTCPay integration
 │   │   ├── client.ts        # BTCPay client
 │   │   └── types.ts         # BTCPay types
+│   ├── query/               # TanStack Query utilities
+│   │   └── keys.ts          # Query keys
 │   ├── env.ts               # Environment validation
 │   └── utils.ts             # Utility functions
 │
@@ -101,6 +108,7 @@ Technical integrations and utilities:
 
 - `supabase/` - Supabase client setup
 - `btcpay/` - BTCPay Server integration
+- `query/` - TanStack Query keys and query utilities
 - `env.ts` - Environment variable validation
 - `utils.ts` - Shared utilities
 
