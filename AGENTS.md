@@ -1,8 +1,12 @@
 # AGENTS.md
 
+Repository instructions for AI coding agents.
+
+Follow this file before editing code. Keep changes small, staged, and aligned with the requested task.
+
 ## Project stack
 
-This project uses:
+Use only the approved stack:
 
 - Next.js App Router
 - TypeScript
@@ -13,44 +17,163 @@ This project uses:
 - Tailwind CSS
 - shadcn/ui
 - Motion.dev
+- TanStack Query
 - Vitest
 - Playwright
+- pnpm
 
-## Core rules
+Do not add WordPress, WooCommerce, PHP, Firebase, Prisma, Redux, TanStack Router, or unrelated state managers.
 
-1. Do not change the selected stack.
-2. Do not add WordPress, PHP, WooCommerce, Firebase, Prisma, Redux, or random state managers.
-3. Use TypeScript.
-4. Keep UI separate from business logic.
-5. Keep payment logic separate from React components.
-6. Never expose private env variables to client components.
-7. Do not use `SUPABASE_SERVICE_ROLE_KEY` outside server-only code.
-8. Do not use `BTCPAY_API_KEY` outside server-only code.
-9. Do not confirm payments on frontend.
-10. Payment status may only be changed by trusted backend/webhook logic.
-11. Do not implement real auth/payment logic during Stage 0.
-12. Do not create final design during Stage 0.
-13. Do not add unnecessary dependencies.
-14. Respect existing folder structure.
+## Stage discipline
 
-## TanStack rules
+Implement only the requested stage.
 
-1. Use TanStack Query only for server state, caching, refetching, and mutations.
-2. Do not use TanStack Query for simple local UI state.
-3. Do not install TanStack Router. Next.js App Router is the router.
-4. Do not install TanStack Table until admin/payment tables are needed.
-5. Query keys must be centralized in `src/lib/query/keys.ts`.
-6. Payment status polling must use TanStack Query only after real payment flow is implemented.
+- Stage 1: Supabase Auth only.
+- Stage 2: Profiles only.
+- Stage 3: Payment creation only.
+- Stage 4: Webhook verification and payment status updates.
+- Stage 5: UI polish only.
 
-## Required checks before finishing
+Do not build future-stage features early.
 
-Run:
+## Architecture rules
+
+Use:
+
+- `src/app` for routes and route-level composition.
+- `src/components` for shared UI.
+- `src/features` for business modules.
+- `src/lib` for technical clients and utilities.
+- `src/types` for shared types.
+- `supabase/functions` for Edge Functions.
+- `supabase/migrations` for SQL migrations.
+
+Keep `page.tsx` files thin. They may compose feature components, but must not contain business logic, payment logic, large forms, direct Supabase mutations, or private env usage.
+
+## Feature module convention
+
+Feature code belongs in:
+
+```text
+src/features/<feature>/
+```
+
+Use these files only when real logic exists:
+
+- `components/`
+- `schemas.ts`
+- `types.ts`
+- `constants.ts`
+- `actions.ts`
+- `queries.ts`
+- `server.ts`
+
+Do not create empty files just to match the structure.
+
+## Server/client boundaries
+
+Server-only files must start with:
+
+```typescript
+import "server-only"
+```
+
+Private server code must never be imported into client components.
+
+Never expose or use these in client code:
+
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `BTCPAY_API_KEY`
+- `BTCPAY_WEBHOOK_SECRET`
+- `@/lib/env/server`
+- server-only BTCPay clients
+- server-only Supabase clients
+
+Use:
+
+- `getClientEnv()` from `@/lib/env` for public env.
+- `getServerEnv()` from `@/lib/env/server` only in server-only code.
+- `createSupabaseBrowserClient()` for browser code.
+- `createSupabaseServerClient()` for server code.
+
+## Stage 1 auth rules
+
+Use Supabase Auth.
+
+Do not store passwords manually.
+
+Do not create custom password tables.
+
+Do not expose service-role access to frontend code.
+
+Do not implement payments during Stage 1.
+
+Do not create profile/payment tables unless explicitly requested.
+
+Auth forms must use Zod validation when implemented.
+
+Protected routes must use session-aware server/middleware checks.
+
+## Payment rules
+
+Frontend never confirms payment.
+
+Payment access/status may only be changed by trusted server or webhook logic.
+
+Do not trust:
+
+- redirect success URL
+- client-side payment status
+- user-submitted invoice status
+- browser polling result as final proof
+
+Webhook logic must be verified, idempotent, and auditable when implemented.
+
+## TanStack Query rules
+
+Use TanStack Query only for server state, caching, refetching, polling, and mutations.
+
+Do not use it for simple local UI state.
+
+Do not install:
+
+- TanStack Router
+- TanStack Table before admin/payment tables are explicitly needed
+
+Query keys must stay centralized in `src/lib/query/keys.ts`.
+
+## Quality rules
+
+Do not weaken checks to make CI green.
+
+Forbidden:
+
+- removing tests instead of fixing code
+- weakening E2E assertions without approval
+- lowering jscpd threshold without approval
+- removing `pnpm duplicates`
+- removing `pnpm deadcode`
+- disabling lint/security rules globally
+- removing Gitleaks, Semgrep, or Dependency Audit
+- changing required GitHub checks without approval
+
+If a check fails, fix the root cause.
+
+## Required checks
+
+Before marking work complete, run:
 
 ```bash
 pnpm quality:ci
 ```
 
-Or individually:
+For UI, route, auth, payment, or workflow changes, run:
+
+```bash
+pnpm quality:full
+```
+
+Individual checks:
 
 ```bash
 pnpm format:check
@@ -58,128 +181,70 @@ pnpm lint
 pnpm typecheck
 pnpm test:ci
 pnpm build
-pnpm test:e2e
 pnpm duplicates
 pnpm deadcode
+pnpm test:e2e
 ```
 
-## Code quality tools
+If a local tool is unavailable, report exactly what could not be run and why.
 
-1. **jscpd** - Detects code duplication
-   - Threshold: 2%
-   - Min lines: 8
-   - Min tokens: 50
-   - Run: `pnpm duplicates`
+## Dependency rules
 
-2. **Knip** - Finds unused code
-   - Detects unused files, exports, dependencies
-   - Run: `pnpm deadcode`
+Do not add dependencies unless necessary.
 
-3. **eslint-plugin-security** - Security linting
-   - Current security linting uses core ESLint security rules:
-     - `no-eval`
-     - `no-implied-eval`
-     - `no-new-func`
-     - `no-script-url`
-   - Full `eslint-plugin-security` recommended config is deferred until stable ESLint 9 flat config compatibility is confirmed
-   - Integrated in `pnpm lint`
+For every new dependency, explain:
 
-### Code quality rules
+- why it is needed
+- why existing tools are insufficient
+- whether it affects client bundle size
+- whether it affects security surface
 
-1. Do not duplicate code - extract to shared helpers/components
-2. Do not leave unused files, exports, or dependencies
-3. Do not disable jscpd/knip/security rules globally
-4. If false positive - disable specific rule with comment explaining why
-5. All new code must pass duplicates and deadcode checks
+Do not replace approved project tools without explicit approval.
 
-### Future improvements (after Stage 1)
+## Security rules
 
-- eslint-plugin-boundaries for architectural rules
+Never commit secrets.
 
-## Environment validation
+Never store passwords manually.
 
-1. Use `getClientEnv()` from `@/lib/env` in client components.
-2. Use `getServerEnv()` from `@/lib/env/server` in server components/API routes.
-3. Never import `@/lib/env/server` in client components.
-4. Environment validation is strict - no fallbacks or console.warn.
-5. All env vars must be defined in `.env.local` for development.
+Use Supabase Auth for authentication.
 
-## Supabase clients
+Do not use custom password storage.
 
-1. Use `createSupabaseBrowserClient()` for client components.
-2. Use `createSupabaseServerClient()` for server components/API routes.
-3. Do not create singleton clients - always call factory functions.
-4. Clients use validated environment variables.
+Do not bypass RLS.
 
-## Architecture
+Do not expose service-role access to frontend code.
 
-Use:
+Validate external input with Zod where applicable.
 
-- `src/app` for routes
-- `src/components` for UI components
-- `src/features` for business modules
-- `src/lib` for technical clients
-- `supabase/functions` for Edge Functions
-- `supabase/migrations` for SQL migrations
+Current security linting uses core ESLint security rules. Do not claim full eslint-plugin-security recommended coverage until it is actually enabled.
 
-## Feature module convention
+## Git and PR rules
 
-Each feature in `src/features/` should follow this structure:
+Base branches on `master`.
 
-- `components/` - Feature-specific UI components
-- `schemas.ts` - Zod schemas for validation
-- `types.ts` - TypeScript types
-- `constants.ts` - Feature constants
-- `actions.ts` - Server Actions (if needed)
-- `queries.ts` - TanStack Query options
-- `server.ts` - Server-only logic (with `import "server-only"`)
+Do not push directly to `master`.
 
-Rules:
+Use focused PRs.
 
-1. Keep `page.tsx` files thin - delegate to feature modules
-2. Business logic belongs in feature modules, not in page components
-3. Server-only code must have `import "server-only"` at the top
-4. Do not mix client and server logic in the same file
+Do not include unrelated refactoring.
 
-## Stage 0 restrictions
+Do not mix documentation cleanup, UI redesign, auth, payment, and infrastructure changes in one task unless explicitly requested.
 
-Do not implement:
+Use `.github/pull_request_template.md`.
 
-- real login
-- real registration
-- real payment creation
-- real BTCPay API calls
-- webhook verification
-- production database schema
-- admin panel
-- final UI design
+## Documentation
 
-## Stage discipline
+Keep documentation consistent with code.
 
-Agents must only implement the requested stage.
+If commands, scripts, env vars, stages, or architecture change, update relevant docs:
 
-Examples:
+- `README.md`
+- `TODO.md`
+- `docs/PROJECT_STRUCTURE.md`
+- `docs/CODING_RULES.md`
+- `docs/QUALITY_GATE.md`
+- `docs/ENVIRONMENT.md`
+- `docs/adr/*`
 
-- Stage 1: auth only. Do not implement real payments.
-- Stage 2: profiles only. Do not implement BTCPay.
-- Stage 3: payment creation only. Do not implement webhook settlement unless requested.
-- Stage 4: webhook verification and payment status updates.
-
-If the user asks for one stage, do not preemptively build future stages.
-
-## No weakening policy
-
-Agents must not weaken checks to make CI green.
-
-Forbidden:
-
-- removing tests instead of fixing code
-- changing E2E tests to weaker assertions without approval
-- lowering jscpd threshold without approval
-- removing `pnpm deadcode`
-- removing `pnpm duplicates`
-- disabling lint rules globally
-- removing Gitleaks, Semgrep, or Dependency Audit
-- changing required GitHub checks without approval
-
-If a check fails, fix the root cause, not the check.
+Detailed rules live in `docs/`. This file is the short operational contract for agents.

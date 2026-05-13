@@ -30,7 +30,7 @@
 
 6. **Security Patterns**
 
-- Follow eslint-plugin-security recommendations
+- Follow enabled security lint rules and project security rules
 - Avoid unsafe regex patterns
 - Use secure random number generation
 - Sanitize user input
@@ -231,7 +231,7 @@ BTCPAY_WEBHOOK_SECRET
 
 ## Git Workflow
 
-1. Create feature branch from `main`
+1. Create feature branch from `master`
 2. Make small, focused commits
 3. Write descriptive commit messages
 4. Test before pushing
