@@ -23,11 +23,18 @@ Stage 0.2 successfully hardened the project foundation and fixed all CI failures
   - Added `GITLEAKS_CONFIG` environment variable
 - **Result**: Secret scanning now works correctly
 
-#### ✅ CodeQL Analysis
+#### ✅ Semgrep
 
 - **Issue**: CodeQL requires GitHub Advanced Security for private repos
 - **Fix**: Replaced with Semgrep CE (free for private repos)
+- **Configuration**: CLI-only mode without SARIF upload
 - **Result**: Static analysis now works with `.github/workflows/semgrep.yml`
+
+#### ✅ Dependency Review
+
+- **Issue**: Dependency Review requires GitHub Advanced Security for private repos
+- **Fix**: Replaced with `pnpm audit` in `.github/workflows/dependency-audit.yml`
+- **Result**: Dependency vulnerability scanning now works
 
 ### 2. Version Pinning
 
@@ -250,21 +257,18 @@ pnpm build
 ### Updated Workflows
 
 1. **CI (Quality Gate)** - `.github/workflows/ci.yml`
-
    - ✅ Uses `actions/checkout@v6`
    - ✅ Uses `node-version-file: ".nvmrc"`
    - ✅ Runs `pnpm test:ci` instead of `pnpm test`
    - ✅ All steps passing
 
 2. **E2E Tests** - `.github/workflows/e2e.yml`
-
    - ✅ Uses `actions/checkout@v6`
    - ✅ Uses `node-version-file: ".nvmrc"`
    - ✅ Installs Playwright browsers
    - ✅ Runs on pull requests only
 
 3. **Secret Scan** - `.github/workflows/secrets.yml`
-
    - ✅ Uses `actions/checkout@v6`
    - ✅ Uses `.gitleaks.toml` config
    - ✅ Scans for secrets in code

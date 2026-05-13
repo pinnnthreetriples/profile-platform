@@ -133,7 +133,8 @@ See [docs/PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md) for detailed structur
 - Vitest unit tests
 - Playwright E2E tests
 - GitHub Actions CI/CD
-- Security scanning (Gitleaks, Semgrep)
+- Security scanning (Gitleaks, Semgrep CE)
+- Dependency audit (pnpm audit)
 - TanStack Query foundation
 - Smooth page transitions
 

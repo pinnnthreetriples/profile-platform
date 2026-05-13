@@ -127,22 +127,23 @@ Runs on every push and PR:
 
 1. ✅ Gitleaks secret detection
 
-### CodeQL (`.github/workflows/codeql.yml`)
+### Semgrep (`.github/workflows/semgrep.yml`)
 
-Runs on:
+Runs on every push and PR:
 
-- Every push and PR
-- Weekly schedule (Monday 3 AM)
-
-1. ✅ Static code analysis
+1. ✅ Static code analysis (SAST)
 2. ✅ Security vulnerability detection
 
-### Dependency Review (`.github/workflows/dependency-review.yml`)
+**Note:** Semgrep CE is used instead of CodeQL for private repositories without GitHub Advanced Security.
 
-Runs on PRs:
+### Dependency Audit (`.github/workflows/dependency-audit.yml`)
+
+Runs on every push and PR:
 
 1. ✅ Check for vulnerable dependencies
 2. ✅ Fail on moderate+ severity
+
+**Note:** Dependency Audit (`pnpm audit`) is used instead of Dependency Review for private repositories without GitHub Advanced Security.
 
 ## Dependabot
 
@@ -158,10 +159,11 @@ Automatically creates PRs for:
 For production repositories, enable:
 
 1. **Require status checks to pass:**
-   - Quality Gate
+   - CI (Quality Gate)
    - Playwright E2E
-   - Secret Scan
-   - CodeQL
+   - Secret Scan (Gitleaks)
+   - Semgrep SAST
+   - Dependency Audit
 
 2. **Require branches to be up to date**
 
@@ -179,8 +181,8 @@ For production repositories, enable:
 ### Security
 
 - No secrets in code (Gitleaks)
-- No vulnerable dependencies (Dependabot + Dependency Review)
-- Static analysis (CodeQL)
+- No vulnerable dependencies (Dependabot + Dependency Audit)
+- Static analysis (Semgrep CE)
 
 ### Performance
 
