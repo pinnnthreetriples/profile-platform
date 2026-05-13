@@ -58,13 +58,38 @@ pnpm lint
 pnpm typecheck
 pnpm test:ci
 pnpm build
-```
-
-If Playwright is installed:
-
-```bash
 pnpm test:e2e
+pnpm duplicates
+pnpm deadcode
 ```
+
+## Code quality tools
+
+1. **jscpd** - Detects code duplication
+   - Threshold: 2%
+   - Min lines: 8
+   - Min tokens: 50
+   - Run: `pnpm duplicates`
+
+2. **Knip** - Finds unused code
+   - Detects unused files, exports, dependencies
+   - Run: `pnpm deadcode`
+
+3. **eslint-plugin-security** - Security linting
+   - Detects unsafe patterns
+   - Integrated in `pnpm lint`
+
+### Code quality rules
+
+1. Do not duplicate code - extract to shared helpers/components
+2. Do not leave unused files, exports, or dependencies
+3. Do not disable jscpd/knip/security rules globally
+4. If false positive - disable specific rule with comment explaining why
+5. All new code must pass duplicates and deadcode checks
+
+### Future improvements (after Stage 1)
+
+- eslint-plugin-boundaries for architectural rules
 
 ## Environment validation
 

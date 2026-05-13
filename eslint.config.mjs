@@ -19,13 +19,7 @@ const eslintConfig = [
       "test-results/**",
       "supabase/.branches/**",
       "supabase/.temp/**",
-      "next.config.ts",
       "next-env.d.ts",
-      "postcss.config.mjs",
-      "tailwind.config.ts",
-      "vitest.config.ts",
-      "playwright.config.ts",
-      "eslint.config.mjs",
     ],
   },
   ...compat.extends("next/core-web-vitals"),
@@ -35,6 +29,12 @@ const eslintConfig = [
     },
     rules: {
       "unused-imports/no-unused-imports": "error",
+      // Core security rules (eslint-plugin-security not compatible with ESLint 9 flat config)
+      // See: https://github.com/eslint-community/eslint-plugin-security/issues/123
+      "no-eval": "error",
+      "no-implied-eval": "error",
+      "no-new-func": "error",
+      "no-script-url": "error",
     },
   },
 ]

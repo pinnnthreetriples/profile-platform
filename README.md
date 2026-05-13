@@ -62,8 +62,13 @@ pnpm test:watch      # Run tests in watch mode
 pnpm test:coverage   # Run tests with coverage
 pnpm test:e2e        # Run E2E tests
 
+# Code quality checks
+pnpm duplicates      # Check for code duplication
+pnpm deadcode        # Check for unused code
+
 # Quality gate (run all checks)
-pnpm quality:ci
+pnpm quality         # Local quality checks
+pnpm quality:ci      # CI quality checks (includes E2E)
 ```
 
 ## Node.js Version
@@ -147,6 +152,14 @@ See [docs/PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md) for detailed structur
 - Expanded E2E tests (7 tests)
 - CI fixes (all workflows passing)
 - Branch protection ready
+
+### ✅ Stage 0.3 - Code Quality Guards
+
+- jscpd (code duplication detection)
+- Knip (dead code detection)
+- eslint-plugin-security (security linting)
+- Updated CI pipeline
+- Documentation updates
 
 ### 🔲 Stage 1 - Supabase Auth
 

@@ -87,6 +87,66 @@ pnpm build
 
 Ensures the production build succeeds.
 
+### 7. jscpd (Code Duplication Detection)
+
+```bash
+pnpm duplicates
+```
+
+**Configuration:** `.jscpd.json`
+
+**Rules:**
+
+- Threshold: 2%
+- Min lines: 8
+- Min tokens: 50
+- Detects copy-paste code
+
+**Purpose:**
+
+- Catch duplicated code
+- Force extraction to shared helpers/components
+- Maintain DRY principle
+
+### 8. Knip (Dead Code Detection)
+
+```bash
+pnpm deadcode
+```
+
+**Configuration:** `knip.json`
+
+**Detects:**
+
+- Unused files
+- Unused exports
+- Unused dependencies
+- Unused scripts
+
+**Purpose:**
+
+- Keep codebase clean
+- Remove unused code
+- Optimize bundle size
+
+### 9. eslint-plugin-security (Security Linting)
+
+Integrated in `pnpm lint`
+
+**Configuration:** `eslint.config.mjs`
+
+**Detects:**
+
+- Unsafe regex patterns
+- Potential XSS vulnerabilities
+- Insecure random number generation
+- Other security anti-patterns
+
+**Purpose:**
+
+- Catch security issues early
+- Enforce secure coding patterns
+
 ## Combined Quality Check
 
 Run all checks at once:
@@ -102,6 +162,14 @@ This runs:
 3. Typecheck
 4. Unit tests
 5. Build
+6. Duplicates check
+7. Deadcode check
+
+For CI (includes E2E):
+
+```bash
+pnpm quality:ci
+```
 
 ## GitHub Actions CI
 
@@ -110,10 +178,13 @@ This runs:
 Runs on every push and PR to `main`/`master`:
 
 1. ✅ Format check
-2. ✅ Lint
+2. ✅ Lint (includes security rules)
 3. ✅ Typecheck
 4. ✅ Unit tests
 5. ✅ Build
+6. ✅ E2E tests
+7. ✅ Duplicates check
+8. ✅ Deadcode check
 
 ### E2E Workflow (`.github/workflows/e2e.yml`)
 
@@ -223,6 +294,38 @@ Check Next.js build output for errors.
 - Ensure dev server starts correctly
 - Check Playwright output for details
 - Run locally: `pnpm test:e2e`
+
+### Duplicates check fails
+
+- Review jscpd output
+- Extract duplicated code to shared helpers/components
+- If false positive, add to `.jscpd.json` ignore list with comment
+
+### Deadcode check fails
+
+- Remove unused files/exports/dependencies
+- If false positive (e.g., used in config), add to `knip.json` ignoreDependencies with comment
+
+## Code Quality Standards
+
+### No Code Duplication
+
+- Extract repeated logic to shared helpers
+- Extract repeated UI to shared components
+- Keep DRY (Don't Repeat Yourself)
+
+### No Dead Code
+
+- Remove unused files
+- Remove unused exports
+- Remove unused dependencies
+- Keep codebase clean
+
+### Security
+
+- Follow eslint-plugin-security recommendations
+- Do not disable security rules globally
+- If false positive, disable specific rule with comment explaining why
 
 ## Stage 0 Status
 

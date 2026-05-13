@@ -44,3 +44,9 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+      - name: Check duplicates
+        run: pnpm duplicates
+
+      - name: Check deadcode
+        run: pnpm deadcode
