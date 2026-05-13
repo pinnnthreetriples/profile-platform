@@ -24,11 +24,12 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
-    "test:ci": "vitest run --reporter=verbose",
+    "test:ci": "vitest run --coverage --reporter=verbose",
     "duplicates": "jscpd src e2e supabase/functions --config .jscpd.json",
     "deadcode": "knip",
     "quality": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm duplicates && pnpm deadcode",
-    "quality:ci": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test:ci && pnpm build && pnpm test:e2e && pnpm duplicates && pnpm deadcode"
+    "quality:ci": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test:ci && pnpm build && pnpm duplicates && pnpm deadcode",
+    "quality:full": "pnpm quality:ci && pnpm test:e2e"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.11",

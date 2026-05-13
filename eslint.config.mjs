@@ -29,10 +29,12 @@ const eslintConfig = [
     },
     rules: {
       "unused-imports/no-unused-imports": "error",
-      // Security rules (manually added from eslint-plugin-security)
+      // Core security rules (eslint-plugin-security not compatible with ESLint 9 flat config)
+      // See: https://github.com/eslint-community/eslint-plugin-security/issues/123
       "no-eval": "error",
       "no-implied-eval": "error",
       "no-new-func": "error",
+      "no-script-url": "error",
     },
   },
 ]
