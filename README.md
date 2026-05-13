@@ -67,8 +67,9 @@ pnpm duplicates      # Check for code duplication
 pnpm deadcode        # Check for unused code
 
 # Quality gate (run all checks)
-pnpm quality         # Local quality checks
-pnpm quality:ci      # CI quality checks (includes E2E)
+pnpm quality         # Local checks without E2E
+pnpm quality:ci      # CI Quality Gate without E2E
+pnpm quality:full    # Full local validation including E2E
 ```
 
 ## Node.js Version
@@ -161,6 +162,14 @@ See [docs/PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md) for detailed structur
 - Updated CI pipeline
 - Documentation updates
 
+### ✅ Stage 0.4 - Structure Governance
+
+- server-only guards
+- feature module convention
+- docs/reports cleanup
+- documentation governance
+- AI agent instructions
+
 ### 🔲 Stage 1 - Supabase Auth
 
 - User registration
@@ -198,6 +207,10 @@ See [docs/PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md) for detailed structur
 - [Coding Rules](docs/CODING_RULES.md)
 - [Payment Flow](docs/PAYMENT_FLOW.md)
 - [Quality Gate](docs/QUALITY_GATE.md)
+- [Environment Guide](docs/ENVIRONMENT.md)
+- [ADR 0001 — Core Stack](docs/adr/0001-core-stack.md)
+- [ADR 0002 — Quality Gate](docs/adr/0002-quality-gate.md)
+- [ADR 0003 — Payment Architecture](docs/adr/0003-payment-architecture.md)
 - [Agent Guidelines](AGENTS.md)
 
 ## License

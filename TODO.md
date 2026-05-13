@@ -17,17 +17,42 @@
 ## Stage 0.1 — Quality Gate ✅
 
 - [x] Prettier
-- [x] ESLint with unused-imports
+- [x] ESLint
+- [x] TypeScript
 - [x] Vitest
 - [x] Playwright
 - [x] GitHub Actions CI
 - [x] GitHub Actions E2E
 - [x] Gitleaks
-- [x] CodeQL
-- [x] Dependency Review
+- [x] Semgrep
+- [x] Dependency Audit
 - [x] Dependabot
 - [x] AGENTS.md
 - [x] QUALITY_GATE.md
+
+## Stage 0.2 — Hardening ✅
+
+- [x] Node/pnpm pinned
+- [x] Env validation hardened
+- [x] Supabase clients converted to factories
+- [x] Real minimal tests added
+- [x] Branch protection ready
+
+## Stage 0.3 — Code Quality Guards ✅
+
+- [x] jscpd
+- [x] Knip
+- [x] core security ESLint rules
+- [x] duplicates check
+- [x] deadcode check
+
+## Stage 0.4 — Structure Governance ✅
+
+- [x] server-only guards
+- [x] feature module convention
+- [x] docs/reports cleanup
+- [x] AI agent documentation
+- [x] documentation consistency cleanup
 
 ## Stage 1 — Supabase Auth
 

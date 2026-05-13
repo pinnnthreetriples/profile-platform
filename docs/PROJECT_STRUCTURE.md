@@ -94,12 +94,26 @@ docs/
 │   ├── STAGE_0.2_COMPLETE.md
 │   ├── STAGE_0.2.1_COMPLETE.md
 │   ├── STAGE_0.2_PR_SUMMARY.md
-│   └── STAGE_0.3_COMPLETE.md
+│   ├── STAGE_0.3_COMPLETE.md
+│   └── STAGE_0.4_COMPLETE.md
+├── adr/                     # Architecture Decision Records
+│   ├── 0001-core-stack.md
+│   ├── 0002-quality-gate.md
+│   └── 0003-payment-architecture.md
 ├── PROJECT_STRUCTURE.md     # This file
 ├── CODING_RULES.md          # Coding standards
 ├── QUALITY_GATE.md          # Quality checks
+├── ENVIRONMENT.md           # Environment guide
 └── PAYMENT_FLOW.md          # Payment flow documentation
 ```
+
+## Important Note for Agents
+
+The tree describes the intended professional structure.
+
+**Do not create empty files only to match the tree.**
+
+Create feature files only when real logic is added.
 
 ## Key Directories
 
@@ -125,6 +139,14 @@ Business logic organized by feature:
 
 - Each feature has its own types and constants
 - Keeps business logic separate from UI
+
+**Feature modules must contain business logic and feature-specific UI.**
+
+**Shared UI goes to `src/components`.**
+
+**Technical integrations go to `src/lib`.**
+
+**Route-level composition goes to `src/app`.**
 
 **Feature module convention:**
 

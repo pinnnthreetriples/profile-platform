@@ -28,7 +28,7 @@ pnpm format        # Auto-fix formatting
 pnpm lint
 ```
 
-**Configuration:** `.eslintrc.json`
+**Configuration:** `eslint.config.mjs`
 
 **Rules:**
 
@@ -129,33 +129,33 @@ pnpm deadcode
 - Remove unused code
 - Optimize bundle size
 
-### 9. eslint-plugin-security (Security Linting)
+### 9. Security Linting
 
 Integrated in `pnpm lint`
 
 **Configuration:** `eslint.config.mjs`
 
-**Detects:**
+**Current security linting uses core ESLint security rules:**
 
-- Unsafe regex patterns
-- Potential XSS vulnerabilities
-- Insecure random number generation
-- Other security anti-patterns
+- `no-eval`
+- `no-implied-eval`
+- `no-new-func`
+- `no-script-url`
+
+**Note:** `eslint-plugin-security` is installed, but the full recommended config is deferred until stable ESLint 9 flat config compatibility is confirmed.
 
 **Purpose:**
 
 - Catch security issues early
 - Enforce secure coding patterns
 
-## Combined Quality Check
+**Do not claim full eslint-plugin-security recommended coverage until it is actually enabled.**
 
-Run all checks at once:
+## Combined Quality Commands
 
-```bash
-pnpm quality
-```
+### `pnpm quality`
 
-This runs:
+Runs local non-E2E checks:
 
 1. Format check
 2. Lint
@@ -165,32 +165,52 @@ This runs:
 6. Duplicates check
 7. Deadcode check
 
-For CI (includes E2E):
+### `pnpm quality:ci`
 
-```bash
-pnpm quality:ci
-```
+Runs CI Quality Gate checks:
 
-## GitHub Actions CI
+1. Format check
+2. Lint
+3. Typecheck
+4. Unit tests with coverage
+5. Build
+6. Duplicates check
+7. Deadcode check
 
-### CI Workflow (`.github/workflows/ci.yml`)
+### `pnpm quality:full`
+
+Runs full local validation:
+
+- `pnpm quality:ci`
+- Playwright E2E
+
+## GitHub Actions
+
+### CI / Quality Gate
 
 Runs on every push and PR to `main`/`master`:
 
 1. ✅ Format check
 2. ✅ Lint (includes security rules)
 3. ✅ Typecheck
-4. ✅ Unit tests
+4. ✅ Unit tests with coverage
 5. ✅ Build
-6. ✅ E2E tests
-7. ✅ Duplicates check
-8. ✅ Deadcode check
+6. ✅ Duplicates check
+7. ✅ Deadcode check
 
-### E2E Workflow (`.github/workflows/e2e.yml`)
+**Does not run E2E.**
 
-Runs on PRs to `main`/`master`:
+### Playwright E2E
 
-1. ✅ Playwright E2E tests
+Runs Playwright tests as a separate required workflow on PRs to `main`/`master`.
+
+### Required branch protection checks
+
+- Quality Gate
+- Playwright E2E
+- Gitleaks
+- Semgrep SAST
+- Dependency Audit
 
 ### Secret Scan (`.github/workflows/secrets.yml`)
 
@@ -241,6 +261,22 @@ For production repositories, enable:
 3. **Require linear history**
 
 4. **Do not allow bypassing**
+
+## No Weakening Policy
+
+Agents must not weaken checks to make CI green.
+
+**Forbidden:**
+
+- Removing tests instead of fixing code
+- Lowering jscpd threshold without approval
+- Removing `pnpm deadcode`
+- Removing `pnpm duplicates`
+- Disabling lint rules globally
+- Removing Gitleaks/Semgrep/Dependency Audit
+- Changing required GitHub checks without approval
+
+**If a check fails, fix the cause, not the check.**
 
 ## Quality Standards
 
