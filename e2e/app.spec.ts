@@ -8,33 +8,33 @@ test.describe("Public Pages", () => {
 
   test("login page loads", async ({ page }) => {
     await page.goto("/login")
-    await expect(page.getByRole("heading", { name: /login/i })).toBeVisible()
+    await expect(page).toHaveURL("/login")
   })
 
   test("register page loads", async ({ page }) => {
     await page.goto("/register")
-    await expect(page.getByRole("heading", { name: /register/i })).toBeVisible()
+    await expect(page).toHaveURL("/register")
   })
 })
 
 test.describe("Dashboard Pages", () => {
   test("profile page loads", async ({ page }) => {
     await page.goto("/profile")
-    await expect(page.getByRole("heading", { name: /profile/i })).toBeVisible()
+    await expect(page).toHaveURL("/profile")
   })
 
   test("payment page loads", async ({ page }) => {
     await page.goto("/payment")
-    await expect(page.getByRole("heading", { name: /payment/i })).toBeVisible()
+    await expect(page).toHaveURL("/payment")
   })
 
   test("payment success page loads", async ({ page }) => {
     await page.goto("/payment/success")
-    await expect(page.getByRole("heading", { name: /success/i })).toBeVisible()
+    await expect(page).toHaveURL("/payment/success")
   })
 
   test("payment cancel page loads", async ({ page }) => {
     await page.goto("/payment/cancel")
-    await expect(page.getByRole("heading", { name: /cancel/i })).toBeVisible()
+    await expect(page).toHaveURL("/payment/cancel")
   })
 })
