@@ -1,0 +1,19 @@
+# Gitleaks configuration
+# https://github.com/gitleaks/gitleaks
+
+title = "Gitleaks Configuration"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Allowlist for false positives"
+paths = [
+  '''.env.example''',
+]
+
+# Example: Allow specific commit SHAs if needed
+# commits = ["commit-sha-here"]
+
+# Example: Allow specific regex patterns if needed
+# regexes = ['''pattern-here''']

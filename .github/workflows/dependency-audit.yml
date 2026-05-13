@@ -1,6 +1,8 @@
-name: E2E
+name: Dependency Audit
 
 on:
+  push:
+    branches: ["main", "master"]
   pull_request:
     branches: ["main", "master"]
 
@@ -8,8 +10,8 @@ permissions:
   contents: read
 
 jobs:
-  e2e:
-    name: Playwright E2E
+  dependency-audit:
+    name: Dependency Audit
     runs-on: ubuntu-latest
 
     steps:
@@ -28,8 +30,5 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Install Playwright browsers
-        run: pnpm exec playwright install --with-deps chromium
-
-      - name: Run Playwright tests
-        run: pnpm test:e2e
+      - name: Audit dependencies
+        run: pnpm audit --audit-level=moderate
