@@ -56,13 +56,14 @@
 
 ## Stage 1 — Supabase Auth
 
-- [ ] Setup Supabase project
-- [ ] Create users table
+- [ ] Configure Supabase project
+- [ ] Configure Supabase Auth
 - [ ] Implement register
 - [ ] Implement login
 - [ ] Implement logout
+- [ ] Implement auth session handling
 - [ ] Add protected routes middleware
-- [ ] Add auth context
+- [ ] Add auth tests
 
 ## Stage 2 — Profiles
 

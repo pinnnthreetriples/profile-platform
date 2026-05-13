@@ -171,10 +171,14 @@ Each feature should follow this structure:
 
 Technical integrations and utilities:
 
+- `env/` - Environment validation modules
+  - `index.ts` - Public exports
+  - `client.ts` - Client-side env
+  - `server.ts` - Server-side env
+  - `shared.ts` - Shared schemas
 - `supabase/` - Supabase client setup
 - `btcpay/` - BTCPay Server integration
 - `query/` - TanStack Query keys and query utilities
-- `env.ts` - Environment variable validation
 - `utils.ts` - Shared utilities
 
 ### `supabase/`

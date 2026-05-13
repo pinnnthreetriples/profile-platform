@@ -27,16 +27,22 @@ Copy `.env.example` to `.env.local` and fill in your values:
 cp .env.example .env.local
 ```
 
-### Required Variables
+### Required for Stage 1 — Auth
 
-- `NEXT_PUBLIC_APP_URL` - Your app URL (e.g., http://localhost:3000)
+- `NEXT_PUBLIC_APP_URL` - Your app URL, for example `http://localhost:3000`
 - `NEXT_PUBLIC_SUPABASE_URL` - Supabase project URL
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY` - Supabase anon key
-- `SUPABASE_SERVICE_ROLE_KEY` - Supabase service role key (server-side only)
+
+### Required for Stage 3+ — Payments
+
 - `BTCPAY_SERVER_URL` - BTCPay Server URL
 - `BTCPAY_API_KEY` - BTCPay API key
 - `BTCPAY_STORE_ID` - BTCPay Store ID
 - `BTCPAY_WEBHOOK_SECRET` - BTCPay webhook secret
+
+### Server-only
+
+- `SUPABASE_SERVICE_ROLE_KEY` - Server-side only. Do not expose to browser code.
 
 ## Development
 
