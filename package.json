@@ -7,6 +7,11 @@
     "node": ">=20.19.0",
     "pnpm": ">=10.30.3"
   },
+  "pnpm": {
+    "overrides": {
+      "postcss": ">=8.5.10"
+    }
+  },
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
