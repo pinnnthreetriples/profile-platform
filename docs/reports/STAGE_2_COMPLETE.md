@@ -30,6 +30,17 @@ Stage 2 implements a full user profile system on top of the Supabase Auth founda
 
 No public read. No cross-user access. No service role used for profile operations.
 
+### Column-Level Privileges
+
+RLS restricts rows by owner. Column grants restrict what authenticated users can write:
+
+- `authenticated` can select their own full profile.
+- `authenticated` can insert only `id`, `display_name`, `bio`, and `avatar_url`.
+- `authenticated` can update only `display_name`, `bio`, and `avatar_url`.
+- `payment_status`, `created_at`, and `updated_at` are not user-writable.
+
+This prevents users from directly changing `payment_status` through the Supabase API.
+
 ### `updated_at` Trigger
 
 `public.set_updated_at()` trigger fires `BEFORE UPDATE` on `profiles` and sets `new.updated_at = now()`.
@@ -40,7 +51,7 @@ No public read. No cross-user access. No service role used for profile operation
 
 ### Profile Feature Module
 
-```
+```text
 src/features/profile/
 ├── actions.ts        — updateProfileAction (server action)
 ├── constants.ts      — PROFILE_ROUTES, PAYMENT_STATUS_LABELS/VARIANTS
@@ -58,7 +69,7 @@ src/features/profile/
 - Server component — fetches profile via `ensureCurrentProfile()` (creates row if missing)
 - Displays `ProfileCard` (read-only: name, email, bio, payment status)
 - Displays `ProfileForm` (editable: display name, bio, avatar URL)
-- Payment status is **read-only** — not in the form
+- Payment status is **read-only** — not in the form and not user-writable by grants
 - Logout button present
 - Link to `/payment` (still placeholder)
 
@@ -68,6 +79,7 @@ src/features/profile/
 - All profile operations use anon SSR client + RLS
 - No service role used
 - No payment status mutation from profile form
+- Column privileges prevent direct authenticated writes to `payment_status`
 - `getUser()` used (not `getSession()`) for server-side auth checks per Supabase best practices
 
 ---
