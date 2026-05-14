@@ -20,20 +20,24 @@ Stage 1 implements complete Supabase Auth Core functionality including:
 ### 1. Supabase SSR Foundation
 
 **New dependency:**
+
 - `@supabase/ssr@0.10.3`
 
 **Client factories:**
+
 - `src/lib/supabase/client.ts` - Browser client using `createBrowserClient`
 - `src/lib/supabase/server.ts` - Server client using `createServerClient` with Next.js cookies
 - `src/lib/supabase/route.ts` - Route handler client for auth callbacks
 
 **Tests:**
+
 - `src/lib/supabase/client.test.ts` (3 tests)
 - `src/lib/supabase/server.test.ts` (3 tests)
 
 ### 2. Auth Callback Route
 
 **Implementation:**
+
 - `src/app/auth/callback/route.ts` - Handles email confirmation and magic link auth
 - Exchanges auth code for session
 - Redirects to `/profile` on success, `/login` on error
@@ -42,16 +46,19 @@ Stage 1 implements complete Supabase Auth Core functionality including:
 ### 3. Auth Schemas
 
 **Implementation:**
+
 - `src/features/auth/schemas.ts` - Zod schemas for login and register
 - Email validation
 - Password minimum 8 characters
 
 **Tests:**
+
 - `src/features/auth/schemas.test.ts` (6 tests)
 
 ### 4. Auth Server Actions
 
 **Implementation:**
+
 - `src/features/auth/actions.ts` - Server actions for auth operations
 - `loginAction` - Login with email/password
 - `registerAction` - Register new user
@@ -63,6 +70,7 @@ Stage 1 implements complete Supabase Auth Core functionality including:
 ### 5. Auth Components
 
 **Implementation:**
+
 - `src/features/auth/components/AuthForm.tsx` - Shared form component
 - `src/features/auth/components/AuthFormCard.tsx` - Card wrapper
 - `src/features/auth/components/LoginForm.tsx` - Login form
@@ -70,6 +78,7 @@ Stage 1 implements complete Supabase Auth Core functionality including:
 - `src/features/auth/components/LogoutButton.tsx` - Logout button
 
 **Features:**
+
 - Client components using server actions
 - Form state management with `useActionState`
 - Loading states during submission
@@ -79,6 +88,7 @@ Stage 1 implements complete Supabase Auth Core functionality including:
 ### 6. Protected Routes
 
 **Implementation:**
+
 - `src/lib/auth/routes.ts` - Route classification helpers
   - `isPublicRoute(pathname)` - Check if route is public
   - `isAuthRoute(pathname)` - Check if route is auth page
@@ -88,21 +98,25 @@ Stage 1 implements complete Supabase Auth Core functionality including:
   - Redirects authenticated users from `/login` and `/register` to `/profile`
 
 **Route configuration:**
+
 - Public routes: `/`, `/login`, `/register`, `/auth/callback`, `/payment/success`, `/payment/cancel`
 - Protected routes: `/profile`, `/payment`
 
 **Tests:**
+
 - `src/lib/auth/routes.test.ts` (6 tests)
 - `middleware.test.ts` (3 tests)
 
 ### 7. Auth Pages
 
 **Updated:**
+
 - `src/app/(auth)/login/page.tsx` - Uses `LoginForm` component
 - `src/app/(auth)/register/page.tsx` - Uses `RegisterForm` component
 - `src/app/(dashboard)/profile/page.tsx` - Includes `LogoutButton`
 
 **Page structure:**
+
 - Thin page.tsx files (composition only)
 - Business logic in feature components
 - Server actions for mutations
@@ -110,6 +124,7 @@ Stage 1 implements complete Supabase Auth Core functionality including:
 ### 8. E2E Tests
 
 **Updated:**
+
 - `e2e/app.spec.ts` - Tests for auth pages and protected routes
 - Login page shows login form
 - Register page shows register form
@@ -117,26 +132,31 @@ Stage 1 implements complete Supabase Auth Core functionality including:
 - Public payment routes remain accessible
 
 **Results:**
+
 - 7 E2E tests passing
 
 ### 9. Documentation
 
 **Updated:**
+
 - `docs/AUTH_FLOW.md` - Complete auth flow documentation
 - `README.md` - Stage 1 marked as complete
 - `TODO.md` - Stage 1 tasks marked complete
 - `docs/PROJECT_STRUCTURE.md` - (if needed)
 
 **Created:**
+
 - `docs/reports/STAGE_1_COMPLETE.md` - This file
 
 ### 10. Code Quality
 
 **Refactoring:**
+
 - Created shared `AuthForm` component to eliminate duplication
 - Reduced code duplication from 3.51% to 1.36%
 
 **Quality metrics:**
+
 - Code duplication: 1.36% (below 2% threshold) ✅
 - Dead code: 0 issues ✅
 - All tests passing: 41 unit tests, 7 E2E tests ✅
@@ -159,6 +179,7 @@ Following AGENTS.md rules, these are explicitly NOT included:
 ## Security Considerations
 
 ✅ **Implemented:**
+
 - No service role key exposed to client
 - Supabase Auth for all authentication
 - No manual password storage
@@ -168,6 +189,7 @@ Following AGENTS.md rules, these are explicitly NOT included:
 - Secure cookie handling via Supabase SSR
 
 ✅ **Not compromised:**
+
 - No secrets in git
 - No weakened security checks
 - No disabled linting rules
@@ -176,6 +198,7 @@ Following AGENTS.md rules, these are explicitly NOT included:
 ## Testing
 
 **Unit tests:** 41 passing
+
 - Supabase client factories (6 tests)
 - Auth schemas (6 tests)
 - Route helpers (6 tests)
@@ -187,6 +210,7 @@ Following AGENTS.md rules, these are explicitly NOT included:
 - Payment types (1 test)
 
 **E2E tests:** 7 passing
+
 - Home page loads
 - Login page shows form
 - Register page shows form
@@ -204,6 +228,7 @@ pnpm quality:full
 ```
 
 ✅ All checks passing:
+
 - format:check ✅
 - lint ✅
 - typecheck ✅
@@ -216,6 +241,7 @@ pnpm quality:full
 ## Files Changed
 
 **New files:**
+
 - `src/lib/supabase/route.ts`
 - `src/features/auth/schemas.ts`
 - `src/features/auth/actions.ts`
@@ -230,6 +256,7 @@ pnpm quality:full
 - `docs/reports/STAGE_1_COMPLETE.md`
 
 **Modified files:**
+
 - `package.json` (added @supabase/ssr)
 - `pnpm-lock.yaml`
 - `.gitignore` (added .kiro/settings/mcp.json)
@@ -249,14 +276,17 @@ pnpm quality:full
 ## Environment Variables
 
 **Required for Stage 1:**
+
 - `NEXT_PUBLIC_APP_URL` - Application URL
 - `NEXT_PUBLIC_SUPABASE_URL` - Supabase project URL
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY` - Supabase anon key
 
 **Server-only (not used in Stage 1):**
+
 - `SUPABASE_SERVICE_ROLE_KEY` - For admin operations (Stage 2+)
 
 **Not required yet:**
+
 - BTCPay variables (Stage 3+)
 
 ## Supabase Configuration
@@ -269,6 +299,7 @@ pnpm quality:full
    - `http://localhost:3000/**`
 
 **Auth providers enabled:**
+
 - Email/Password ✅
 - Magic Link ready (not tested yet)
 - OAuth ready (not configured yet)
@@ -325,6 +356,7 @@ pnpm quality:full
 ✅ **Ready to merge**
 
 This PR can be merged when:
+
 - GitHub Actions checks pass (Quality Gate, E2E, Gitleaks, Semgrep, Dependency Audit)
 - Code review approved
 - No merge conflicts with master

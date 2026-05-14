@@ -109,6 +109,7 @@ File: `src/features/auth/actions.ts`
 ### Auth Components
 
 Files:
+
 - `src/features/auth/components/AuthForm.tsx` - Shared form component
 - `src/features/auth/components/AuthFormCard.tsx` - Card wrapper
 - `src/features/auth/components/LoginForm.tsx` - Login form
@@ -116,6 +117,7 @@ Files:
 - `src/features/auth/components/LogoutButton.tsx` - Logout button
 
 Features:
+
 - Client components using server actions
 - Form state management with `useActionState`
 - Loading states during submission
