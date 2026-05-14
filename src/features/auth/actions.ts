@@ -4,8 +4,32 @@ import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { createSupabaseServerClient } from "@/lib/supabase/server"
 import { loginSchema, registerSchema } from "./schemas"
+import type { z } from "zod"
 
 export type AuthActionResult = { ok: true } | { ok: false; message: string }
+
+/**
+ * Shared validation logic for auth actions
+ */
+function validateAuthInput<T extends z.ZodTypeAny>(
+  schema: T,
+  formData: FormData
+): { ok: true; data: z.infer<T> } | { ok: false; message: string } {
+  const rawData = {
+    email: formData.get("email"),
+    password: formData.get("password"),
+  }
+
+  const result = schema.safeParse(rawData)
+
+  if (!result.success) {
+    const errors = result.error.flatten().fieldErrors
+    const firstError = errors.email?.[0] || errors.password?.[0]
+    return { ok: false, message: firstError || "Invalid input" }
+  }
+
+  return { ok: true, data: result.data }
+}
 
 /**
  * Login action
@@ -15,23 +39,11 @@ export async function loginAction(
   _prevState: AuthActionResult | null,
   formData: FormData
 ): Promise<AuthActionResult> {
-  // Validate input
-  const rawData = {
-    email: formData.get("email"),
-    password: formData.get("password"),
-  }
+  const validation = validateAuthInput(loginSchema, formData)
+  if (!validation.ok) return validation
 
-  const result = loginSchema.safeParse(rawData)
+  const { email, password } = validation.data
 
-  if (!result.success) {
-    const errors = result.error.flatten().fieldErrors
-    const firstError = errors.email?.[0] || errors.password?.[0]
-    return { ok: false, message: firstError || "Invalid input" }
-  }
-
-  const { email, password } = result.data
-
-  // Authenticate with Supabase
   const supabase = await createSupabaseServerClient()
   const { error } = await supabase.auth.signInWithPassword({
     email,
@@ -42,7 +54,6 @@ export async function loginAction(
     return { ok: false, message: error.message }
   }
 
-  // Success - redirect to profile
   revalidatePath("/", "layout")
   redirect("/profile")
 }
@@ -55,23 +66,11 @@ export async function registerAction(
   _prevState: AuthActionResult | null,
   formData: FormData
 ): Promise<AuthActionResult> {
-  // Validate input
-  const rawData = {
-    email: formData.get("email"),
-    password: formData.get("password"),
-  }
+  const validation = validateAuthInput(registerSchema, formData)
+  if (!validation.ok) return validation
 
-  const result = registerSchema.safeParse(rawData)
+  const { email, password } = validation.data
 
-  if (!result.success) {
-    const errors = result.error.flatten().fieldErrors
-    const firstError = errors.email?.[0] || errors.password?.[0]
-    return { ok: false, message: firstError || "Invalid input" }
-  }
-
-  const { email, password } = result.data
-
-  // Create user with Supabase
   const supabase = await createSupabaseServerClient()
   const { error } = await supabase.auth.signUp({
     email,
@@ -82,7 +81,6 @@ export async function registerAction(
     return { ok: false, message: error.message }
   }
 
-  // Success - redirect to profile
   revalidatePath("/", "layout")
   redirect("/profile")
 }

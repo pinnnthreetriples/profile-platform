@@ -11,8 +11,10 @@ import { createSupabaseRouteClient } from "@/lib/supabase/route"
  *
  * Flow:
  * 1. Extract code from URL params
- * 2. Exchange code for session
- * 3. Redirect to profile on success or login on failure
+ * 2. Create redirect response upfront
+ * 3. Pass redirect response to Supabase client for cookie writing
+ * 4. Exchange code for session (cookies written to redirect response)
+ * 5. Return the same redirect response with cookies
  */
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url)
@@ -24,10 +26,14 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(`${origin}/login`)
   }
 
-  // Create Supabase client with proper cookie handling
-  const { supabase, response } = await createSupabaseRouteClient(request)
+  // Create redirect response upfront
+  const redirectResponse = NextResponse.redirect(`${origin}/profile`)
+
+  // Create Supabase client with redirect response for cookie handling
+  const { supabase } = await createSupabaseRouteClient(request, redirectResponse)
 
   // Exchange code for session
+  // Cookies are written directly into redirectResponse via setAll
   const { error } = await supabase.auth.exchangeCodeForSession(code)
 
   if (error) {
@@ -35,11 +41,6 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(`${origin}/login`)
   }
 
-  // Success - redirect to profile
-  // Session cookies are automatically set via response object
-  // The response.headers contain Set-Cookie headers from exchangeCodeForSession
-  // which are preserved in the redirect response
-  return NextResponse.redirect(`${origin}/profile`, {
-    headers: response.headers,
-  })
+  // Success - return redirect response with cookies already set
+  return redirectResponse
 }

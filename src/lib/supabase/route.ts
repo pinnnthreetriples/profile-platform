@@ -9,14 +9,17 @@ import { type NextRequest, NextResponse } from "next/server"
  * Handles cookies properly for auth callback routes
  *
  * @param request - Next.js request object
+ * @param response - Optional NextResponse to write cookies into (for redirects)
  * @returns Tuple of [supabase client, response object]
  */
-export async function createSupabaseRouteClient(request: NextRequest) {
+export async function createSupabaseRouteClient(
+  request: NextRequest,
+  response?: NextResponse
+) {
   const cookieStore = await cookies()
 
-  let response = NextResponse.next({
-    request,
-  })
+  // Use provided response or create a new one
+  const responseToUse = response || NextResponse.next({ request })
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -29,12 +32,12 @@ export async function createSupabaseRouteClient(request: NextRequest) {
         setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value, options }) => {
             cookieStore.set(name, value, options)
-            response.cookies.set(name, value, options)
+            responseToUse.cookies.set(name, value, options)
           })
         },
       },
     }
   )
 
-  return { supabase, response }
+  return { supabase, response: responseToUse }
 }
