@@ -9,6 +9,12 @@ describe("profileUpdateSchema", () => {
       if (result.success) expect(result.data.displayName).toBe("Alice")
     })
 
+    it("trims displayName", () => {
+      const result = profileUpdateSchema.safeParse({ displayName: "  Alice  " })
+      expect(result.success).toBe(true)
+      if (result.success) expect(result.data.displayName).toBe("Alice")
+    })
+
     it("accepts undefined displayName", () => {
       const result = profileUpdateSchema.safeParse({})
       expect(result.success).toBe(true)
@@ -57,6 +63,12 @@ describe("profileUpdateSchema", () => {
       if (result.success) expect(result.data.bio).toBe("Hello world")
     })
 
+    it("trims bio", () => {
+      const result = profileUpdateSchema.safeParse({ bio: "  Hello world  " })
+      expect(result.success).toBe(true)
+      if (result.success) expect(result.data.bio).toBe("Hello world")
+    })
+
     it("normalizes empty string to null", () => {
       const result = profileUpdateSchema.safeParse({ bio: "" })
       expect(result.success).toBe(true)
@@ -93,6 +105,15 @@ describe("profileUpdateSchema", () => {
     it("accepts a valid URL", () => {
       const result = profileUpdateSchema.safeParse({
         avatarUrl: "https://example.com/avatar.png",
+      })
+      expect(result.success).toBe(true)
+      if (result.success)
+        expect(result.data.avatarUrl).toBe("https://example.com/avatar.png")
+    })
+
+    it("trims avatarUrl", () => {
+      const result = profileUpdateSchema.safeParse({
+        avatarUrl: "  https://example.com/avatar.png  ",
       })
       expect(result.success).toBe(true)
       if (result.success)
