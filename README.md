@@ -190,11 +190,16 @@ See [docs/PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md) for detailed structur
 - Protected routes: /profile, /payment
 - 41 unit tests, 7 E2E tests
 
-### 🔲 Stage 2 - Profiles
+### ✅ Stage 2 - Profiles
 
-- Profiles table
-- RLS policies
-- Profile page
+- Supabase migration: `profiles` table with constraints
+- RLS policies (select/insert/update own profile only)
+- `updated_at` trigger
+- Profile feature module (schemas, types, server, actions, queries, components)
+- `/profile` page: real server-side data, edit form, payment status display
+- `ensureCurrentProfile()` auto-creates profile on first visit
+- Unit tests (schemas, server functions, actions)
+- E2E: unauthenticated redirect verified
 
 ### 🔲 Stage 3 - Payments
 
