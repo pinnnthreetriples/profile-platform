@@ -5,6 +5,15 @@ import { profileUpdateSchema } from "./schemas"
 import { ensureCurrentProfile, updateCurrentProfile } from "./server"
 import type { ProfileActionResult } from "./types"
 
+function isNextRedirectError(err: unknown): boolean {
+  if (typeof err !== "object" || err === null || !("digest" in err)) {
+    return false
+  }
+
+  const digest = (err as { digest?: unknown }).digest
+  return typeof digest === "string" && digest.startsWith("NEXT_REDIRECT")
+}
+
 /**
  * Server action to update the current user's profile.
  * Validates input with Zod, updates via server function, revalidates /profile.
@@ -37,6 +46,10 @@ export async function updateProfileAction(
     revalidatePath("/profile")
     return { ok: true }
   } catch (err) {
+    if (isNextRedirectError(err)) {
+      throw err
+    }
+
     const message = err instanceof Error ? err.message : "Failed to update profile"
     return { ok: false, message }
   }
