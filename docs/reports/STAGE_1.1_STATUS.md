@@ -3,7 +3,7 @@
 **Date:** 2026-05-14  
 **PR:** #14 - Stage 1.1 Supabase Auth Setup  
 **Branch:** `stage-1-1-supabase-auth-setup`  
-**Status:** ✅ Ready for Merge (E2E needs GitHub Secrets)
+**Status:** ⚠️ Awaiting E2E Configuration
 
 ## Current GitHub Checks Status
 
@@ -14,7 +14,7 @@
 | Semgrep SAST      | ✅ PASSING | No security issues                        |
 | Dependency Audit  | ✅ PASSING | No vulnerable dependencies                |
 | TruffleHog        | ✅ PASSING | Additional secret scanning                |
-| Playwright E2E    | ❌ FAILING | **Expected** - needs Supabase credentials |
+| Playwright E2E    | ❌ FAILING | **Requires GitHub Secrets configuration** |
 
 **Overall:** 5/6 checks passing
 
@@ -39,16 +39,16 @@
 - Commit 2: `style: format STAGE_1.1_FINAL_REPORT.md with Prettier`
 - Both commits successfully pushed to PR branch
 
-## Why E2E Is Failing (Expected)
+## Why E2E Is Failing
 
-The E2E test failure is **expected and documented**. E2E tests require:
+E2E tests require Supabase environment variables to be configured in GitHub Actions:
 
 1. **NEXT_PUBLIC_SUPABASE_URL** - Supabase project URL
 2. **NEXT_PUBLIC_SUPABASE_ANON_KEY** - Supabase anon/public key
 
-These are **public keys** (safe for CI) but need to be added to GitHub Secrets.
+These are **public keys** (safe for CI) and must be added to GitHub Secrets.
 
-**E2E tests pass locally** (7/7) when these env vars are present.
+**E2E tests pass locally** (7/7) when these env vars are present in `.env.local`.
 
 ## Required Actions Before Merge
 
@@ -163,7 +163,7 @@ Expected result: All 6/6 checks passing
 
 ## Summary
 
-Stage 1.1 is **production-ready** with:
+Stage 1.1 implementation is complete with:
 
 - ✅ Comprehensive auth implementation
 - ✅ Security hardening complete
@@ -172,9 +172,9 @@ Stage 1.1 is **production-ready** with:
 - ✅ All local checks passing
 - ✅ 5/6 GitHub checks passing
 
-**Only blocker:** E2E needs Supabase credentials in GitHub Secrets (expected, documented, easy fix)
+**Blocker:** E2E requires Supabase credentials in GitHub Secrets
 
-**Recommendation:** Add secrets and merge immediately after E2E passes.
+**Next step:** Configure GitHub Secrets, verify all checks pass, then merge.
 
 ---
 

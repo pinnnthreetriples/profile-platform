@@ -24,6 +24,28 @@ const AUTH_ROUTES = ["/login", "/register"]
 const PROTECTED_ROUTES = ["/profile", "/payment"]
 
 /**
+ * Get Supabase environment variables with validation
+ * Throws clear error if variables are missing
+ */
+function getSupabaseEnv(): {
+  url: string
+  anonKey: string
+} {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+  if (!url || !anonKey) {
+    throw new Error(
+      "Missing required Supabase environment variables. " +
+        "NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY must be set. " +
+        "Check your .env.local file or GitHub Actions secrets configuration."
+    )
+  }
+
+  return { url, anonKey }
+}
+
+/**
  * Check if a route is an auth route (login/register)
  */
 function isAuthRoute(pathname: string): boolean {
@@ -61,28 +83,26 @@ export async function middleware(request: NextRequest) {
     request,
   })
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll()
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value }) => {
-            request.cookies.set(name, value)
-          })
-          supabaseResponse = NextResponse.next({
-            request,
-          })
-          cookiesToSet.forEach(({ name, value, options }) => {
-            supabaseResponse.cookies.set(name, value, options)
-          })
-        },
+  const { url, anonKey } = getSupabaseEnv()
+
+  const supabase = createServerClient(url, anonKey, {
+    cookies: {
+      getAll() {
+        return request.cookies.getAll()
       },
-    }
-  )
+      setAll(cookiesToSet) {
+        cookiesToSet.forEach(({ name, value }) => {
+          request.cookies.set(name, value)
+        })
+        supabaseResponse = NextResponse.next({
+          request,
+        })
+        cookiesToSet.forEach(({ name, value, options }) => {
+          supabaseResponse.cookies.set(name, value, options)
+        })
+      },
+    },
+  })
 
   // Refresh session if expired - required for Server Components
   // IMPORTANT: Don't use getUser() in middleware as it makes a network request

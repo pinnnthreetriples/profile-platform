@@ -31,5 +31,19 @@ jobs:
       - name: Install Playwright browsers
         run: pnpm exec playwright install --with-deps chromium
 
+      - name: Validate E2E environment
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+        run: |
+          test -n "$NEXT_PUBLIC_SUPABASE_URL" || (echo "NEXT_PUBLIC_SUPABASE_URL is required for E2E" && exit 1)
+          test -n "$NEXT_PUBLIC_SUPABASE_ANON_KEY" || (echo "NEXT_PUBLIC_SUPABASE_ANON_KEY is required for E2E" && exit 1)
+
       - name: Run Playwright tests
         run: pnpm test:e2e
+        env:
+          NEXT_PUBLIC_APP_URL: http://localhost:3000
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          NEXT_PUBLIC_PAYMENT_CURRENCY: USDT
+          NEXT_PUBLIC_PAYMENT_NETWORK: polygon
