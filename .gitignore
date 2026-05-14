@@ -48,3 +48,6 @@ supabase/.temp
 playwright-report
 test-results
 coverage
+
+# kiro
+.kiro/settings/mcp.json

@@ -154,7 +154,7 @@ Forbidden:
 - removing `pnpm duplicates`
 - removing `pnpm deadcode`
 - disabling lint/security rules globally
-- removing Gitleaks, Semgrep, or Dependency Audit
+- removing Gitleaks, Semgrep, Dependency Audit, or TruffleHog
 - changing required GitHub checks without approval
 
 If a check fails, fix the root cause.

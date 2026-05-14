@@ -54,16 +54,41 @@
 - [x] AI agent documentation
 - [x] documentation consistency cleanup
 
-## Stage 1 — Supabase Auth
+## Stage 1 — Supabase Auth ✅
 
-- [ ] Configure Supabase project
-- [ ] Configure Supabase Auth
-- [ ] Implement register
-- [ ] Implement login
-- [ ] Implement logout
-- [ ] Implement auth session handling
-- [ ] Add protected routes middleware
-- [ ] Add auth tests
+- [x] Configure Supabase project connection
+- [x] Install @supabase/ssr package
+- [x] Configure Supabase SSR browser client
+- [x] Configure Supabase SSR server client
+- [x] Configure Supabase SSR route handler client
+- [x] Add auth middleware with session refresh
+- [x] Add protected route redirects
+- [x] Add auth callback route with code exchange
+- [x] Create auth schemas (Zod)
+- [x] Implement register form
+- [x] Implement login form
+- [x] Implement logout
+- [x] Add auth server actions
+- [x] Add auth components
+- [x] Add auth tests (54 unit tests, 7 E2E tests)
+- [x] Document auth flow
+
+## Stage 1.1 — Production Hardening ✅
+
+- [x] Merge master into PR branch
+- [x] Fix auth callback cookie handling
+- [x] Strengthen auth actions tests
+- [x] Add TruffleHog workflow
+- [x] Add security headers (CSP, X-Frame-Options, etc.)
+- [x] Add centralized logger
+- [x] Add env validation fail-fast
+- [x] Add rate limiting architecture
+- [x] Add ADR documentation (0004-auth, 0005-middleware)
+- [x] Enhance middleware matcher
+- [x] Verify no client-side secret leaks
+- [x] Reduce code duplication to 1.1%
+- [x] Update documentation (QUALITY_GATE.md, AGENTS.md)
+- [x] Create comprehensive final report
 
 ## Stage 2 — Profiles
 

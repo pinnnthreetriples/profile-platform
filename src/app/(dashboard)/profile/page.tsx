@@ -8,14 +8,20 @@ import {
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
+import { LogoutButton } from "@/features/auth/components/LogoutButton"
 
 export default function ProfilePage() {
   return (
-    <div className="min-h-screen flex items-center justify-center p-8">
+    <div className="flex min-h-screen items-center justify-center p-8">
       <Card className="w-full max-w-2xl">
         <CardHeader>
-          <CardTitle>Profile</CardTitle>
-          <CardDescription>Profile placeholder</CardDescription>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle>Profile</CardTitle>
+              <CardDescription>Your account information</CardDescription>
+            </div>
+            <LogoutButton />
+          </div>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-2">
