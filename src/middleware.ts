@@ -1,6 +1,49 @@
 import { NextResponse, type NextRequest } from "next/server"
 import { createServerClient } from "@supabase/ssr"
-import { isProtectedRoute, isAuthRoute } from "@/lib/auth/routes"
+
+/**
+ * Public routes that don't require authentication
+ */
+const PUBLIC_ROUTES = [
+  "/",
+  "/login",
+  "/register",
+  "/auth/callback",
+  "/payment/success",
+  "/payment/cancel",
+]
+
+/**
+ * Auth routes that authenticated users should not access
+ */
+const AUTH_ROUTES = ["/login", "/register"]
+
+/**
+ * Protected routes that require authentication
+ */
+const PROTECTED_ROUTES = ["/profile", "/payment"]
+
+/**
+ * Check if a route is an auth route (login/register)
+ */
+function isAuthRoute(pathname: string): boolean {
+  return AUTH_ROUTES.includes(pathname)
+}
+
+/**
+ * Check if a route is protected (requires authentication)
+ */
+function isProtectedRoute(pathname: string): boolean {
+  // First check if it's explicitly public (exact match)
+  if (PUBLIC_ROUTES.includes(pathname)) {
+    return false
+  }
+
+  // Then check if it matches protected routes
+  return PROTECTED_ROUTES.some(
+    (route) => pathname === route || pathname.startsWith(`${route}/`)
+  )
+}
 
 /**
  * Middleware for Supabase Auth
@@ -12,6 +55,8 @@ import { isProtectedRoute, isAuthRoute } from "@/lib/auth/routes"
  * - Redirect authenticated users from auth routes
  */
 export async function middleware(request: NextRequest) {
+  const pathname = request.nextUrl.pathname
+
   let supabaseResponse = NextResponse.next({
     request,
   })
@@ -25,7 +70,7 @@ export async function middleware(request: NextRequest) {
           return request.cookies.getAll()
         },
         setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) => {
+          cookiesToSet.forEach(({ name, value }) => {
             request.cookies.set(name, value)
           })
           supabaseResponse = NextResponse.next({
@@ -40,22 +85,34 @@ export async function middleware(request: NextRequest) {
   )
 
   // Refresh session if expired - required for Server Components
+  // IMPORTANT: Don't use getUser() in middleware as it makes a network request
+  // Use getSession() instead which only reads from cookies
   const {
-    data: { user },
-  } = await supabase.auth.getUser()
+    data: { session },
+  } = await supabase.auth.getSession()
 
-  const pathname = request.nextUrl.pathname
+  const user = session?.user
 
   // Redirect unauthenticated users from protected routes
   if (isProtectedRoute(pathname) && !user) {
     const redirectUrl = new URL("/login", request.url)
-    return NextResponse.redirect(redirectUrl)
+    const redirectResponse = NextResponse.redirect(redirectUrl)
+    // Preserve session cookies in redirect response
+    supabaseResponse.cookies.getAll().forEach((cookie) => {
+      redirectResponse.cookies.set(cookie.name, cookie.value)
+    })
+    return redirectResponse
   }
 
   // Redirect authenticated users from auth routes to profile
   if (isAuthRoute(pathname) && user) {
     const redirectUrl = new URL("/profile", request.url)
-    return NextResponse.redirect(redirectUrl)
+    const redirectResponse = NextResponse.redirect(redirectUrl)
+    // Preserve session cookies in redirect response
+    supabaseResponse.cookies.getAll().forEach((cookie) => {
+      redirectResponse.cookies.set(cookie.name, cookie.value)
+    })
+    return redirectResponse
   }
 
   return supabaseResponse

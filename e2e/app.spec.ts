@@ -24,18 +24,14 @@ test.describe("Public Pages", () => {
 })
 
 test.describe("Protected Pages", () => {
-  test("profile page loads", async ({ page }) => {
+  test("profile page redirects to login when unauthenticated", async ({ page }) => {
     await page.goto("/profile")
-    // In dev mode, middleware may not redirect immediately
-    // Just verify the page loads
-    await expect(page).toHaveURL(/\/(profile|login)/)
+    await expect(page).toHaveURL(/\/login/)
   })
 
-  test("payment page loads", async ({ page }) => {
+  test("payment page redirects to login when unauthenticated", async ({ page }) => {
     await page.goto("/payment")
-    // In dev mode, middleware may not redirect immediately
-    // Just verify the page loads
-    await expect(page).toHaveURL(/\/(payment|login)/)
+    await expect(page).toHaveURL(/\/login/)
   })
 
   test("payment success page loads (public)", async ({ page }) => {

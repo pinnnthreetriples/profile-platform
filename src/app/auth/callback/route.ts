@@ -37,6 +37,8 @@ export async function GET(request: NextRequest) {
 
   // Success - redirect to profile
   // Session cookies are automatically set via response object
+  // The response.headers contain Set-Cookie headers from exchangeCodeForSession
+  // which are preserved in the redirect response
   return NextResponse.redirect(`${origin}/profile`, {
     headers: response.headers,
   })

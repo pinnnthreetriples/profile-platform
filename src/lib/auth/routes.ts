@@ -28,29 +28,26 @@ const PROTECTED_ROUTES = ["/profile", "/payment"]
  * Check if a route is public (accessible without auth)
  */
 export function isPublicRoute(pathname: string): boolean {
-  return PUBLIC_ROUTES.some(
-    (route) => pathname === route || pathname.startsWith(`${route}/`)
-  )
+  return PUBLIC_ROUTES.includes(pathname)
 }
 
 /**
  * Check if a route is an auth route (login/register)
  */
 export function isAuthRoute(pathname: string): boolean {
-  return AUTH_ROUTES.some(
-    (route) => pathname === route || pathname.startsWith(`${route}/`)
-  )
+  return AUTH_ROUTES.includes(pathname)
 }
 
 /**
  * Check if a route is protected (requires authentication)
  */
 export function isProtectedRoute(pathname: string): boolean {
-  // Check if it's explicitly public first
-  if (isPublicRoute(pathname)) {
+  // First check if it's explicitly public (exact match)
+  if (PUBLIC_ROUTES.includes(pathname)) {
     return false
   }
 
+  // Then check if it matches protected routes
   return PROTECTED_ROUTES.some(
     (route) => pathname === route || pathname.startsWith(`${route}/`)
   )

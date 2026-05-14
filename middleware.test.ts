@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { config } from "./middleware"
+import { config } from "./src/middleware"
 
 describe("middleware config", () => {
   it("should have matcher configuration", () => {
