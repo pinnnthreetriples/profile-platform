@@ -23,7 +23,7 @@ Stage 1.1 successfully implements the Supabase Auth foundation for Next.js App R
 - **Existing Edge Functions:** None (clean state)
 - **Available Keys:**
   - Legacy anon key (JWT-based)
-  - Modern publishable key (sb_publishable_...)
+  - Modern publishable key (sb*publishable*...)
 
 ## What Changed in Code
 
