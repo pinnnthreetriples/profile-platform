@@ -23,7 +23,10 @@ function validateAuthInput<T extends z.ZodTypeAny>(
   const result = schema.safeParse(rawData)
 
   if (!result.success) {
-    const errors = result.error.flatten().fieldErrors
+    const errors = result.error.flatten().fieldErrors as Record<
+      string,
+      string[] | undefined
+    >
     const firstError = errors.email?.[0] || errors.password?.[0]
     return { ok: false, message: firstError || "Invalid input" }
   }
