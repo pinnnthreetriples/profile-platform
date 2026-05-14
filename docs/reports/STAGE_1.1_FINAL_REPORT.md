@@ -410,12 +410,12 @@ Dead Code:      0 issues
 
 ## Next Steps
 
-### Immediate (Before Merge)
+### Required Before Merge
 
-1. ✅ Add GitHub Secrets (NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY)
-2. ✅ Add TruffleHog to branch protection
-3. ✅ Verify E2E tests pass in CI
-4. ✅ Merge PR #14
+1. ⬜ Add GitHub Secrets (NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY)
+2. ⬜ Add TruffleHog to branch protection
+3. ⬜ Verify E2E tests pass in CI
+4. ⬜ Merge PR #14 after all required checks are green
 
 ### Stage 2 (Profiles)
 
