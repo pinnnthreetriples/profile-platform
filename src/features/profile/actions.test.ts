@@ -107,6 +107,16 @@ describe("updateProfileAction", () => {
     }
   })
 
+  it("rethrows Next.js redirect errors", async () => {
+    const redirectError = new Error("NEXT_REDIRECT") as Error & { digest: string }
+    redirectError.digest = "NEXT_REDIRECT;replace;/login;307;"
+    vi.mocked(ensureCurrentProfile).mockRejectedValue(redirectError)
+
+    const fd = makeFormData({ displayName: "Alice", bio: "", avatarUrl: "" })
+
+    await expect(updateProfileAction(null, fd)).rejects.toBe(redirectError)
+  })
+
   it("normalizes empty displayName to null before calling updateCurrentProfile", async () => {
     const fd = makeFormData({ displayName: "", bio: "", avatarUrl: "" })
     await updateProfileAction(null, fd)
