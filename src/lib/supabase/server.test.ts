@@ -1,3 +1,5 @@
+/** @vitest-environment node */
+
 import { describe, it, expect, beforeEach, vi } from "vitest"
 
 // Mock Next.js cookies at module level
@@ -37,7 +39,7 @@ describe("createSupabaseServerClient", () => {
     expect(result).toBeInstanceOf(Promise)
   })
 
-  it("should use environment variables from getClientEnv", async () => {
+  it("should use environment variables from getServerEnv", async () => {
     const { createSupabaseServerClient } = await import("./server")
     const client = await createSupabaseServerClient()
 
