@@ -2,12 +2,22 @@
 
 import { describe, it, expect, beforeEach, vi } from "vitest"
 
+const mocks = vi.hoisted(() => ({
+  cookieStore: {
+    getAll: vi.fn(),
+    set: vi.fn(),
+  },
+  createServerClient: vi.fn(),
+}))
+
 // Mock Next.js cookies at module level
 vi.mock("next/headers", () => ({
-  cookies: vi.fn().mockResolvedValue({
-    getAll: vi.fn().mockReturnValue([]),
-    set: vi.fn(),
-  }),
+  cookies: vi.fn().mockResolvedValue(mocks.cookieStore),
+}))
+
+// Mock Supabase SSR client factory to avoid creating a real Realtime client in Node tests
+vi.mock("@supabase/ssr", () => ({
+  createServerClient: mocks.createServerClient,
 }))
 
 const setupValidEnv = () => {
@@ -21,7 +31,13 @@ const setupValidEnv = () => {
 describe("createSupabaseServerClient", () => {
   beforeEach(() => {
     vi.resetModules()
+    vi.clearAllMocks()
     setupValidEnv()
+
+    mocks.cookieStore.getAll.mockReturnValue([])
+    mocks.createServerClient.mockReturnValue({
+      auth: {},
+    })
   })
 
   it("should create a Supabase server client", async () => {
@@ -37,12 +53,22 @@ describe("createSupabaseServerClient", () => {
     const result = createSupabaseServerClient()
 
     expect(result).toBeInstanceOf(Promise)
+    await result
   })
 
   it("should use environment variables from getServerEnv", async () => {
     const { createSupabaseServerClient } = await import("./server")
-    const client = await createSupabaseServerClient()
+    await createSupabaseServerClient()
 
-    expect(client).toBeDefined()
+    expect(mocks.createServerClient).toHaveBeenCalledWith(
+      "https://example.supabase.co",
+      "test-anon-key",
+      expect.objectContaining({
+        cookies: expect.objectContaining({
+          getAll: expect.any(Function),
+          setAll: expect.any(Function),
+        }),
+      })
+    )
   })
 })
