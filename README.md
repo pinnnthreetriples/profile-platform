@@ -176,18 +176,7 @@ See [docs/PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md) for detailed structur
 - documentation governance
 - AI agent instructions
 
-### 🔄 Stage 1 - Supabase Auth (In Progress)
-
-#### ✅ Stage 1.1 - Supabase Auth Setup
-
-- Supabase SSR client foundation
-- Browser client factory
-- Server client factory
-- Middleware session refresh
-- Auth callback route placeholder
-- Auth flow documentation
-
-#### 🔲 Stage 1.2+ - Auth Implementation
+### 🔲 Stage 1 - Supabase Auth
 
 - User registration
 - User login
