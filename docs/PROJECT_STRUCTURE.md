@@ -17,9 +17,6 @@ src/
 │   ├── (dashboard)/         # Protected routes
 │   │   ├── profile/         # Profile page
 │   │   └── payment/         # Payment pages
-│   ├── auth/                # Auth API routes
-│   │   └── callback/        # Auth callback handler
-│   │       └── route.ts     # Email/magic link/OAuth callback
 │   ├── providers.tsx        # App-level client providers
 │   ├── template.tsx         # Smooth route transition wrapper
 │   ├── loading.tsx          # Route loading placeholder
@@ -67,8 +64,8 @@ src/
 │   │   ├── server.ts        # Server-side env (server-only)
 │   │   └── shared.ts        # Shared schemas
 │   ├── supabase/            # Supabase clients
-│   │   ├── client.ts        # Browser client (SSR-compatible)
-│   │   └── server.ts        # Server client (SSR-compatible, server-only)
+│   │   ├── client.ts        # Browser client
+│   │   └── server.ts        # Server client (server-only)
 │   ├── btcpay/              # BTCPay integration
 │   │   ├── client.ts        # BTCPay client (server-only)
 │   │   └── types.ts         # BTCPay types
@@ -79,8 +76,6 @@ src/
 └── types/                   # Shared TypeScript types
     ├── database.ts          # Database types
     └── payment.ts           # Payment types
-
-middleware.ts                # Auth session refresh middleware
 
 supabase/
 ├── functions/               # Supabase Edge Functions
@@ -109,7 +104,6 @@ docs/
 ├── CODING_RULES.md          # Coding standards
 ├── QUALITY_GATE.md          # Quality checks
 ├── ENVIRONMENT.md           # Environment guide
-├── AUTH_FLOW.md             # Auth flow documentation
 └── PAYMENT_FLOW.md          # Payment flow documentation
 ```
 

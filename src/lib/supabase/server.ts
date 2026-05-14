@@ -1,39 +1,21 @@
 import "server-only"
 
-import { cookies } from "next/headers"
-import { createServerClient } from "@supabase/ssr"
-import { getClientEnv } from "@/lib/env"
+import { createClient } from "@supabase/supabase-js"
+import { getServerEnv } from "@/lib/env/server"
 
 /**
  * Create a Supabase client for server components and API routes
- * Uses SSR-compatible server client with cookie handling
- * Uses anon key - service_role only when needed
+ * Uses anon key for now - service_role only when needed
  *
- * @returns Supabase server client instance
+ * @returns Supabase client instance
  */
-export async function createSupabaseServerClient() {
-  const cookieStore = await cookies()
-  const env = getClientEnv()
+export function createSupabaseServerClient() {
+  const env = getServerEnv()
 
-  return createServerClient(
-    env.NEXT_PUBLIC_SUPABASE_URL,
-    env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-    {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll()
-        },
-        setAll(cookiesToSet) {
-          try {
-            cookiesToSet.forEach(({ name, value, options }) => {
-              cookieStore.set(name, value, options)
-            })
-          } catch {
-            // Server Components cannot set cookies during render.
-            // Middleware handles session refresh.
-          }
-        },
-      },
-    }
-  )
+  return createClient(env.NEXT_PUBLIC_SUPABASE_URL, env.NEXT_PUBLIC_SUPABASE_ANON_KEY, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+    },
+  })
 }
