@@ -11,7 +11,6 @@ describe("middleware config", () => {
   it("should exclude static files from middleware", () => {
     const matcher = config.matcher[0]
 
-    // Verify pattern excludes common static paths
     expect(matcher).toContain("_next/static")
     expect(matcher).toContain("_next/image")
     expect(matcher).toContain("favicon.ico")

@@ -176,23 +176,19 @@ See [docs/PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md) for detailed structur
 - documentation governance
 - AI agent instructions
 
-### 🔄 Stage 1 - Supabase Auth (In Progress)
-
-#### ✅ Stage 1.1 - Supabase Auth Setup
+### ✅ Stage 1 - Supabase Auth Core
 
 - Supabase SSR client foundation
-- Browser client factory
-- Server client factory
+- Browser, server, and route handler client factories
 - Middleware session refresh
-- Auth callback route placeholder
-- Auth flow documentation
-
-#### 🔲 Stage 1.2+ - Auth Implementation
-
-- User registration
-- User login
-- User logout
-- Protected routes
+- Protected route redirects
+- Auth callback with code exchange
+- Auth schemas (Zod validation)
+- Auth server actions (login, register, logout)
+- Auth components (LoginForm, RegisterForm, LogoutButton)
+- Login and register pages
+- Protected routes: /profile, /payment
+- 41 unit tests, 7 E2E tests
 
 ### 🔲 Stage 2 - Profiles
 

@@ -1,23 +1,28 @@
 # Auth Flow
 
-## Stage 1.1 — Supabase Auth Setup ✅
+## Stage 1 — Supabase Auth Core ✅
 
 Implemented:
 
-- Supabase SSR client foundation
-- Browser client factory using `@supabase/ssr`
-- Server client factory using `@supabase/ssr` with cookie handling
-- Middleware session refresh foundation
-- Auth callback route placeholder for email/magic link/OAuth
+- Supabase SSR client foundation (`@supabase/ssr`)
+- Browser client factory using `createBrowserClient`
+- Server client factory using `createServerClient` with cookie handling
+- Route handler client factory for auth callbacks
+- Middleware session refresh with protected route redirects
+- Auth callback route with code exchange
+- Auth schemas (Zod validation for login/register)
+- Auth server actions (loginAction, registerAction, logoutAction)
+- Auth components (LoginForm, RegisterForm, LogoutButton)
+- Protected routes: `/profile`, `/payment`
+- Public routes: `/`, `/login`, `/register`, `/auth/callback`, `/payment/success`, `/payment/cancel`
+- Auth route redirects (authenticated users redirected from `/login` and `/register` to `/profile`)
 
-Not implemented yet:
+Not implemented yet (Stage 2+):
 
-- Login form logic
-- Register form logic
-- Logout functionality
-- Protected route redirects
 - Profile table
+- Profile management
 - Payments
+- Service role usage
 
 ## Rules
 
@@ -51,6 +56,15 @@ File: `src/lib/supabase/server.ts`
 - Handles cookies via Next.js `cookies()` API
 - Async function (required for Next.js 15+)
 
+### Route Handler Client
+
+File: `src/lib/supabase/route.ts`
+
+- Uses `createServerClient` from `@supabase/ssr`
+- Designed for Route Handlers (GET/POST endpoints)
+- Handles cookies via `NextRequest` and `NextResponse`
+- Used in auth callback route
+
 ### Middleware
 
 File: `middleware.ts`
@@ -58,7 +72,9 @@ File: `middleware.ts`
 - Refreshes auth session on every request
 - Updates auth cookies automatically
 - Uses `supabase.auth.getUser()` for session validation
-- Does not implement protected route redirects yet (Stage 1.2+)
+- Redirects unauthenticated users from protected routes to `/login`
+- Redirects authenticated users from `/login` and `/register` to `/profile`
+- Uses route helpers from `src/lib/auth/routes.ts`
 
 ### Auth Callback
 
@@ -66,9 +82,45 @@ File: `src/app/auth/callback/route.ts`
 
 - Handles email confirmation links
 - Handles magic link authentication
-- Exchanges auth code for session
-- Redirects to profile or login based on result
+- Exchanges auth code for session using route helper
+- Redirects to profile on success
+- Redirects to login on error
 - OAuth support ready for future implementation
+
+### Auth Schemas
+
+File: `src/features/auth/schemas.ts`
+
+- Zod schemas for login and register forms
+- Email validation
+- Password minimum 8 characters
+- Type-safe form validation
+
+### Auth Actions
+
+File: `src/features/auth/actions.ts`
+
+- Server actions for login, register, logout
+- Zod validation on server side
+- Uses Supabase Auth (no manual password storage)
+- Returns typed `AuthActionResult`
+- Handles errors gracefully
+
+### Auth Components
+
+Files:
+- `src/features/auth/components/AuthForm.tsx` - Shared form component
+- `src/features/auth/components/AuthFormCard.tsx` - Card wrapper
+- `src/features/auth/components/LoginForm.tsx` - Login form
+- `src/features/auth/components/RegisterForm.tsx` - Register form
+- `src/features/auth/components/LogoutButton.tsx` - Logout button
+
+Features:
+- Client components using server actions
+- Form state management with `useActionState`
+- Loading states during submission
+- Error message display
+- Minimal UI (no final design yet)
 
 ## Environment Variables
 
@@ -95,45 +147,46 @@ Production redirect URL pending until production domain is known.
 
 ## Next Steps
 
-### Stage 1.2 — Auth Schemas and Forms
+### Stage 2 — Profiles
 
-- Create Zod schemas for login/register
-- Implement register form
-- Implement login form
-- Add form validation
-- Add error handling
+- Create profiles table with RLS policies
+- Implement profile page
+- Add profile update functionality
+- Link profile to auth user
 
-### Stage 1.3 — Auth Session Handling
+### Stage 3 — Payments
 
-- Implement logout functionality
-- Add session state management
-- Add auth context/hooks
-- Add loading states
+- Create payments table
+- Implement create-payment Edge Function
+- Integrate BTCPay Server
+- Add payment page UI
 
-### Stage 1.4 — Protected Routes
+### Stage 4 — Webhooks
 
-- Add protected route middleware redirects
-- Implement auth guards
-- Add role-based access (future)
+- Implement webhook verification
+- Handle payment status updates
+- Add payment events logging
 
 ## Testing
 
 Current test coverage:
 
-- Browser client factory exists
-- Server client factory exists
-- Middleware matcher configuration
-- Auth callback route exists
-- Environment validation for Supabase keys
+- Browser client factory (3 tests)
+- Server client factory (3 tests)
+- Middleware matcher configuration (3 tests)
+- Auth schemas validation (6 tests)
+- Route classification helpers (6 tests)
+- E2E tests for login/register pages (7 tests)
+- E2E tests for protected route redirects
+
+Total: 41 unit tests passing, 7 E2E tests passing
 
 Future test coverage:
 
-- Login flow E2E
-- Register flow E2E
-- Logout flow E2E
-- Protected route redirects
+- Auth actions (login/register/logout)
 - Session persistence
 - Token refresh
+- Profile management (Stage 2+)
 
 ## Security Considerations
 

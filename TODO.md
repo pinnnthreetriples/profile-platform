@@ -54,27 +54,24 @@
 - [x] AI agent documentation
 - [x] documentation consistency cleanup
 
-## Stage 1 — Supabase Auth
-
-### Stage 1.1 — Supabase Auth Setup ✅
+## Stage 1 — Supabase Auth ✅
 
 - [x] Configure Supabase project connection
 - [x] Install @supabase/ssr package
 - [x] Configure Supabase SSR browser client
 - [x] Configure Supabase SSR server client
-- [x] Add auth middleware foundation
-- [x] Add auth callback route placeholder
+- [x] Configure Supabase SSR route handler client
+- [x] Add auth middleware with session refresh
+- [x] Add protected route redirects
+- [x] Add auth callback route with code exchange
+- [x] Create auth schemas (Zod)
+- [x] Implement register form
+- [x] Implement login form
+- [x] Implement logout
+- [x] Add auth server actions
+- [x] Add auth components
+- [x] Add auth tests (41 unit tests, 7 E2E tests)
 - [x] Document auth flow
-
-### Stage 1.2+ — Auth Implementation
-
-- [ ] Create auth schemas (Zod)
-- [ ] Implement register form
-- [ ] Implement login form
-- [ ] Implement logout
-- [ ] Implement auth session handling
-- [ ] Add protected routes middleware redirects
-- [ ] Add auth tests
 
 ## Stage 2 — Profiles
 
