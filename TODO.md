@@ -90,13 +90,17 @@
 - [x] Update documentation (QUALITY_GATE.md, AGENTS.md)
 - [x] Create comprehensive final report
 
-## Stage 2 — Profiles
+## Stage 2 — Profiles ✅
 
-- [ ] Create profiles table
-- [ ] Setup RLS policies
-- [ ] Implement profile page
-- [ ] Add profile update
-- [ ] Link profile to auth
+- [x] Create profiles table (supabase/migrations/20260515000000_create_profiles.sql)
+- [x] Setup RLS policies (select/insert/update own profile only)
+- [x] Implement profile page (/profile — real data, no longer placeholder)
+- [x] Add profile update (updateProfileAction + updateCurrentProfile)
+- [x] Link profile to auth (profiles.id = auth.users.id, ensureCurrentProfile)
+- [x] Database types updated (src/types/database.ts)
+- [x] Profile feature module (schemas, types, server, actions, queries, components)
+- [x] Unit tests (schemas, server functions, actions)
+- [x] E2E tests (unauthenticated redirect verified)
 
 ## Stage 3 — Payments
 
