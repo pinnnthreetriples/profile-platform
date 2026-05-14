@@ -70,8 +70,25 @@
 - [x] Implement logout
 - [x] Add auth server actions
 - [x] Add auth components
-- [x] Add auth tests (41 unit tests, 7 E2E tests)
+- [x] Add auth tests (54 unit tests, 7 E2E tests)
 - [x] Document auth flow
+
+## Stage 1.1 — Production Hardening ✅
+
+- [x] Merge master into PR branch
+- [x] Fix auth callback cookie handling
+- [x] Strengthen auth actions tests
+- [x] Add TruffleHog workflow
+- [x] Add security headers (CSP, X-Frame-Options, etc.)
+- [x] Add centralized logger
+- [x] Add env validation fail-fast
+- [x] Add rate limiting architecture
+- [x] Add ADR documentation (0004-auth, 0005-middleware)
+- [x] Enhance middleware matcher
+- [x] Verify no client-side secret leaks
+- [x] Reduce code duplication to 1.1%
+- [x] Update documentation (QUALITY_GATE.md, AGENTS.md)
+- [x] Create comprehensive final report
 
 ## Stage 2 — Profiles
 
