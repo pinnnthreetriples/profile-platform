@@ -211,12 +211,21 @@ Runs Playwright tests as a separate required workflow on PRs to `main`/`master`.
 - Gitleaks
 - Semgrep SAST
 - Dependency Audit
+- TruffleHog
 
 ### Secret Scan (`.github/workflows/secrets.yml`)
 
 Runs on every push and PR:
 
 1. ✅ Gitleaks secret detection
+
+### TruffleHog (`.github/workflows/trufflehog.yml`)
+
+Runs on every push and PR:
+
+1. ✅ TruffleHog secret detection (verified and unknown results)
+
+**Note:** TruffleHog provides additional secret scanning coverage alongside Gitleaks. Both checks are required.
 
 ### Semgrep (`.github/workflows/semgrep.yml`)
 
