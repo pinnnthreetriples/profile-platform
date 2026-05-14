@@ -25,6 +25,15 @@ public.profiles (
 - No cross-user access.
 - `payment_status` is never mutated by the profile form — only by trusted server/webhook logic (Stage 4).
 
+## Column Privileges
+
+RLS controls row ownership. Column-level privileges additionally prevent authenticated users from directly writing protected fields through the Supabase API:
+
+- `authenticated` can select their own full profile.
+- `authenticated` can insert only `id`, `display_name`, `bio`, and `avatar_url`.
+- `authenticated` can update only `display_name`, `bio`, and `avatar_url`.
+- `payment_status`, `created_at`, and `updated_at` are not user-writable.
+
 ## Profile Page Flow
 
 ```
@@ -69,5 +78,6 @@ updateProfileAction (Server Action)
 
 - `server.ts` is server-only (`import "server-only"`).
 - All DB operations use the anon SSR client — RLS enforces ownership.
+- Column grants prevent direct client-side writes to `payment_status`.
 - `payment_status` is not in the update schema — cannot be changed via profile form.
 - No service role key used for profile operations.
