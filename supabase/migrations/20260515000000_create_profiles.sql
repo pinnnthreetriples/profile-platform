@@ -29,6 +29,15 @@ alter table public.profiles
 -- Enable RLS
 alter table public.profiles enable row level security;
 
+-- Column-level privileges
+-- Authenticated users may read their own full profile through RLS, but they must not
+-- be able to directly set payment_status. Payment status is controlled by later
+-- server-side payment/webhook flows.
+revoke all on table public.profiles from anon, authenticated;
+grant select on table public.profiles to authenticated;
+grant insert (id, display_name, bio, avatar_url) on table public.profiles to authenticated;
+grant update (display_name, bio, avatar_url) on table public.profiles to authenticated;
+
 -- RLS Policies
 create policy "Users can read own profile"
   on public.profiles
