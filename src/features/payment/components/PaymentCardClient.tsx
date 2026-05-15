@@ -2,12 +2,20 @@
 
 import { useState, useTransition, useEffect } from "react"
 import Link from "next/link"
+import { motion, AnimatePresence } from "motion/react"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { Button } from "@/components/ui/button"
 import { PaymentStatusBadge } from "@/components/badges/PaymentStatusBadge"
 import { createPaymentAction } from "../actions"
 import { currentPaymentQueryOptions } from "../queries"
 import { queryKeys } from "@/lib/query/keys"
+import {
+  staggerContainer,
+  staggerItem,
+  staggerItemConfig,
+  formErrorMotion,
+  formErrorConfig,
+} from "@/lib/animations"
 import type { Payment } from "../types"
 import type { PaymentStatus } from "@/types/database"
 import { PAYMENT_AMOUNT, PAYMENT_CURRENCY } from "../constants"
@@ -18,11 +26,13 @@ interface PaymentCardClientProps {
 }
 
 /**
- * Payment card with TanStack Query polling.
+ * Payment card with TanStack Query polling + Motion.dev animations.
  *
  * - Polls /api/payment/status every 10s while status is pending/processing
  * - Stops polling automatically when status becomes paid/failed/expired
  * - Invalidates profile query when payment becomes paid
+ * - Error state uses formErrorMotion from lib/animations.ts
+ * - Card content staggers in on mount
  */
 export function PaymentCardClient({
   profilePaymentStatus,
@@ -35,11 +45,8 @@ export function PaymentCardClient({
   )
   const [error, setError] = useState<string | null>(null)
 
-  // Real polling via API route — stops automatically when status is final
   const { data: payment } = useQuery(currentPaymentQueryOptions(latestPayment))
 
-  // When payment becomes paid, invalidate profile to refresh status badge.
-  // useEffect prevents calling invalidateQueries as a side effect inside select/render.
   useEffect(() => {
     if (payment?.status === "paid") {
       void queryClient.invalidateQueries({ queryKey: queryKeys.profile.current })
@@ -60,7 +67,6 @@ export function PaymentCardClient({
       const result = await createPaymentAction()
       if (result.ok) {
         setCheckoutUrl(result.checkoutUrl)
-        // Trigger immediate refetch to start polling
         await queryClient.invalidateQueries({ queryKey: queryKeys.payment.current })
       } else {
         setError(result.message)
@@ -70,7 +76,13 @@ export function PaymentCardClient({
 
   if (isAlreadyPaid) {
     return (
-      <div className="rounded-lg bg-brand-paper p-6 shadow-card">
+      <motion.div
+        variants={staggerItem}
+        initial="initial"
+        animate="animate"
+        transition={staggerItemConfig}
+        className="rounded-lg bg-brand-paper p-6 shadow-card"
+      >
         <div className="flex items-center justify-between">
           <div>
             <h2 className="font-semibold text-brand-ink">Оплата</h2>
@@ -79,13 +91,23 @@ export function PaymentCardClient({
           <PaymentStatusBadge status="paid" />
         </div>
         <p className="mt-3 text-sm text-brand-success">Спасибо. Ваш аккаунт активен.</p>
-      </div>
+      </motion.div>
     )
   }
 
   return (
-    <div className="rounded-lg bg-brand-paper p-6 shadow-card">
-      <div className="mb-4 flex items-start justify-between">
+    <motion.div
+      variants={staggerContainer}
+      initial="initial"
+      animate="animate"
+      className="rounded-lg bg-brand-paper p-6 shadow-card"
+    >
+      {/* Header */}
+      <motion.div
+        variants={staggerItem}
+        transition={staggerItemConfig}
+        className="mb-4 flex items-start justify-between"
+      >
         <div>
           <h2 className="font-semibold text-brand-ink">Оплата USDT TRC20</h2>
           <p className="text-sm text-brand-muted">
@@ -93,10 +115,14 @@ export function PaymentCardClient({
           </p>
         </div>
         {currentStatus && <PaymentStatusBadge status={currentStatus} />}
-      </div>
+      </motion.div>
 
       {/* Payment details */}
-      <div className="mb-4 space-y-1 rounded-md bg-brand-bg p-3 text-sm">
+      <motion.div
+        variants={staggerItem}
+        transition={staggerItemConfig}
+        className="mb-4 space-y-1 rounded-md bg-brand-bg p-3 text-sm"
+      >
         <p>
           <span className="font-medium text-brand-ink">Сумма:</span>{" "}
           <span className="text-brand-muted">
@@ -111,44 +137,66 @@ export function PaymentCardClient({
           <span className="font-medium text-brand-ink">Метод:</span>{" "}
           <span className="text-brand-muted">USDT-TRON via BTCPay Server</span>
         </p>
-      </div>
+      </motion.div>
 
       {/* Polling indicator */}
-      {(currentStatus === "pending" || currentStatus === "processing") && (
-        <div className="mb-4 flex items-center gap-2 text-xs text-brand-muted">
-          <span className="size-2 animate-pulse rounded-full bg-brand-mustard" />
-          Ожидаем подтверждения платежа...
-        </div>
-      )}
+      <AnimatePresence>
+        {(currentStatus === "pending" || currentStatus === "processing") && (
+          <motion.div
+            key="polling"
+            variants={formErrorMotion}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            transition={formErrorConfig}
+            className="mb-4 flex items-center gap-2 text-xs text-brand-muted"
+          >
+            <span className="size-2 animate-pulse rounded-full bg-brand-mustard" />
+            Ожидаем подтверждения платежа...
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      {error && (
-        <div
-          role="alert"
-          className="mb-4 rounded-md bg-brand-danger/10 p-3 text-sm text-brand-danger"
-        >
-          {error}
-        </div>
-      )}
+      {/* Error state with formErrorMotion */}
+      <AnimatePresence mode="wait">
+        {error && (
+          <motion.div
+            key="error"
+            variants={formErrorMotion}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            transition={formErrorConfig}
+            role="alert"
+            className="mb-4 rounded-md bg-brand-danger/10 p-3 text-sm text-brand-danger"
+          >
+            {error}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      {hasActiveInvoice ? (
-        <div className="space-y-2">
-          <p className="text-sm text-brand-muted">Инвойс готов. Нажмите для оплаты.</p>
-          <Button variant="primaryOrange" className="w-full" asChild>
-            <Link href={currentCheckoutUrl!} target="_blank" rel="noopener noreferrer">
-              Открыть BTCPay Checkout
-            </Link>
+      {/* CTA */}
+      <motion.div variants={staggerItem} transition={staggerItemConfig}>
+        {hasActiveInvoice ? (
+          <div className="space-y-2">
+            <p className="text-sm text-brand-muted">Инвойс готов. Нажмите для оплаты.</p>
+            <Button variant="primaryOrange" className="w-full" asChild>
+              <Link href={currentCheckoutUrl!} target="_blank" rel="noopener noreferrer">
+                Открыть BTCPay Checkout
+              </Link>
+            </Button>
+          </div>
+        ) : (
+          <Button
+            variant="primaryOrange"
+            className="w-full"
+            onClick={handleCreatePayment}
+            loading={isPending}
+          >
+            Оплатить USDT TRC20
           </Button>
-        </div>
-      ) : (
-        <Button
-          variant="primaryOrange"
-          className="w-full"
-          onClick={handleCreatePayment}
-          loading={isPending}
-        >
-          Оплатить USDT TRC20
-        </Button>
-      )}
-    </div>
+        )}
+      </motion.div>
+    </motion.div>
   )
 }

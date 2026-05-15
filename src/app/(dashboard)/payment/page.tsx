@@ -1,3 +1,4 @@
+import { motion } from "motion/react"
 import { PageShell } from "@/components/layout/PageShell"
 import { PaymentStatusCard } from "@/features/payment/components/PaymentStatusCard"
 import { PaymentCardClient } from "@/features/payment/components/PaymentCardClient"
@@ -7,6 +8,7 @@ import {
   getLatestPaymentForCurrentUser,
 } from "@/features/payment/server"
 import { ensureCurrentProfile } from "@/features/profile/server"
+import { staggerContainer, staggerItem, staggerItemConfig } from "@/lib/animations"
 
 export default async function PaymentPage() {
   const profile = await ensureCurrentProfile()
@@ -17,19 +19,38 @@ export default async function PaymentPage() {
 
   return (
     <PageShell className="py-12">
-      <div className="mx-auto max-w-2xl space-y-6">
-        <h1 className="text-2xl font-bold text-brand-ink">Оплата</h1>
+      <motion.div
+        className="mx-auto max-w-2xl space-y-6"
+        variants={staggerContainer}
+        initial="initial"
+        animate="animate"
+      >
+        <motion.h1
+          variants={staggerItem}
+          transition={staggerItemConfig}
+          className="text-2xl font-bold text-brand-ink"
+        >
+          Оплата
+        </motion.h1>
 
-        <PaymentStatusCard paymentStatus={profile.paymentStatus} />
+        <motion.div variants={staggerItem} transition={staggerItemConfig}>
+          <PaymentStatusCard paymentStatus={profile.paymentStatus} />
+        </motion.div>
 
         {/* Client component with TanStack Query polling */}
-        <PaymentCardClient
-          profilePaymentStatus={profile.paymentStatus}
-          latestPayment={latestPayment}
-        />
+        <motion.div variants={staggerItem} transition={staggerItemConfig}>
+          <PaymentCardClient
+            profilePaymentStatus={profile.paymentStatus}
+            latestPayment={latestPayment}
+          />
+        </motion.div>
 
-        <PaymentHistory payments={allPayments} />
-      </div>
+        {allPayments.length > 0 && (
+          <motion.div variants={staggerItem} transition={staggerItemConfig}>
+            <PaymentHistory payments={allPayments} />
+          </motion.div>
+        )}
+      </motion.div>
     </PageShell>
   )
 }

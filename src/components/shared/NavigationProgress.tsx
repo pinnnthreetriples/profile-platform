@@ -5,36 +5,50 @@ import { usePathname } from "next/navigation"
 
 /**
  * Thin progress bar at the top of the page during navigation.
- * Purely CSS-driven — no external dependencies.
+ * CSS-driven — no Motion.dev dependency, no conflict with page transition.
+ *
+ * Sequence: 0 → 70% (fast) → 100% (on complete) → fade out
  */
 export function NavigationProgress() {
   const pathname = usePathname()
   const [visible, setVisible] = useState(false)
   const [width, setWidth] = useState(0)
+  const [opacity, setOpacity] = useState(1)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const prevPathname = useRef(pathname)
 
   useEffect(() => {
     if (pathname !== prevPathname.current) {
-      // New navigation started
       prevPathname.current = pathname
+
+      // Reset
+      if (timerRef.current) clearTimeout(timerRef.current)
+      setOpacity(1)
       setVisible(true)
       setWidth(0)
 
-      // Animate to near-complete
-      requestAnimationFrame(() => {
-        setWidth(85)
+      // Start: jump to 70% quickly
+      const raf = requestAnimationFrame(() => {
+        setWidth(70)
       })
 
-      // Complete after a short delay
+      // Complete: fill to 100%, then fade out
       timerRef.current = setTimeout(() => {
         setWidth(100)
-        setTimeout(() => setVisible(false), 300)
-      }, 400)
-    }
+        timerRef.current = setTimeout(() => {
+          setOpacity(0)
+          timerRef.current = setTimeout(() => {
+            setVisible(false)
+            setWidth(0)
+            setOpacity(1)
+          }, 300)
+        }, 200)
+      }, 350)
 
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current)
+      return () => {
+        cancelAnimationFrame(raf)
+        if (timerRef.current) clearTimeout(timerRef.current)
+      }
     }
   }, [pathname])
 
@@ -42,9 +56,19 @@ export function NavigationProgress() {
 
   return (
     <div
-      className="pointer-events-none fixed left-0 top-0 z-[9999] h-0.5 bg-brand-orange transition-all duration-300 ease-out"
-      style={{ width: `${width}%` }}
+      role="progressbar"
       aria-hidden="true"
+      className="pointer-events-none fixed left-0 top-0 z-[9999] h-[2px] bg-brand-orange"
+      style={{
+        width: `${width}%`,
+        opacity,
+        transition:
+          width === 0
+            ? "none"
+            : width === 70
+              ? "width 0.35s cubic-bezier(0.22, 1, 0.36, 1)"
+              : "width 0.2s ease-out, opacity 0.3s ease-out",
+      }}
     />
   )
 }

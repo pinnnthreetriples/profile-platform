@@ -1,6 +1,7 @@
 "use client"
 
 import { useRef } from "react"
+import { motion, AnimatePresence } from "motion/react"
 import { useQueryClient } from "@tanstack/react-query"
 import { useActionState } from "react"
 import { Button } from "@/components/ui/button"
@@ -8,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { updateProfileAction } from "../actions"
 import { queryKeys } from "@/lib/query/keys"
+import { formErrorMotion, formErrorConfig } from "@/lib/animations"
 import type { Profile, ProfileActionResult } from "../types"
 
 interface ProfileFormClientProps {
@@ -91,21 +93,34 @@ export function ProfileFormClient({ profile }: ProfileFormClientProps) {
         </div>
 
         {state && !state.ok && (
-          <div
-            role="alert"
-            className="rounded-md bg-brand-danger/10 p-3 text-sm text-brand-danger"
-          >
-            {state.message}
-          </div>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key="error"
+              variants={formErrorMotion}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              transition={formErrorConfig}
+              role="alert"
+              className="rounded-md bg-brand-danger/10 p-3 text-sm text-brand-danger"
+            >
+              {state.message}
+            </motion.div>
+          </AnimatePresence>
         )}
 
         {state?.ok && (
-          <div
+          <motion.div
+            key="success"
+            variants={formErrorMotion}
+            initial="initial"
+            animate="animate"
+            transition={formErrorConfig}
             role="status"
             className="rounded-md bg-brand-success/10 p-3 text-sm text-brand-success"
           >
             Профиль обновлён.
-          </div>
+          </motion.div>
         )}
 
         <Button variant="dark" type="submit" loading={isPending}>

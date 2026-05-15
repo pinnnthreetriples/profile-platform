@@ -1,10 +1,12 @@
 "use client"
 
 import { useActionState } from "react"
+import { motion, AnimatePresence } from "motion/react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { AuthFormCard } from "./AuthFormCard"
+import { formErrorMotion, formErrorConfig } from "@/lib/animations"
 import type { AuthActionResult } from "../actions"
 
 interface AuthFormProps {
@@ -43,7 +45,7 @@ export function AuthForm({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="password">Password</Label>
+          <Label htmlFor="password">Пароль</Label>
           <Input
             id="password"
             name="password"
@@ -54,13 +56,24 @@ export function AuthForm({
           />
         </div>
 
-        {state && !state.ok && (
-          <div className="rounded-md bg-red-50 p-3 text-sm text-red-800">
-            {state.message}
-          </div>
-        )}
+        <AnimatePresence mode="wait">
+          {state && !state.ok && (
+            <motion.div
+              key="error"
+              variants={formErrorMotion}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              transition={formErrorConfig}
+              role="alert"
+              className="rounded-md bg-brand-danger/10 p-3 text-sm text-brand-danger"
+            >
+              {state.message}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-        <Button type="submit" className="w-full" disabled={isPending}>
+        <Button type="submit" variant="dark" className="w-full" loading={isPending}>
           {isPending ? submittingLabel : submitLabel}
         </Button>
       </form>

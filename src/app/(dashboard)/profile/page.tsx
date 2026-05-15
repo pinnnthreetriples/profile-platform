@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { motion } from "motion/react"
 import { PageShell } from "@/components/layout/PageShell"
 import { Button } from "@/components/ui/button"
 import { LogoutButton } from "@/features/auth/components/LogoutButton"
@@ -6,6 +7,7 @@ import { ProfileFormClient } from "@/features/profile/components/ProfileFormClie
 import { PaymentStatusBadge } from "@/components/badges/PaymentStatusBadge"
 import { ensureCurrentProfile } from "@/features/profile/server"
 import { createSupabaseServerClient } from "@/lib/supabase/server"
+import { staggerContainer, staggerItem, staggerItemConfig } from "@/lib/animations"
 
 export default async function ProfilePage() {
   const supabase = await createSupabaseServerClient()
@@ -17,15 +19,28 @@ export default async function ProfilePage() {
 
   return (
     <PageShell className="py-12">
-      <div className="mx-auto max-w-2xl space-y-6">
+      <motion.div
+        className="mx-auto max-w-2xl space-y-6"
+        variants={staggerContainer}
+        initial="initial"
+        animate="animate"
+      >
         {/* Header */}
-        <div className="flex items-center justify-between">
+        <motion.div
+          variants={staggerItem}
+          transition={staggerItemConfig}
+          className="flex items-center justify-between"
+        >
           <h1 className="text-2xl font-bold text-brand-ink">Профиль</h1>
           <LogoutButton />
-        </div>
+        </motion.div>
 
         {/* Profile summary */}
-        <div className="rounded-lg bg-brand-paper p-6 shadow-card">
+        <motion.div
+          variants={staggerItem}
+          transition={staggerItemConfig}
+          className="rounded-lg bg-brand-paper p-6 shadow-card"
+        >
           <div className="flex items-center justify-between">
             <div>
               <p className="font-semibold text-brand-ink">
@@ -36,16 +51,20 @@ export default async function ProfilePage() {
             <PaymentStatusBadge status={profile.paymentStatus} />
           </div>
           {profile.bio && <p className="mt-3 text-sm text-brand-muted">{profile.bio}</p>}
-        </div>
+        </motion.div>
 
-        {/* Edit form — client component with TanStack Query cache invalidation */}
-        <ProfileFormClient profile={profile} />
+        {/* Edit form */}
+        <motion.div variants={staggerItem} transition={staggerItemConfig}>
+          <ProfileFormClient profile={profile} />
+        </motion.div>
 
         {/* Payment CTA */}
-        <Button variant="primaryOrange" className="w-full" asChild>
-          <Link href="/payment">Оплатить доступ (USDT)</Link>
-        </Button>
-      </div>
+        <motion.div variants={staggerItem} transition={staggerItemConfig}>
+          <Button variant="primaryOrange" className="w-full" asChild>
+            <Link href="/payment">Оплатить доступ (USDT)</Link>
+          </Button>
+        </motion.div>
+      </motion.div>
     </PageShell>
   )
 }
