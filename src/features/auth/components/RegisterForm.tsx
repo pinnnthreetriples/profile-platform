@@ -9,10 +9,10 @@ import { registerAction } from "../actions"
 import type { AuthActionResult } from "../actions"
 
 export function RegisterForm() {
-  const [state, formAction, isPending] = useActionState<AuthActionResult | null, FormData>(
-    registerAction,
-    null
-  )
+  const [state, formAction, isPending] = useActionState<
+    AuthActionResult | null,
+    FormData
+  >(registerAction, null)
 
   // Email confirmation required — show success message
   if (state && "needsConfirmation" in state && state.needsConfirmation) {
@@ -26,8 +26,8 @@ export function RegisterForm() {
             <p className="font-medium">Almost there!</p>
             <p className="mt-1">
               We sent a confirmation link to{" "}
-              <span className="font-medium">{state.email}</span>. Click the link
-              in the email to activate your account, then come back to log in.
+              <span className="font-medium">{state.email}</span>. Click the link in the
+              email to activate your account, then come back to log in.
             </p>
           </div>
           <p className="text-center text-sm text-muted-foreground">
@@ -39,10 +39,7 @@ export function RegisterForm() {
   }
 
   return (
-    <AuthFormCard
-      title="Register"
-      description="Create a new account to get started"
-    >
+    <AuthFormCard title="Register" description="Create a new account to get started">
       <form action={formAction} className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
