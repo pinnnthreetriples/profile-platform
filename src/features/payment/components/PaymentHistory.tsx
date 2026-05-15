@@ -1,54 +1,36 @@
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { PaymentStatusBadge } from "@/components/badges/PaymentStatusBadge"
 import type { Payment } from "../types"
-import type { PaymentStatus } from "@/types/database"
-
-const STATUS_VARIANTS: Record<
-  PaymentStatus,
-  "default" | "secondary" | "destructive" | "outline"
-> = {
-  pending: "secondary",
-  processing: "secondary",
-  paid: "default",
-  failed: "destructive",
-  expired: "outline",
-  cancelled: "outline",
-}
 
 interface PaymentHistoryProps {
   payments: Payment[]
 }
 
 export function PaymentHistory({ payments }: PaymentHistoryProps) {
-  if (payments.length === 0) {
-    return null
-  }
+  if (payments.length === 0) return null
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-base">Payment History</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <ul className="space-y-2">
-          {payments.map((payment) => (
-            <li
-              key={payment.id}
-              className="flex items-center justify-between text-sm border-b pb-2 last:border-0 last:pb-0"
-            >
-              <div className="space-y-0.5">
-                <p className="font-medium">
-                  {payment.amount} {payment.currency}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  {new Date(payment.createdAt).toLocaleDateString()}
-                </p>
-              </div>
-              <Badge variant={STATUS_VARIANTS[payment.status]}>{payment.status}</Badge>
-            </li>
-          ))}
-        </ul>
-      </CardContent>
-    </Card>
+    <div className="rounded-lg bg-brand-paper p-5 shadow-soft">
+      <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-brand-muted">
+        История платежей
+      </p>
+      <ul className="space-y-2">
+        {payments.map((payment) => (
+          <li
+            key={payment.id}
+            className="flex items-center justify-between border-b border-brand-line pb-2 text-sm last:border-0 last:pb-0"
+          >
+            <div className="space-y-0.5">
+              <p className="font-medium text-brand-ink">
+                {payment.amount} {payment.currency}
+              </p>
+              <p className="text-xs text-brand-muted">
+                {new Date(payment.createdAt).toLocaleDateString("ru-RU")}
+              </p>
+            </div>
+            <PaymentStatusBadge status={payment.status} />
+          </li>
+        ))}
+      </ul>
+    </div>
   )
 }
