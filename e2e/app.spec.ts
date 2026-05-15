@@ -40,7 +40,7 @@ test.describe("Payment Result Pages", () => {
     await page.goto("/payment/success")
     await expect(page).toHaveURL("/payment/success")
     // Page should show informational message, not a confirmation of payment
-    await expect(page.getByText(/being processed|confirmation|verified/i)).toBeVisible()
+    await expect(page.getByText("Your payment is being processed.")).toBeVisible()
     // Should have links back to profile and payment
     await expect(page.getByRole("link", { name: /profile/i })).toBeVisible()
   })
@@ -51,7 +51,7 @@ test.describe("Payment Result Pages", () => {
     await page.goto("/payment/cancel")
     await expect(page).toHaveURL("/payment/cancel")
     // Page should show informational message
-    await expect(page.getByText(/not completed|cancelled|try again/i)).toBeVisible()
+    await expect(page.getByText(/your payment was not completed/i)).toBeVisible()
     // Should have a link to try again
     await expect(page.getByRole("link", { name: /try again/i })).toBeVisible()
   })
