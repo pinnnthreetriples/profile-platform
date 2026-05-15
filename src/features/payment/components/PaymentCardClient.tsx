@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useTransition } from "react"
+import { useState, useTransition, useEffect } from "react"
 import Link from "next/link"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { Button } from "@/components/ui/button"
@@ -36,16 +36,15 @@ export function PaymentCardClient({
   const [error, setError] = useState<string | null>(null)
 
   // Real polling via API route — stops automatically when status is final
-  const { data: payment } = useQuery({
-    ...currentPaymentQueryOptions(latestPayment),
-    select: (data) => {
-      // When payment becomes paid, invalidate profile to refresh status badge
-      if (data?.status === "paid") {
-        void queryClient.invalidateQueries({ queryKey: queryKeys.profile.current })
-      }
-      return data
-    },
-  })
+  const { data: payment } = useQuery(currentPaymentQueryOptions(latestPayment))
+
+  // When payment becomes paid, invalidate profile to refresh status badge.
+  // useEffect prevents calling invalidateQueries as a side effect inside select/render.
+  useEffect(() => {
+    if (payment?.status === "paid") {
+      void queryClient.invalidateQueries({ queryKey: queryKeys.profile.current })
+    }
+  }, [payment?.status, queryClient])
 
   const currentStatus = payment?.status ?? latestPayment?.status
   const currentCheckoutUrl =

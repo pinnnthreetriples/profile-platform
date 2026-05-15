@@ -21,9 +21,11 @@ export function currentPaymentQueryOptions(initialData?: Payment | null) {
     },
     initialData: initialData ?? undefined,
     staleTime: 10_000,
-    // Poll every 10s while payment is in an active state
+    // Poll every 10s while payment is in an active state.
+    // In TanStack Query v5, refetchInterval receives the Query object.
     refetchInterval: (query) => {
-      const status = query.state.data?.status
+      const data = query.state.data
+      const status = data?.status
       return status && ACTIVE_STATUSES.has(status) ? 10_000 : false
     },
   })
@@ -43,7 +45,8 @@ export function paymentStatusQueryOptions(paymentId: string, initialData?: Payme
     initialData: initialData,
     staleTime: 10_000,
     refetchInterval: (query) => {
-      const status = query.state.data?.status
+      const data = query.state.data
+      const status = data?.status
       return status && ACTIVE_STATUSES.has(status) ? 10_000 : false
     },
   })
