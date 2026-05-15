@@ -156,8 +156,49 @@ describe("registerAction", () => {
     await testAuthActionError(registerAction, "signUp", "User already exists")
   })
 
-  it("should call redirect and revalidatePath on successful registration", async () => {
-    await testAuthActionSuccess(registerAction, "signUp", "/profile")
+  it("should return needsConfirmation when signUp returns no session (email confirmation required)", async () => {
+    const mockSupabase = {
+      auth: {
+        signUp: vi.fn().mockResolvedValue({
+          data: { user: { id: "user-123" }, session: null },
+          error: null,
+        }),
+      },
+    } as unknown as SupabaseClient
+    vi.mocked(createSupabaseServerClient).mockResolvedValue(mockSupabase)
+
+    const formData = new FormData()
+    formData.append("email", "test@example.com")
+    formData.append("password", "password123")
+
+    const result = await registerAction(null, formData)
+
+    expect(result.ok).toBe(true)
+    if (result.ok && "needsConfirmation" in result) {
+      expect(result.needsConfirmation).toBe(true)
+      expect(result.email).toBe("test@example.com")
+    }
+    expect(redirect).not.toHaveBeenCalled()
+  })
+
+  it("should redirect to /profile when signUp returns a session (email confirmation disabled)", async () => {
+    const mockSupabase = {
+      auth: {
+        signUp: vi.fn().mockResolvedValue({
+          data: { user: { id: "user-123" }, session: { access_token: "tok" } },
+          error: null,
+        }),
+      },
+    } as unknown as SupabaseClient
+    vi.mocked(createSupabaseServerClient).mockResolvedValue(mockSupabase)
+
+    const formData = new FormData()
+    formData.append("email", "test@example.com")
+    formData.append("password", "password123")
+
+    await expect(registerAction(null, formData)).rejects.toThrow("REDIRECT:/profile")
+    expect(revalidatePath).toHaveBeenCalledWith("/", "layout")
+    expect(redirect).toHaveBeenCalledWith("/profile")
   })
 
   it("should validate input with registerSchema", () => {
