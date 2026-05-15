@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest"
 import { createHmac, randomUUID } from "crypto"
+import { describe, expect, it } from "vitest"
 import { verifyBtcpayWebhookSignature } from "./webhook"
 
 const TEST_SECRET = randomUUID()
@@ -27,13 +27,21 @@ describe("verifyBtcpayWebhookSignature", () => {
 
   it("returns false when signature is null", () => {
     expect(
-      verifyBtcpayWebhookSignature({ rawBody: BODY, signature: null, secret: TEST_SECRET })
+      verifyBtcpayWebhookSignature({
+        rawBody: BODY,
+        signature: null,
+        secret: TEST_SECRET,
+      })
     ).toBe(false)
   })
 
   it("returns false when signature is empty string", () => {
     expect(
-      verifyBtcpayWebhookSignature({ rawBody: BODY, signature: "", secret: TEST_SECRET })
+      verifyBtcpayWebhookSignature({
+        rawBody: BODY,
+        signature: "",
+        secret: TEST_SECRET,
+      })
     ).toBe(false)
   })
 
