@@ -2,7 +2,10 @@ import { describe, it, expect } from "vitest"
 import { createHmac } from "crypto"
 import { verifyBtcpayWebhookSignature } from "./webhook"
 
-const SECRET = "test-webhook-secret"
+function getTestSecret(): string {
+  return process.env.TEST_BTCPAY_WEBHOOK_SECRET ?? "test-webhook-secret"
+}
+
 const BODY = '{"type":"InvoiceSettled","invoiceId":"inv-123"}'
 
 function makeSignature(body: string, secret: string): string {
@@ -12,72 +15,80 @@ function makeSignature(body: string, secret: string): string {
 
 describe("verifyBtcpayWebhookSignature", () => {
   it("returns true for a valid signature", () => {
-    const signature = makeSignature(BODY, SECRET)
+    const secret = getTestSecret()
+    const signature = makeSignature(BODY, secret)
     expect(
-      verifyBtcpayWebhookSignature({ rawBody: BODY, signature, secret: SECRET })
+      verifyBtcpayWebhookSignature({ rawBody: BODY, signature, secret })
     ).toBe(true)
   })
 
   it("returns false for an invalid signature", () => {
-    const signature = makeSignature(BODY, "wrong-secret")
+    const secret = getTestSecret()
+    const signature = makeSignature(BODY, `${secret}-wrong`)
     expect(
-      verifyBtcpayWebhookSignature({ rawBody: BODY, signature, secret: SECRET })
+      verifyBtcpayWebhookSignature({ rawBody: BODY, signature, secret })
     ).toBe(false)
   })
 
   it("returns false when signature is null", () => {
+    const secret = getTestSecret()
     expect(
-      verifyBtcpayWebhookSignature({ rawBody: BODY, signature: null, secret: SECRET })
+      verifyBtcpayWebhookSignature({ rawBody: BODY, signature: null, secret })
     ).toBe(false)
   })
 
   it("returns false when signature is empty string", () => {
-    expect(
-      verifyBtcpayWebhookSignature({ rawBody: BODY, signature: "", secret: SECRET })
-    ).toBe(false)
+    const secret = getTestSecret()
+    expect(verifyBtcpayWebhookSignature({ rawBody: BODY, signature: "", secret })).toBe(
+      false
+    )
   })
 
   it("returns false when signature has wrong prefix", () => {
-    const hex = createHmac("sha256", SECRET).update(BODY, "utf8").digest("hex")
+    const secret = getTestSecret()
+    const hex = createHmac("sha256", secret).update(BODY, "utf8").digest("hex")
     expect(
       verifyBtcpayWebhookSignature({
         rawBody: BODY,
         signature: `md5=${hex}`,
-        secret: SECRET,
+        secret,
       })
     ).toBe(false)
   })
 
   it("returns false when body is tampered", () => {
-    const signature = makeSignature(BODY, SECRET)
+    const secret = getTestSecret()
+    const signature = makeSignature(BODY, secret)
     const tamperedBody = BODY.replace("InvoiceSettled", "InvoiceExpired")
     expect(
       verifyBtcpayWebhookSignature({
         rawBody: tamperedBody,
         signature,
-        secret: SECRET,
+        secret,
       })
     ).toBe(false)
   })
 
   it("returns false for mismatched hex lengths", () => {
+    const secret = getTestSecret()
     // Truncated hex — different length
     expect(
       verifyBtcpayWebhookSignature({
         rawBody: BODY,
         signature: "sha256=abc123",
-        secret: SECRET,
+        secret,
       })
     ).toBe(false)
   })
 
   it("uses constant-time comparison (timingSafeEqual path covered)", () => {
+    const secret = getTestSecret()
     // This test verifies the happy path goes through timingSafeEqual
-    const signature = makeSignature(BODY, SECRET)
+    const signature = makeSignature(BODY, secret)
     const result = verifyBtcpayWebhookSignature({
       rawBody: BODY,
       signature,
-      secret: SECRET,
+      secret,
     })
     expect(result).toBe(true)
   })
