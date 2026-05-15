@@ -113,26 +113,26 @@ export async function middleware(request: NextRequest) {
 
   const user = session?.user
 
-  // Redirect unauthenticated users from protected routes
-  if (isProtectedRoute(pathname) && !user) {
-    const redirectUrl = new URL("/login", request.url)
+  /**
+   * Helper to create a redirect response preserving session cookies
+   */
+  function redirectWithCookies(destination: string): NextResponse {
+    const redirectUrl = new URL(destination, request.url)
     const redirectResponse = NextResponse.redirect(redirectUrl)
-    // Preserve session cookies in redirect response
     supabaseResponse.cookies.getAll().forEach((cookie) => {
       redirectResponse.cookies.set(cookie.name, cookie.value)
     })
     return redirectResponse
   }
 
+  // Redirect unauthenticated users from protected routes
+  if (isProtectedRoute(pathname) && !user) {
+    return redirectWithCookies("/login")
+  }
+
   // Redirect authenticated users from auth routes to profile
   if (isAuthRoute(pathname) && user) {
-    const redirectUrl = new URL("/profile", request.url)
-    const redirectResponse = NextResponse.redirect(redirectUrl)
-    // Preserve session cookies in redirect response
-    supabaseResponse.cookies.getAll().forEach((cookie) => {
-      redirectResponse.cookies.set(cookie.name, cookie.value)
-    })
-    return redirectResponse
+    return redirectWithCookies("/profile")
   }
 
   return supabaseResponse
