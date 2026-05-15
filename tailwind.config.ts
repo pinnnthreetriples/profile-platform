@@ -10,11 +10,14 @@ export default {
   theme: {
     extend: {
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        sm: "var(--radius-sm)",
+        md: "var(--radius-md)",
+        lg: "var(--radius-lg)",
+        xl: "var(--radius-xl)",
+        pill: "var(--radius-pill)",
       },
       colors: {
+        /* shadcn/ui semantic tokens */
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {
@@ -48,6 +51,36 @@ export default {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
+
+        /* Brand palette — direct access */
+        brand: {
+          bg: "#f6f1e8",
+          paper: "#fffdf7",
+          ink: "#061f17",
+          green: "#06281c",
+          orange: "#ff5f1f",
+          lilac: "#ddb4f2",
+          "lilac-soft": "#ead4f7",
+          mustard: "#d9ae3f",
+          muted: "#9c9a90",
+          line: "#d8d1c5",
+          success: "#2e8b57",
+          warning: "#d9ae3f",
+          danger: "#d94a38",
+        },
+      },
+      boxShadow: {
+        soft: "var(--shadow-soft)",
+        card: "var(--shadow-card)",
+        hover: "var(--shadow-hover)",
+      },
+      screens: {
+        xs: "375px",
+        sm: "640px",
+        md: "768px",
+        lg: "1024px",
+        xl: "1280px",
+        "2xl": "1440px",
       },
     },
   },

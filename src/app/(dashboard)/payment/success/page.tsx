@@ -1,48 +1,34 @@
 import Link from "next/link"
+import { AppHeader } from "@/components/layout/AppHeader"
+import { AppFooter } from "@/components/layout/AppFooter"
+import { PageShell } from "@/components/layout/PageShell"
 import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
 
-/**
- * Payment success page — UX only.
- *
- * IMPORTANT: This page does NOT confirm or mark payment as paid.
- * Payment status is updated exclusively by the verified BTCPay webhook.
- * Blockchain confirmation may take a few minutes after this redirect.
- */
 export default function PaymentSuccessPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center p-8">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>Payment Submitted</CardTitle>
-          <CardDescription>Your payment is being processed.</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <p className="text-sm text-muted-foreground">
-            Your transaction has been submitted to the TRON network. Confirmation
-            typically takes a few minutes. Your account status will update automatically
-            once the payment is verified.
-          </p>
-          <p className="text-sm text-muted-foreground">
-            You do not need to stay on this page. Check your profile for the updated
-            payment status.
-          </p>
-          <div className="flex flex-col gap-2">
-            <Button asChild className="w-full">
-              <Link href="/profile">Go to Profile</Link>
-            </Button>
-            <Button asChild variant="outline" className="w-full">
-              <Link href="/payment">Back to Payment</Link>
-            </Button>
+    <>
+      <AppHeader />
+      <main className="flex min-h-screen items-center bg-brand-bg py-12">
+        <PageShell>
+          <div className="mx-auto max-w-md space-y-6 text-center">
+            <div className="text-5xl">✅</div>
+            <h1 className="text-2xl font-bold text-brand-ink">Платёж отправлен</h1>
+            <p className="text-brand-muted">
+              Транзакция отправлена в сеть TRON. Подтверждение занимает несколько минут.
+              Статус обновится автоматически.
+            </p>
+            <div className="flex flex-col gap-3">
+              <Button variant="primaryOrange" asChild>
+                <Link href="/profile">Перейти в профиль</Link>
+              </Button>
+              <Button variant="outline" asChild>
+                <Link href="/payment">Назад к оплате</Link>
+              </Button>
+            </div>
           </div>
-        </CardContent>
-      </Card>
-    </div>
+        </PageShell>
+      </main>
+      <AppFooter />
+    </>
   )
 }

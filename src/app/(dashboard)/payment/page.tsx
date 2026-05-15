@@ -1,3 +1,6 @@
+import { AppHeader } from "@/components/layout/AppHeader"
+import { AppFooter } from "@/components/layout/AppFooter"
+import { PageShell } from "@/components/layout/PageShell"
 import { PaymentCard } from "@/features/payment/components/PaymentCard"
 import { PaymentHistory } from "@/features/payment/components/PaymentHistory"
 import { PaymentStatusCard } from "@/features/payment/components/PaymentStatusCard"
@@ -8,7 +11,6 @@ import {
 import { ensureCurrentProfile } from "@/features/profile/server"
 
 export default async function PaymentPage() {
-  // ensureCurrentProfile redirects to /login if unauthenticated
   const profile = await ensureCurrentProfile()
   const [latestPayment, allPayments] = await Promise.all([
     getLatestPaymentForCurrentUser(),
@@ -16,19 +18,22 @@ export default async function PaymentPage() {
   ])
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-8">
-      <div className="w-full max-w-2xl space-y-6">
-        <h1 className="text-2xl font-bold">Payment</h1>
-
-        <PaymentStatusCard paymentStatus={profile.paymentStatus} />
-
-        <PaymentCard
-          profilePaymentStatus={profile.paymentStatus}
-          latestPayment={latestPayment}
-        />
-
-        <PaymentHistory payments={allPayments} />
-      </div>
-    </div>
+    <>
+      <AppHeader />
+      <main className="min-h-screen bg-brand-bg py-12">
+        <PageShell>
+          <div className="mx-auto max-w-2xl space-y-6">
+            <h1 className="text-2xl font-bold text-brand-ink">Оплата</h1>
+            <PaymentStatusCard paymentStatus={profile.paymentStatus} />
+            <PaymentCard
+              profilePaymentStatus={profile.paymentStatus}
+              latestPayment={latestPayment}
+            />
+            <PaymentHistory payments={allPayments} />
+          </div>
+        </PageShell>
+      </main>
+      <AppFooter />
+    </>
   )
 }
