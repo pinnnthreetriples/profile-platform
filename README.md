@@ -201,21 +201,29 @@ See [docs/PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md) for detailed structur
 - Unit tests (schemas, server functions, actions)
 - E2E: unauthenticated redirect verified
 
-### 🔲 Stage 3+4 - Payments & Webhooks
+### ✅ Stage 3+4 - Payments & Webhooks
 
-- payments and payment_events tables
-- RLS policies
-- BTCPay Greenfield API integration (USDT-TRON)
-- Webhook signature verification
-- Idempotent webhook processing
-- Payment page UI
-- Unit and E2E tests
+- Supabase migrations: `payments` and `payment_events` tables with RLS
+- Supabase admin client (service role, server-only)
+- BTCPay Greenfield API client (USDT-TRON, Tether USDt Plugin)
+- Webhook signature verification (HMAC-SHA256, constant-time)
+- Idempotent webhook processing with audit log
+- Payment feature module (server, actions, schemas, types, queries, components)
+- `/payment` page with TanStack Query polling (10s interval)
+- `/payment/success` and `/payment/cancel` pages (UX-only)
+- API routes: `/api/payment/status`, `/api/profile`
+- 149 unit tests passing
 
-### 🔲 Stage 5 - UI Polish
+### 🔲 Stage 5 - UI Foundation (in progress)
 
-- Motion animations
-- Responsive design
-- Loading states
+- Design tokens, brand palette, Tailwind config ✅
+- shadcn/ui with brand tokens ✅
+- Button variants, badge system ✅
+- Layout: AppHeader (session-aware), AppFooter, PageShell ✅
+- Animation system: Motion.dev presets, stagger, cardHover, formErrorMotion ✅
+- TanStack Query: real polling, cache invalidation ✅
+- Loading/error states per route group ✅
+- Remaining: toast notifications, final responsive polish, accessibility
 
 ## Documentation
 
