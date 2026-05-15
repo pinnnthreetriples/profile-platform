@@ -102,31 +102,79 @@
 - [x] Unit tests (schemas, server functions, actions)
 - [x] E2E tests (unauthenticated redirect verified)
 
-## Stage 3+4 — Payments & Webhooks
+## Stage 3+4 — Payments & Webhooks ✅
 
-- [ ] Create payments table
-- [ ] Create payment_events table
-- [ ] Setup RLS policies for payments
-- [ ] Setup BTCPay Server + Tether USDt Plugin
-- [ ] Implement create-payment server action
-- [ ] Create BTCPay invoice (Greenfield API, USDT-TRON)
-- [ ] Implement webhook route with signature verification
-- [ ] Implement idempotent webhook processing
-- [ ] Update payment/profile status from verified webhook
-- [ ] Payment page UI
-- [ ] Payment success/cancel pages
-- [ ] Unit tests (client, webhook verifier, processing, server)
-- [ ] E2E smoke tests
+- [x] Create payments table (supabase/migrations/20260515000001_create_payments.sql)
+- [x] Create payment_events table
+- [x] Setup RLS policies for payments (select own only, no direct write)
+- [x] Supabase admin client (service role, server-only)
+- [x] BTCPay Greenfield API client (USDT-TRON, real implementation)
+- [x] Webhook signature verification (HMAC-SHA256, timingSafeEqual)
+- [x] Idempotent webhook processing (unique event_id index)
+- [x] Update payment/profile status from verified webhook
+- [x] Payment page UI (PaymentCardClient with TanStack Query polling)
+- [x] Payment success/cancel pages
+- [x] API routes: /api/payment/status, /api/profile
+- [x] Unit tests (BTCPay client, webhook verifier, webhook processing, payment server, queries)
+- [x] E2E smoke tests
 
-## Stage 5 — UI Polish
+## Stage 5 — UI Foundation & Polish (in progress)
 
-- [ ] Add Motion animations
-- [ ] Improve responsive design
-- [ ] Add loading states
-- [ ] Add error states
-- [ ] Polish forms
-- [ ] Add toast notifications
-- [ ] Improve accessibility
+### Foundation (carried over) ✅
+
+- [x] Design tokens (globals.css — colors, radii, spacing, shadows)
+- [x] Tailwind config extended with brand palette
+- [x] shadcn/ui uses brand tokens
+- [x] Button variants (primaryOrange, dark, outline, lilac, ghost, text)
+- [x] Badge system (PaymentStatusBadge, ModelStatusBadge)
+- [x] Layout components (AppHeader, AppFooter, PageShell)
+- [x] Shared components (AnimatedSection, SectionLabel, DecorativeStar, StampBadge, Ticker, StaggerWrapper)
+- [x] Card components (ModelCard, ProfileCard, StatCard, InvestmentCampaignCard)
+- [x] Animation system (lib/animations.ts — single source of truth)
+- [x] Motion.dev: page transition, stagger, fadeUp, cardHover, formErrorMotion
+- [x] MotionButton wrapper with arrow animation
+- [x] useReducedMotion hook
+- [x] NavigationProgress (CSS-driven, brand-orange)
+- [x] Stagger on home page (hero, stats, model cards)
+- [x] Stagger on profile and payment pages
+- [x] TanStack Query: real polling via API routes, cache invalidation
+- [x] Session-aware AppHeader
+- [x] Loading/error states (loading.tsx, error.tsx per route group)
+- [x] Mock data (models, campaigns, profile)
+- [x] Types (user.ts, model.ts, navigation.ts)
+
+### PR 1 — visual foundation, /, /login, /register, /models ✅
+
+- [x] next/font: Inter (body) + Oswald (display, latin + cyrillic)
+- [x] Tailwind: fontFamily.sans/display, animation/keyframes, screens
+- [x] globals.css: .display, .script, .bg-grain, .hand-underline, .rotate-tilt-\*, reduced-motion overrides
+- [x] Decorative components (src/components/decor): DottedPath, HandDrawnArrow, ModelPlaceholder, PaperCard, StickyNote, TornTape, VerifiedStamp
+- [x] SVG ModelPlaceholder (deterministic by seed, no network, works in CI)
+- [x] Mock data extended: 8 models with initials and Cyrillic display names; filter options
+- [x] ModelCard redesigned: editorial typography, status badge, wishlist heart, CTA arrow, link to detail
+- [x] InvestmentCampaignCard uses ModelPlaceholder
+- [x] Navigation updated: Модели · Как работает · Клиентам · Моделям · Тарифы · О нас
+- [x] AppHeader: animated underline (layoutId), session-aware, transparent variant
+- [x] AppFooter: ticker strip, multi-currency note
+- [x] Home page (/): collage hero with sticky note, mustard ticket, paper photo card, profile mini-card, verified stamp, hand-drawn arrow; category strip; model preview; payment trust strip
+- [x] Auth split-layout: editorial side with collage + form side
+- [x] AuthTabs: animated tab switch between /login and /register
+- [x] AuthForm: 12px height inputs with icon, password visibility toggle, remember/forgot row (login only), Cyrillic labels
+- [x] /models catalog: editorial header with verified stamp, ModelsFilters (category/location/status via search params), responsive 1/2/4/5 columns grid, empty state
+- [x] /apply-model coming-soon page (full UI + Zod form arrives in PR 2)
+- [x] /models/[id] minimal placeholder page (full editorial layout arrives in PR 2)
+
+### PR 2 — pending
+
+- [ ] /models/[id] full editorial layout with portfolio gallery
+- [ ] /apply-model full Zod form with success state (UI-only, no backend)
+- [ ] /invest UI page
+
+### Other
+
+- [ ] Toast notifications
+- [ ] Final responsive polish
+- [ ] Accessibility audit
 
 ## Future Enhancements
 

@@ -6,9 +6,20 @@ export default {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/features/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["var(--font-inter)", "ui-sans-serif", "system-ui", "sans-serif"],
+        display: [
+          "var(--font-oswald)",
+          "Impact",
+          "Arial Narrow",
+          "ui-sans-serif",
+          "sans-serif",
+        ],
+      },
       borderRadius: {
         sm: "var(--radius-sm)",
         md: "var(--radius-md)",
@@ -81,6 +92,15 @@ export default {
         lg: "1024px",
         xl: "1280px",
         "2xl": "1440px",
+      },
+      keyframes: {
+        "spin-slow": {
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(360deg)" },
+        },
+      },
+      animation: {
+        "spin-slow": "spin-slow 18s linear infinite",
       },
     },
   },

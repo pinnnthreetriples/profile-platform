@@ -3,6 +3,7 @@
 import Image from "next/image"
 import { motion } from "motion/react"
 import { Button } from "@/components/ui/button"
+import { ModelPlaceholder } from "@/components/decor/ModelPlaceholder"
 import { cardHover, staggerItem, staggerItemConfig } from "@/lib/animations"
 import { useReducedMotion } from "@/hooks/useReducedMotion"
 import { cn } from "@/lib/utils"
@@ -37,12 +38,9 @@ export function InvestmentCampaignCard({
     <motion.div
       variants={staggerItem}
       transition={staggerItemConfig}
-      initial="initial"
-      whileInView="animate"
-      viewport={{ once: true, margin: "-40px" }}
       animate="rest"
       whileHover={reducedMotion ? undefined : "hover"}
-      className={cn("overflow-hidden rounded-lg bg-brand-paper shadow-card", className)}
+      className={cn("overflow-hidden rounded-md bg-brand-paper shadow-card", className)}
       style={{ willChange: "transform" }}
     >
       <motion.div variants={reducedMotion ? undefined : cardHover} className="h-full">
@@ -57,16 +55,21 @@ export function InvestmentCampaignCard({
               sizes="(max-width: 768px) 100vw, 50vw"
             />
           ) : (
-            <div className="flex h-full items-center justify-center text-brand-muted">
-              <span className="text-4xl">📸</span>
-            </div>
+            <ModelPlaceholder
+              seed={campaign.id}
+              initials={campaign.modelName.slice(0, 2)}
+              shape="square"
+              className="h-full w-full"
+            />
           )}
         </div>
 
         <div className="space-y-4 p-5">
           <div className="flex items-start justify-between gap-2">
             <div>
-              <p className="font-semibold text-brand-ink">{campaign.modelName}</p>
+              <p className="display text-lg leading-none text-brand-ink">
+                {campaign.modelName}
+              </p>
               <p className="text-sm text-brand-muted">{campaign.city}</p>
             </div>
             <span className={cn("text-xs font-semibold", riskColors[campaign.riskLevel])}>

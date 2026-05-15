@@ -93,4 +93,81 @@
       "rlig" 1,
       "calt" 1;
   }
+
+  /* Editorial display headings */
+  .display {
+    font-family: var(--font-oswald), Impact, "Arial Narrow", sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 0.95;
+    text-transform: uppercase;
+  }
+
+  /* Hand-script accent — uses Oswald italic-light fallback when handwriting font is absent */
+  .script {
+    font-family: var(--font-oswald), "Brush Script MT", cursive;
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: 0.005em;
+  }
+}
+
+@layer components {
+  /* Subtle paper-grain texture; pure CSS, no images */
+  .bg-grain {
+    background-color: var(--color-bg);
+    background-image:
+      radial-gradient(rgba(6, 31, 23, 0.05) 1px, transparent 1px),
+      radial-gradient(rgba(6, 31, 23, 0.04) 1px, transparent 1px);
+    background-size:
+      4px 4px,
+      9px 9px;
+    background-position:
+      0 0,
+      2px 2px;
+  }
+
+  .bg-grain-paper {
+    background-color: var(--color-paper);
+    background-image: radial-gradient(rgba(6, 31, 23, 0.04) 1px, transparent 1px);
+    background-size: 6px 6px;
+  }
+
+  /* Hand-drawn underline used in hero subtitles */
+  .hand-underline {
+    background-image: linear-gradient(
+      to right,
+      var(--color-orange) 0,
+      var(--color-orange) 100%
+    );
+    background-size: 100% 2px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    padding-bottom: 2px;
+  }
+}
+
+@layer utilities {
+  /* Slight rotation utilities used by collage cards */
+  .rotate-tilt-1 {
+    transform: rotate(-2.5deg);
+  }
+  .rotate-tilt-2 {
+    transform: rotate(2deg);
+  }
+  .rotate-tilt-3 {
+    transform: rotate(-1deg);
+  }
+
+  /* Reduced motion — disable decorative tilts and heavy transforms */
+  @media (prefers-reduced-motion: reduce) {
+    .rotate-tilt-1,
+    .rotate-tilt-2,
+    .rotate-tilt-3 {
+      transform: none;
+    }
+    .animate-spin-slow {
+      animation: none !important;
+    }
+  }
 }

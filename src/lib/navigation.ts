@@ -3,9 +3,8 @@ import type { NavItem } from "@/types/navigation"
 export const mainNav: NavItem[] = [
   { label: "Модели", href: "/models" },
   { label: "Как работает", href: "/how-it-works" },
-  { label: "Для клиентов", href: "/clients" },
-  { label: "Для моделей", href: "/models/apply" },
-  { label: "Инвестиции", href: "/invest" },
+  { label: "Клиентам", href: "/clients" },
+  { label: "Моделям", href: "/apply-model" },
   { label: "Тарифы", href: "/pricing" },
   { label: "О нас", href: "/about" },
 ]
@@ -17,7 +16,7 @@ export const authNav: NavItem[] = [
 
 export const footerNav: NavItem[] = [
   { label: "Модели", href: "/models" },
-  { label: "Инвестиции", href: "/invest" },
+  { label: "Стать моделью", href: "/apply-model" },
   { label: "О нас", href: "/about" },
   { label: "Контакты", href: "/contact" },
 ]
