@@ -1,137 +1,54 @@
-import "server-only"
-
 /**
- * Rate Limiting Architecture Layer
+ * In-memory rate limiter for server-side use.
  *
- * This module defines the rate limiting strategy for the application.
- * Implementation will be added in future stages.
+ * LIMITATION: This is a per-process, in-memory store.
+ * It does NOT work correctly in multi-instance or serverless deployments
+ * where each request may hit a different process.
+ * For production, replace with a Redis-backed or database-backed rate limiter.
  *
- * Strategy:
- * - Use sliding window algorithm for accurate rate limiting
- * - Store rate limit data in Redis or Upstash for distributed systems
- * - Apply different limits based on endpoint sensitivity
- * - Include IP-based and user-based rate limiting
+ * Suitable for: development, single-instance deployments, CI.
  */
 
-export interface RateLimitConfig {
-  /**
-   * Maximum number of requests allowed in the window
-   */
-  maxRequests: number
+type RateLimitEntry = {
+  count: number
+  resetAt: number
+}
 
-  /**
-   * Time window in seconds
-   */
-  windowSeconds: number
+const store = new Map<string, RateLimitEntry>()
 
-  /**
-   * Identifier type for rate limiting
-   */
-  identifierType: "ip" | "user" | "session"
+/**
+ * Check and increment rate limit for a given key.
+ *
+ * @param key - Unique identifier (e.g. userId + action)
+ * @param maxAttempts - Maximum allowed attempts in the window
+ * @param windowMs - Time window in milliseconds
+ * @returns { allowed: boolean; remaining: number }
+ */
+export function checkRateLimit(
+  key: string,
+  maxAttempts: number,
+  windowMs: number
+): { allowed: boolean; remaining: number } {
+  const now = Date.now()
+  const entry = store.get(key)
+
+  if (!entry || now >= entry.resetAt) {
+    // New window
+    store.set(key, { count: 1, resetAt: now + windowMs })
+    return { allowed: true, remaining: maxAttempts - 1 }
+  }
+
+  if (entry.count >= maxAttempts) {
+    return { allowed: false, remaining: 0 }
+  }
+
+  entry.count += 1
+  return { allowed: true, remaining: maxAttempts - entry.count }
 }
 
 /**
- * Rate limit configurations for different endpoint types
- *
- * TODO: Implement actual rate limiting in Stage 2+
+ * Reset rate limit for a given key (e.g. after successful action).
  */
-export const RATE_LIMITS: Record<string, RateLimitConfig> = {
-  // Auth endpoints - strict limits to prevent brute force
-  "auth:login": {
-    maxRequests: 5,
-    windowSeconds: 60, // 5 attempts per minute
-    identifierType: "ip",
-  },
-  "auth:register": {
-    maxRequests: 3,
-    windowSeconds: 3600, // 3 registrations per hour
-    identifierType: "ip",
-  },
-  "auth:password-reset": {
-    maxRequests: 3,
-    windowSeconds: 3600, // 3 resets per hour
-    identifierType: "ip",
-  },
-
-  // Payment endpoints - moderate limits
-  "payment:create": {
-    maxRequests: 10,
-    windowSeconds: 60, // 10 payment creations per minute
-    identifierType: "user",
-  },
-  "payment:webhook": {
-    maxRequests: 100,
-    windowSeconds: 60, // 100 webhook calls per minute
-    identifierType: "ip",
-  },
-
-  // Profile mutation endpoints - moderate limits
-  "profile:update": {
-    maxRequests: 20,
-    windowSeconds: 60, // 20 updates per minute
-    identifierType: "user",
-  },
-
-  // General API - lenient limits
-  "api:general": {
-    maxRequests: 100,
-    windowSeconds: 60, // 100 requests per minute
-    identifierType: "ip",
-  },
-}
-
-/**
- * Rate limiter interface
- *
- * TODO: Implement using Upstash Redis or similar
- */
-export interface RateLimiter {
-  /**
-   * Check if request is allowed under rate limit
-   * @param key - Unique identifier (IP, user ID, etc.)
-   * @param config - Rate limit configuration
-   * @returns true if allowed, false if rate limited
-   */
-  check(key: string, config: RateLimitConfig): Promise<boolean>
-
-  /**
-   * Get remaining requests for a key
-   * @param key - Unique identifier
-   * @param config - Rate limit configuration
-   * @returns number of remaining requests
-   */
-  remaining(key: string, config: RateLimitConfig): Promise<number>
-
-  /**
-   * Reset rate limit for a key
-   * @param key - Unique identifier
-   */
-  reset(key: string): Promise<void>
-}
-
-/**
- * Placeholder rate limiter
- * Always returns true (no limiting)
- *
- * TODO: Replace with actual implementation
- */
-export const rateLimiter: RateLimiter = {
-  async check() {
-    return true
-  },
-
-  async remaining() {
-    return 999
-  },
-
-  async reset() {
-    // No-op
-  },
-}
-
-/**
- * Helper to get rate limit config by endpoint
- */
-export function getRateLimitConfig(endpoint: string): RateLimitConfig {
-  return RATE_LIMITS[endpoint] || RATE_LIMITS["api:general"]
+export function resetRateLimit(key: string): void {
+  store.delete(key)
 }

@@ -102,23 +102,21 @@
 - [x] Unit tests (schemas, server functions, actions)
 - [x] E2E tests (unauthenticated redirect verified)
 
-## Stage 3 — Payments
+## Stage 3+4 — Payments & Webhooks
 
 - [ ] Create payments table
-- [ ] Setup BTCPay Server
-- [ ] Implement create-payment function
-- [ ] Create BTCPay invoice
-- [ ] Add payment page UI
-- [ ] Handle payment redirect
-
-## Stage 4 — Webhooks
-
-- [ ] Implement webhook verification
-- [ ] Handle payment status updates
 - [ ] Create payment_events table
-- [ ] Add webhook logging
-- [ ] Handle edge cases
-- [ ] Add retry logic
+- [ ] Setup RLS policies for payments
+- [ ] Setup BTCPay Server + Tether USDt Plugin
+- [ ] Implement create-payment server action
+- [ ] Create BTCPay invoice (Greenfield API, USDT-TRON)
+- [ ] Implement webhook route with signature verification
+- [ ] Implement idempotent webhook processing
+- [ ] Update payment/profile status from verified webhook
+- [ ] Payment page UI
+- [ ] Payment success/cancel pages
+- [ ] Unit tests (client, webhook verifier, processing, server)
+- [ ] E2E smoke tests
 
 ## Stage 5 — UI Polish
 

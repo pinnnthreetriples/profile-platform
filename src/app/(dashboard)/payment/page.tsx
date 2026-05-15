@@ -1,29 +1,34 @@
+import { PaymentCard } from "@/features/payment/components/PaymentCard"
+import { PaymentHistory } from "@/features/payment/components/PaymentHistory"
+import { PaymentStatusCard } from "@/features/payment/components/PaymentStatusCard"
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+  getCurrentUserPayments,
+  getLatestPaymentForCurrentUser,
+} from "@/features/payment/server"
+import { ensureCurrentProfile } from "@/features/profile/server"
 
-export default function PaymentPage() {
+export default async function PaymentPage() {
+  // ensureCurrentProfile redirects to /login if unauthenticated
+  const profile = await ensureCurrentProfile()
+  const [latestPayment, allPayments] = await Promise.all([
+    getLatestPaymentForCurrentUser(),
+    getCurrentUserPayments(),
+  ])
+
   return (
-    <div className="min-h-screen flex items-center justify-center p-8">
-      <Card className="w-full max-w-2xl">
-        <CardHeader>
-          <CardTitle>Payment</CardTitle>
-          <CardDescription>Payment placeholder</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="space-y-2">
-            <p className="text-sm text-muted-foreground">Payment skeleton</p>
-            <p className="text-sm text-muted-foreground">USDT payment card</p>
-            <p className="text-sm text-muted-foreground">BTCPay checkout placeholder</p>
-          </div>
-          <Button disabled>Create Invoice (disabled)</Button>
-        </CardContent>
-      </Card>
+    <div className="flex min-h-screen items-center justify-center p-8">
+      <div className="w-full max-w-2xl space-y-6">
+        <h1 className="text-2xl font-bold">Payment</h1>
+
+        <PaymentStatusCard paymentStatus={profile.paymentStatus} />
+
+        <PaymentCard
+          profilePaymentStatus={profile.paymentStatus}
+          latestPayment={latestPayment}
+        />
+
+        <PaymentHistory payments={allPayments} />
+      </div>
     </div>
   )
 }

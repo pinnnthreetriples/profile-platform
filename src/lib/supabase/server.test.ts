@@ -25,7 +25,7 @@ const setupValidEnv = () => {
   process.env.NEXT_PUBLIC_SUPABASE_URL = "https://example.supabase.co"
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = "test-anon-key"
   process.env.NEXT_PUBLIC_PAYMENT_CURRENCY = "USDT"
-  process.env.NEXT_PUBLIC_PAYMENT_NETWORK = "polygon"
+  process.env.NEXT_PUBLIC_PAYMENT_NETWORK = "tron"
 }
 
 describe("createSupabaseServerClient", () => {

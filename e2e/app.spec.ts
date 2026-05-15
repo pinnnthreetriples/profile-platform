@@ -33,14 +33,26 @@ test.describe("Protected Pages", () => {
     await page.goto("/payment")
     await expect(page).toHaveURL(/\/login/)
   })
+})
 
-  test("payment success page loads (public)", async ({ page }) => {
+test.describe("Payment Result Pages", () => {
+  test("payment success page loads and does not mark payment paid", async ({ page }) => {
     await page.goto("/payment/success")
     await expect(page).toHaveURL("/payment/success")
+    // Page should show informational message, not a confirmation of payment
+    await expect(page.getByText(/being processed|confirmation|verified/i)).toBeVisible()
+    // Should have links back to profile and payment
+    await expect(page.getByRole("link", { name: /profile/i })).toBeVisible()
   })
 
-  test("payment cancel page loads (public)", async ({ page }) => {
+  test("payment cancel page loads and does not mark payment cancelled", async ({
+    page,
+  }) => {
     await page.goto("/payment/cancel")
     await expect(page).toHaveURL("/payment/cancel")
+    // Page should show informational message
+    await expect(page.getByText(/not completed|cancelled|try again/i)).toBeVisible()
+    // Should have a link to try again
+    await expect(page.getByRole("link", { name: /try again/i })).toBeVisible()
   })
 })

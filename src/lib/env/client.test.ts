@@ -11,7 +11,7 @@ describe("getClientEnv", () => {
     process.env.NEXT_PUBLIC_SUPABASE_URL = "https://example.supabase.co"
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = "test-anon-key"
     process.env.NEXT_PUBLIC_PAYMENT_CURRENCY = "USDT"
-    process.env.NEXT_PUBLIC_PAYMENT_NETWORK = "polygon"
+    process.env.NEXT_PUBLIC_PAYMENT_NETWORK = "tron"
 
     const { getClientEnv } = await import("./client")
     const env = getClientEnv()
@@ -20,7 +20,7 @@ describe("getClientEnv", () => {
     expect(env.NEXT_PUBLIC_SUPABASE_URL).toBe("https://example.supabase.co")
     expect(env.NEXT_PUBLIC_SUPABASE_ANON_KEY).toBe("test-anon-key")
     expect(env.NEXT_PUBLIC_PAYMENT_CURRENCY).toBe("USDT")
-    expect(env.NEXT_PUBLIC_PAYMENT_NETWORK).toBe("polygon")
+    expect(env.NEXT_PUBLIC_PAYMENT_NETWORK).toBe("tron")
   })
 
   it("should throw error for invalid URL", async () => {
@@ -28,7 +28,7 @@ describe("getClientEnv", () => {
     process.env.NEXT_PUBLIC_SUPABASE_URL = "https://example.supabase.co"
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = "test-anon-key"
     process.env.NEXT_PUBLIC_PAYMENT_CURRENCY = "USDT"
-    process.env.NEXT_PUBLIC_PAYMENT_NETWORK = "polygon"
+    process.env.NEXT_PUBLIC_PAYMENT_NETWORK = "tron"
 
     const { getClientEnv } = await import("./client")
 
@@ -40,7 +40,7 @@ describe("getClientEnv", () => {
     process.env.NEXT_PUBLIC_SUPABASE_URL = "https://example.supabase.co"
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = "test-anon-key"
     process.env.NEXT_PUBLIC_PAYMENT_CURRENCY = "BTC"
-    process.env.NEXT_PUBLIC_PAYMENT_NETWORK = "polygon"
+    process.env.NEXT_PUBLIC_PAYMENT_NETWORK = "tron"
 
     const { getClientEnv } = await import("./client")
 
@@ -52,7 +52,7 @@ describe("getClientEnv", () => {
     process.env.NEXT_PUBLIC_SUPABASE_URL = "https://example.supabase.co"
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = "test-anon-key"
     process.env.NEXT_PUBLIC_PAYMENT_CURRENCY = "USDT"
-    process.env.NEXT_PUBLIC_PAYMENT_NETWORK = "polygon"
+    process.env.NEXT_PUBLIC_PAYMENT_NETWORK = "tron"
 
     const { getClientEnv } = await import("./client")
     const env1 = getClientEnv()
