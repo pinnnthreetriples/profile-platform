@@ -9,7 +9,8 @@ export const publicEnvSchema = z.object({
   NEXT_PUBLIC_SUPABASE_URL: z.string().url(),
   NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1),
   NEXT_PUBLIC_PAYMENT_CURRENCY: z.enum(["USDT"]),
-  NEXT_PUBLIC_PAYMENT_NETWORK: z.enum(["polygon", "tron", "ethereum"]),
+  // MVP: only TRON is supported in UI
+  NEXT_PUBLIC_PAYMENT_NETWORK: z.enum(["tron"]),
 })
 
 export const serverEnvSchema = z.object({

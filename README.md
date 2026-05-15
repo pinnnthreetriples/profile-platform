@@ -201,17 +201,15 @@ See [docs/PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md) for detailed structur
 - Unit tests (schemas, server functions, actions)
 - E2E: unauthenticated redirect verified
 
-### 🔲 Stage 3 - Payments
+### 🔲 Stage 3+4 - Payments & Webhooks
 
-- Payments table
-- create-payment function
-- BTCPay invoice creation
-
-### 🔲 Stage 4 - Webhooks
-
-- Webhook verification
-- Payment status updates
-- Payment events table
+- payments and payment_events tables
+- RLS policies
+- BTCPay Greenfield API integration (USDT-TRON)
+- Webhook signature verification
+- Idempotent webhook processing
+- Payment page UI
+- Unit and E2E tests
 
 ### 🔲 Stage 5 - UI Polish
 

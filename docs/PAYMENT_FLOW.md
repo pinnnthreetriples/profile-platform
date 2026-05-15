@@ -2,162 +2,156 @@
 
 ## Overview
 
-This document describes the payment flow for USDT payments using BTCPay Server.
+End-to-end payment flow using BTCPay Server with the Tether USDt Plugin for USDT on TRON.
 
-**Note:** This is a skeleton flow for Stage 0. Real implementation will be done in later stages.
+**MVP scope:** USDT on TRON (TRC20) only. Polygon and Ethereum are out of scope.
 
-## Flow Diagram
+## Provider Decision
 
-```mermaid
-flowchart TD
-    A[User] --> B[Next.js frontend]
-    B --> C[create-payment Edge Function]
-    C --> D[BTCPay Server]
-    D --> E[USDT QR checkout]
-    E --> F[User pays]
-    D --> G[btcpay-webhook Edge Function]
-    G --> H[Supabase payments table]
-    H --> I[User access updated]
+- **BTCPay Server** — self-hosted payment processor
+- **Tether USDt Plugin** — `BTCPayServer.Plugins.USDt` v0.6.0+, minimum BTCPay v2.3.7
+- **Payment method id:** `USDT-TRON` (TRON network)
+- Reference: https://github.com/btcpayserver-tether/BTCPayServer.Plugins.USDt
+
+## Payment Lifecycle
+
+```
+User clicks "Pay with USDT TRC20"
+       │
+       ▼
+createPaymentAction (Server Action)
+  ├── Auth check (getUser)
+  ├── Rate limit check (5 req / 10 min per user, in-memory)
+  ├── Profile payment_status check
+  │     └── "paid" → return alreadyPaid
+  ├── Check for existing active pending/processing payment
+  │     └── exists with checkout_url → reuse
+  ├── INSERT payments row (status=pending, admin client)
+  ├── createBtcpayInvoice (BTCPay Greenfield API)
+  │     └── paymentMethods: ["USDT-TRON"]
+  ├── UPDATE payments row (provider_invoice_id, checkout_url, expires_at)
+  └── Return { ok: true, checkoutUrl }
+       │
+       ▼
+User redirected to BTCPay checkout
+       │
+       ▼
+User pays on TRON network
+       │
+       ▼
+BTCPay sends webhook POST /api/webhooks/btcpay
+  ├── Read raw body
+  ├── Verify BTCPay-Sig header (HMAC-SHA256)
+  │     └── Invalid → 401
+  ├── Parse JSON (only after verification)
+  ├── Validate payload schema
+  ├── Check idempotency (event_id unique index)
+  │     └── Duplicate → 200 (no-op)
+  ├── Find payment by provider_invoice_id
+  ├── INSERT payment_events (audit log)
+  ├── Map event type to status:
+  │     InvoiceSettled / InvoicePaymentSettled → paid
+  │     InvoiceExpired → expired
+  │     InvoiceProcessing → processing
+  │     InvoiceInvalid → failed
+  │     Unknown → stored, no status change
+  └── Update payments.status + profiles.payment_status (admin client)
+       │
+       ▼
+User sees updated payment status on /profile and /payment
 ```
 
-## Step-by-Step Flow
+## Security Rules
 
-### 1. User Initiates Payment
+- Frontend never confirms payment.
+- `/payment/success` and `/payment/cancel` are UX-only pages — they do NOT mutate payment state.
+- Payment status is controlled exclusively by verified webhook or server-side logic.
+- Amount, currency, network, and payment method are server-controlled.
+- Users cannot set payment status via profile form or direct API.
+- Webhook signature verified before any JSON parsing or DB mutation.
+- Raw body used for signature verification (not re-serialized JSON).
+- Duplicate webhook events are idempotent (unique index on provider + event_id).
+- Admin client (service role) used only in server-only files.
+- No BTCPay API key or webhook secret exposed to frontend.
 
-- User clicks "Pay with USDT" button on profile page
-- Frontend redirects to `/payment` page
+## DB Schema
 
-### 2. Create Payment Invoice
+### payments
 
-- Frontend calls `create-payment` Edge Function
-- Edge Function creates invoice in BTCPay Server
-- BTCPay returns invoice ID and checkout URL
+| Column              | Type          | Notes                                            |
+| ------------------- | ------------- | ------------------------------------------------ |
+| id                  | uuid          | PK, gen_random_uuid()                            |
+| user_id             | uuid          | FK auth.users                                    |
+| profile_id          | uuid          | FK profiles                                      |
+| provider            | text          | 'btcpay'                                         |
+| provider_invoice_id | text          | unique, BTCPay invoice id                        |
+| checkout_url        | text          | BTCPay checkout link                             |
+| amount              | numeric(12,2) | server-controlled                                |
+| currency            | text          | 'USDT'                                           |
+| network             | text          | 'tron' (MVP only)                                |
+| payment_method_id   | text          | 'USDT-TRON'                                      |
+| status              | text          | pending/processing/paid/failed/expired/cancelled |
+| created_at          | timestamptz   |                                                  |
+| updated_at          | timestamptz   | auto via trigger                                 |
+| expires_at          | timestamptz   | from BTCPay                                      |
+| settled_at          | timestamptz   | set on paid                                      |
 
-### 3. User Pays
+### payment_events
 
-- User is redirected to BTCPay checkout page
-- BTCPay displays QR code for USDT payment
-- User scans QR and sends USDT
+| Column              | Type        | Notes                                   |
+| ------------------- | ----------- | --------------------------------------- |
+| id                  | uuid        | PK                                      |
+| payment_id          | uuid        | FK payments (nullable)                  |
+| provider            | text        | 'btcpay'                                |
+| provider_invoice_id | text        |                                         |
+| event_type          | text        | BTCPay event type string                |
+| event_id            | text        | BTCPay deliveryId (unique per provider) |
+| payload             | jsonb       | full webhook payload                    |
+| processed_at        | timestamptz |                                         |
 
-### 4. Payment Confirmation
+## RLS
 
-- BTCPay detects payment on blockchain
-- BTCPay sends webhook to `btcpay-webhook` Edge Function
-- Webhook verifies signature and updates payment status
+- `payments`: authenticated users can SELECT own rows only (`user_id = auth.uid()`). No direct INSERT/UPDATE/DELETE.
+- `payment_events`: authenticated users can SELECT events for own payments only. No direct INSERT/UPDATE/DELETE.
+- All writes go through admin client (service role) in server-only code.
 
-### 5. Update User Access
+## BTCPay Setup Notes
 
-- Edge Function updates `payments` table in Supabase
-- Edge Function updates user profile with payment status
-- User gets access to paid features
+1. Install BTCPay Server (v2.3.7+)
+2. Install Tether USDt Plugin from Plugin Builder
+3. Create a store
+4. Configure TRON receiving address in store settings
+5. Verify USDT-TRON payment method is available
+6. Create a Greenfield API key with store-level invoice permissions
+7. Add webhook in store settings:
+   - URL: `https://your-app.com/api/webhooks/btcpay`
+   - Events: InvoiceSettled, InvoicePaymentSettled, InvoiceExpired, InvoiceProcessing, InvoiceInvalid, InvoiceCreated
+   - Copy the webhook secret to `BTCPAY_WEBHOOK_SECRET`
 
-### 6. User Redirect
+## BTCPay Runtime Verification
 
-- BTCPay redirects user to success/cancel page
-- Frontend displays payment status
+**Status: Pending** — BTCPay Server runtime verification (live invoice creation, webhook delivery) requires a configured BTCPay instance with the Tether USDt Plugin installed. The implementation is built against the documented BTCPay Greenfield API interface. Verify before production deployment:
 
-## Payment States
+- [ ] BTCPay Server installed and accessible
+- [ ] BTCPay version ≥ 2.3.7
+- [ ] Tether USDt Plugin installed
+- [ ] Store configured
+- [ ] TRON receiving address configured
+- [ ] USDT-TRON payment method available
+- [ ] Test invoice created from BTCPay UI
+- [ ] Webhook URL configured and receiving events
 
-### Invoice States (BTCPay)
+## Rate Limiting
 
-- `new` - Invoice created, waiting for payment
-- `processing` - Payment detected, waiting for confirmations
-- `settled` - Payment confirmed, invoice complete
-- `expired` - Invoice expired without payment
-- `invalid` - Invalid payment or error
+In-memory rate limiter: 5 invoice creation attempts per user per 10 minutes.
 
-### Payment States (Database)
+**Limitation:** In-memory store is per-process only. Does not work correctly in multi-instance or serverless deployments. Replace with Redis-backed rate limiter for production.
 
-- `pending` - Payment initiated, waiting for confirmation
-- `paid` - Payment confirmed and settled
-- `failed` - Payment failed or invalid
-- `expired` - Payment expired
-- `cancelled` - Payment cancelled by user
+## Known Limitations
 
-## Security Considerations
-
-### Webhook Verification
-
-- Verify webhook signature using `BTCPAY_WEBHOOK_SECRET`
-- Reject webhooks with invalid signatures
-- Log all webhook attempts
-
-### Payment Validation
-
-- Never trust frontend payment status
-- Always verify payment status from BTCPay
-- Check payment amount matches expected amount
-- Verify payment currency and network
-
-### Access Control
-
-- Only grant access after payment is `settled`
-- Implement idempotency for webhook processing
-- Handle duplicate webhooks gracefully
-
-## Error Handling
-
-### Payment Failures
-
-- User cancels payment → redirect to `/payment/cancel`
-- Payment expires → update status to `expired`
-- Invalid payment → update status to `failed`
-
-### Webhook Failures
-
-- Log webhook errors
-- Retry failed webhook processing
-- Alert admin on repeated failures
-
-## Testing (Future Stages)
-
-### Test Scenarios
-
-1. Successful payment flow
-2. Cancelled payment
-3. Expired payment
-4. Invalid webhook signature
-5. Duplicate webhook
-6. Network errors
-
-### Test Networks
-
-- Use BTCPay testnet for development
-- Test with small amounts on mainnet before production
-- Verify all supported networks (Polygon, Tron, Ethereum)
-
-## Implementation Stages
-
-### Stage 0 (Current)
-
-- ✅ Skeleton structure
-- ✅ Placeholder pages
-- ✅ Edge Function stubs
-
-### Stage 1
-
-- Supabase authentication
-- Protected routes
-
-### Stage 2
-
-- User profiles
-- Profile page with payment status
-
-### Stage 3
-
-- Real BTCPay integration
-- Create payment invoices
-- Payment page with checkout
-
-### Stage 4
-
-- Webhook verification
-- Payment status updates
-- Payment events logging
-
-### Stage 5
-
-- UI polish
-- Error handling
-- Loading states
+- No Polygon/Ethereum support in UI (out of scope for MVP)
+- No USDC support
+- No refunds
+- No multiple payment tiers
+- No admin panel
+- Rate limiter is in-memory only (not production-grade for multi-instance)
