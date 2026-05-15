@@ -1,20 +1,18 @@
 "use client"
 
 import { useActionState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { AuthForm } from "./AuthForm"
 import { AuthFormCard } from "./AuthFormCard"
 import { registerAction } from "../actions"
 import type { AuthActionResult } from "../actions"
 
 export function RegisterForm() {
-  const [state, formAction, isPending] = useActionState<
-    AuthActionResult | null,
-    FormData
-  >(registerAction, null)
+  const [state, , isPending] = useActionState<AuthActionResult | null, FormData>(
+    registerAction,
+    null
+  )
 
-  // Email confirmation required — show success message
+  // Email confirmation required — show success message instead of form
   if (state && "needsConfirmation" in state && state.needsConfirmation) {
     return (
       <AuthFormCard
@@ -38,43 +36,14 @@ export function RegisterForm() {
     )
   }
 
+  // Render shared AuthForm — avoids duplicating form fields
   return (
-    <AuthFormCard title="Register" description="Create a new account to get started">
-      <form action={formAction} className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            name="email"
-            type="email"
-            placeholder="you@example.com"
-            required
-            disabled={isPending}
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="password">Password</Label>
-          <Input
-            id="password"
-            name="password"
-            type="password"
-            placeholder="••••••••"
-            required
-            disabled={isPending}
-          />
-        </div>
-
-        {state && !state.ok && (
-          <div role="alert" className="rounded-md bg-red-50 p-3 text-sm text-red-800">
-            {state.message}
-          </div>
-        )}
-
-        <Button type="submit" className="w-full" disabled={isPending}>
-          {isPending ? "Creating account..." : "Register"}
-        </Button>
-      </form>
-    </AuthFormCard>
+    <AuthForm
+      title="Register"
+      description="Create a new account to get started"
+      action={registerAction}
+      submitLabel="Register"
+      submittingLabel="Creating account..."
+    />
   )
 }
