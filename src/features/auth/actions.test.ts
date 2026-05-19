@@ -2,21 +2,12 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 import { loginAction, registerAction, logoutAction } from "./actions"
 import { loginSchema, registerSchema } from "./schemas"
 import type { SupabaseClient } from "@supabase/supabase-js"
+import { setupSupabaseMock, setupRedirectMock, setupCacheMock } from "@/test/auth-mocks"
 
-// Mock dependencies
-vi.mock("@/lib/supabase/server", () => ({
-  createSupabaseServerClient: vi.fn(),
-}))
-
-vi.mock("next/navigation", () => ({
-  redirect: vi.fn((url: string) => {
-    throw new Error(`REDIRECT:${url}`)
-  }),
-}))
-
-vi.mock("next/cache", () => ({
-  revalidatePath: vi.fn(),
-}))
+// Setup mocks via shared helpers (avoids jscpd duplication with other test files)
+setupSupabaseMock()
+setupRedirectMock()
+setupCacheMock()
 
 // Import mocked modules
 import { createSupabaseServerClient } from "@/lib/supabase/server"
@@ -31,6 +22,17 @@ function createMockSupabaseAuth(
   return {
     auth: {
       [method]: vi.fn().mockResolvedValue({ error }),
+    },
+  } as unknown as SupabaseClient
+}
+
+function createMockSignUpSupabase(data: { session: unknown }) {
+  return {
+    auth: {
+      signUp: vi.fn().mockResolvedValue({
+        data: { user: { id: "user-123" }, session: data.session },
+        error: null,
+      }),
     },
   } as unknown as SupabaseClient
 }
@@ -157,14 +159,7 @@ describe("registerAction", () => {
   })
 
   it("should return needsConfirmation when signUp returns no session (email confirmation required)", async () => {
-    const mockSupabase = {
-      auth: {
-        signUp: vi.fn().mockResolvedValue({
-          data: { user: { id: "user-123" }, session: null },
-          error: null,
-        }),
-      },
-    } as unknown as SupabaseClient
+    const mockSupabase = createMockSignUpSupabase({ session: null })
     vi.mocked(createSupabaseServerClient).mockResolvedValue(mockSupabase)
 
     const formData = new FormData()
@@ -182,14 +177,7 @@ describe("registerAction", () => {
   })
 
   it("should redirect to /profile when signUp returns a session (email confirmation disabled)", async () => {
-    const mockSupabase = {
-      auth: {
-        signUp: vi.fn().mockResolvedValue({
-          data: { user: { id: "user-123" }, session: { access_token: "tok" } },
-          error: null,
-        }),
-      },
-    } as unknown as SupabaseClient
+    const mockSupabase = createMockSignUpSupabase({ session: { access_token: "tok" } })
     vi.mocked(createSupabaseServerClient).mockResolvedValue(mockSupabase)
 
     const formData = new FormData()
