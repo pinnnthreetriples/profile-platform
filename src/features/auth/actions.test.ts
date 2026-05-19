@@ -2,12 +2,22 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 import { loginAction, registerAction, logoutAction } from "./actions"
 import { loginSchema, registerSchema } from "./schemas"
 import type { SupabaseClient } from "@supabase/supabase-js"
-import { setupSupabaseMock, setupRedirectMock, setupCacheMock } from "@/test/auth-mocks"
 
-// Setup mocks via shared helpers (avoids jscpd duplication with other test files)
-setupSupabaseMock()
-setupRedirectMock()
-setupCacheMock()
+// jscpd:ignore-start — vi.mock must be inline (Vitest hoisting), duplication with profile tests is unavoidable
+vi.mock("@/lib/supabase/server", () => ({
+  createSupabaseServerClient: vi.fn(),
+}))
+
+vi.mock("next/navigation", () => ({
+  redirect: vi.fn((url: string) => {
+    throw new Error(`REDIRECT:${url}`)
+  }),
+}))
+
+vi.mock("next/cache", () => ({
+  revalidatePath: vi.fn(),
+}))
+// jscpd:ignore-end
 
 // Import mocked modules
 import { createSupabaseServerClient } from "@/lib/supabase/server"
