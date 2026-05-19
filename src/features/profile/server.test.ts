@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import type { SupabaseClient } from "@supabase/supabase-js"
 
-// Mock dependencies
+// jscpd:ignore-start — vi.mock must be inline (Vitest hoisting), duplication with auth tests is unavoidable
 vi.mock("@/lib/supabase/server", () => ({
   createSupabaseServerClient: vi.fn(),
 }))
@@ -11,6 +11,7 @@ vi.mock("next/navigation", () => ({
     throw new Error(`REDIRECT:${url}`)
   }),
 }))
+// jscpd:ignore-end
 
 import { createSupabaseServerClient } from "@/lib/supabase/server"
 import { getCurrentProfile, ensureCurrentProfile, updateCurrentProfile } from "./server"

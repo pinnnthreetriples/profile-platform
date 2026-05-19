@@ -19,6 +19,15 @@ export default {
           "ui-sans-serif",
           "sans-serif",
         ],
+        hand: ["var(--font-caveat)", "Brush Script MT", "cursive"],
+        script: ["var(--font-caveat)", "Brush Script MT", "cursive"],
+      },
+      transitionDuration: {
+        section: "var(--dur-section)",
+        hero: "var(--dur-hero)",
+      },
+      transitionTimingFunction: {
+        editorial: "var(--ease)",
       },
       borderRadius: {
         sm: "var(--radius-sm)",
@@ -62,6 +71,26 @@ export default {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
+
+        /* Short aliases — used by editorial components */
+        ink: {
+          DEFAULT: "#061f17",
+          soft: "#4a5a52",
+          mute: "#8a9189",
+        },
+        orange: {
+          DEFAULT: "#ff5f1f",
+          press: "#e0541a",
+        },
+        lilac: {
+          DEFAULT: "#ddb4f2",
+          2: "#c99ce0",
+        },
+        mustard: {
+          DEFAULT: "#d9ae3f",
+          2: "#b58e2e",
+        },
+        paper: "#f6f1e8",
 
         /* Brand palette — direct access */
         brand: {

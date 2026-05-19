@@ -1,7 +1,0 @@
-export { DottedPath } from "./DottedPath"
-export { HandDrawnArrow } from "./HandDrawnArrow"
-export { ModelPlaceholder } from "./ModelPlaceholder"
-export { PaperCard } from "./PaperCard"
-export { StickyNote } from "./StickyNote"
-export { TornTape } from "./TornTape"
-export { VerifiedStamp } from "./VerifiedStamp"
