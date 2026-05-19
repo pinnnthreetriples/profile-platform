@@ -14,7 +14,7 @@ test.describe("Public Pages", () => {
     // Submit button uses the Russian label and arrow suffix
     await expect(page.getByRole("button", { name: /войти в аккаунт/i })).toBeVisible()
     await expect(page.getByLabel(/email/i)).toBeVisible()
-    await expect(page.getByLabel(/пароль/i)).toBeVisible()
+    await expect(page.getByRole("textbox", { name: /пароль/i })).toBeVisible()
   })
 
   test("register page shows register form", async ({ page }) => {
@@ -22,7 +22,7 @@ test.describe("Public Pages", () => {
     await expect(page).toHaveURL("/register")
     await expect(page.getByRole("button", { name: /создать аккаунт/i })).toBeVisible()
     await expect(page.getByLabel(/email/i)).toBeVisible()
-    await expect(page.getByLabel(/пароль/i)).toBeVisible()
+    await expect(page.getByRole("textbox", { name: /пароль/i })).toBeVisible()
   })
 
   test("models catalog renders cards from mock data", async ({ page }) => {
