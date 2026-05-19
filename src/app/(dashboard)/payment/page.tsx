@@ -1,14 +1,15 @@
-import { PaymentCard } from "@/features/payment/components/PaymentCard"
-import { PaymentHistory } from "@/features/payment/components/PaymentHistory"
+import { PageShell } from "@/components/layout/PageShell"
 import { PaymentStatusCard } from "@/features/payment/components/PaymentStatusCard"
+import { PaymentCardClient } from "@/features/payment/components/PaymentCardClient"
+import { PaymentHistory } from "@/features/payment/components/PaymentHistory"
 import {
   getCurrentUserPayments,
   getLatestPaymentForCurrentUser,
 } from "@/features/payment/server"
 import { ensureCurrentProfile } from "@/features/profile/server"
+import { StaggerWrapper } from "@/components/shared/StaggerWrapper"
 
 export default async function PaymentPage() {
-  // ensureCurrentProfile redirects to /login if unauthenticated
   const profile = await ensureCurrentProfile()
   const [latestPayment, allPayments] = await Promise.all([
     getLatestPaymentForCurrentUser(),
@@ -16,19 +17,19 @@ export default async function PaymentPage() {
   ])
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-8">
-      <div className="w-full max-w-2xl space-y-6">
-        <h1 className="text-2xl font-bold">Payment</h1>
+    <PageShell className="py-12">
+      <StaggerWrapper className="mx-auto max-w-2xl space-y-6">
+        <h1 className="text-2xl font-bold text-brand-ink">Оплата</h1>
 
         <PaymentStatusCard paymentStatus={profile.paymentStatus} />
 
-        <PaymentCard
+        <PaymentCardClient
           profilePaymentStatus={profile.paymentStatus}
           latestPayment={latestPayment}
         />
 
-        <PaymentHistory payments={allPayments} />
-      </div>
-    </div>
+        {allPayments.length > 0 && <PaymentHistory payments={allPayments} />}
+      </StaggerWrapper>
+    </PageShell>
   )
 }

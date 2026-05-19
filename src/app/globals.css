@@ -2,51 +2,85 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
-    --radius: 0.5rem;
-  }
+/* ============================================================
+   DESIGN TOKENS — Brand palette & spacing
+   ============================================================ */
+:root {
+  /* Brand colors */
+  --color-bg: #f6f1e8;
+  --color-paper: #fffdf7;
+  --color-ink: #061f17;
+  --color-green: #06281c;
+  --color-orange: #ff5f1f;
+  --color-lilac: #ddb4f2;
+  --color-lilac-soft: #ead4f7;
+  --color-mustard: #d9ae3f;
+  --color-muted: #9c9a90;
+  --color-line: #d8d1c5;
+  --color-success: #2e8b57;
+  --color-warning: #d9ae3f;
+  --color-danger: #d94a38;
 
-  .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
-  }
+  /* Border radii */
+  --radius-sm: 14px;
+  --radius-md: 22px;
+  --radius-lg: 32px;
+  --radius-xl: 40px;
+  --radius-pill: 999px;
+
+  /* Page spacing */
+  --page-x-desktop: 48px;
+  --page-x-tablet: 28px;
+  --page-x-mobile: 16px;
+  --section-y-desktop: 96px;
+  --section-y-mobile: 56px;
+
+  /* Shadows */
+  --shadow-soft: 0 12px 40px rgba(6, 31, 23, 0.08);
+  --shadow-card: 0 18px 60px rgba(6, 31, 23, 0.12);
+  --shadow-hover: 0 24px 80px rgba(6, 31, 23, 0.16);
+
+  /* ============================================================
+     shadcn/ui CSS variables — mapped to our design tokens
+     Values are in HSL format: H S% L%
+     ============================================================ */
+  /* #F6F1E8 → hsl(42 38% 91%) */
+  --background: 42 38% 91%;
+  /* #061F17 → hsl(160 68% 8%) */
+  --foreground: 160 68% 8%;
+
+  /* #FFFDF7 → hsl(50 100% 98%) */
+  --card: 50 100% 98%;
+  --card-foreground: 160 68% 8%;
+
+  --popover: 50 100% 98%;
+  --popover-foreground: 160 68% 8%;
+
+  /* primary = orange #FF5F1F → hsl(18 100% 56%) */
+  --primary: 18 100% 56%;
+  --primary-foreground: 50 100% 98%;
+
+  /* secondary = lilac #DDB4F2 → hsl(284 72% 82%) */
+  --secondary: 284 72% 82%;
+  --secondary-foreground: 160 68% 8%;
+
+  /* muted = line #D8D1C5 → hsl(38 18% 81%) */
+  --muted: 38 18% 81%;
+  --muted-foreground: 38 8% 58%;
+
+  --accent: 38 18% 81%;
+  --accent-foreground: 160 68% 8%;
+
+  /* destructive = danger #D94A38 → hsl(6 63% 53%) */
+  --destructive: 6 63% 53%;
+  --destructive-foreground: 50 100% 98%;
+
+  --border: 38 18% 81%;
+  --input: 38 18% 81%;
+  --ring: 18 100% 56%;
+
+  /* Base radius for shadcn */
+  --radius: 0.875rem;
 }
 
 @layer base {
@@ -55,5 +89,85 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1;
+  }
+
+  /* Editorial display headings */
+  .display {
+    font-family: var(--font-oswald), Impact, "Arial Narrow", sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 0.95;
+    text-transform: uppercase;
+  }
+
+  /* Hand-script accent — uses Oswald italic-light fallback when handwriting font is absent */
+  .script {
+    font-family: var(--font-oswald), "Brush Script MT", cursive;
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: 0.005em;
+  }
+}
+
+@layer components {
+  /* Subtle paper-grain texture; pure CSS, no images */
+  .bg-grain {
+    background-color: var(--color-bg);
+    background-image:
+      radial-gradient(rgba(6, 31, 23, 0.05) 1px, transparent 1px),
+      radial-gradient(rgba(6, 31, 23, 0.04) 1px, transparent 1px);
+    background-size:
+      4px 4px,
+      9px 9px;
+    background-position:
+      0 0,
+      2px 2px;
+  }
+
+  .bg-grain-paper {
+    background-color: var(--color-paper);
+    background-image: radial-gradient(rgba(6, 31, 23, 0.04) 1px, transparent 1px);
+    background-size: 6px 6px;
+  }
+
+  /* Hand-drawn underline used in hero subtitles */
+  .hand-underline {
+    background-image: linear-gradient(
+      to right,
+      var(--color-orange) 0,
+      var(--color-orange) 100%
+    );
+    background-size: 100% 2px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    padding-bottom: 2px;
+  }
+}
+
+@layer utilities {
+  /* Slight rotation utilities used by collage cards */
+  .rotate-tilt-1 {
+    transform: rotate(-2.5deg);
+  }
+  .rotate-tilt-2 {
+    transform: rotate(2deg);
+  }
+  .rotate-tilt-3 {
+    transform: rotate(-1deg);
+  }
+
+  /* Reduced motion — disable decorative tilts and heavy transforms */
+  @media (prefers-reduced-motion: reduce) {
+    .rotate-tilt-1,
+    .rotate-tilt-2,
+    .rotate-tilt-3 {
+      transform: none;
+    }
+    .animate-spin-slow {
+      animation: none !important;
+    }
   }
 }

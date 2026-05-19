@@ -4,19 +4,18 @@ import type { Profile } from "./types"
 
 /**
  * Query options for the current user's profile.
- * The actual fetch is done server-side; this is used for client-side
- * cache management and refetching after mutations.
  *
- * NOTE: The queryFn here is intentionally a no-op placeholder.
- * Profile data is fetched server-side via server.ts and passed as props.
- * This query key is used for cache invalidation after profile updates.
+ * - Uses initialData from server-side fetch to avoid loading flash
+ * - On invalidation (after profile update), refetches from /api/profile
+ * - staleTime: 60s — profile data doesn't change often
  */
 export function currentProfileQueryOptions(initialData?: Profile) {
   return queryOptions({
     queryKey: queryKeys.profile.current,
     queryFn: async (): Promise<Profile | null> => {
-      // Profile data is loaded server-side; client refetch not needed
-      return initialData ?? null
+      const res = await fetch("/api/profile", { cache: "no-store" })
+      if (!res.ok) return null
+      return res.json() as Promise<Profile | null>
     },
     initialData: initialData,
     staleTime: 60_000,

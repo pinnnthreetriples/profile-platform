@@ -2,20 +2,25 @@
 
 import { motion } from "motion/react"
 import type { ReactNode } from "react"
+import { pageTransition, pageTransitionConfig } from "@/lib/animations"
 
 type PageTransitionProps = {
   children: ReactNode
 }
 
+/**
+ * Wraps page content with an enter animation.
+ * Used in template.tsx — animates only the content, not header/footer.
+ *
+ * Values come from lib/animations.ts — single source of truth.
+ */
 export function PageTransition({ children }: PageTransitionProps) {
   return (
     <motion.main
-      initial={{ opacity: 0, y: 8, filter: "blur(2px)" }}
-      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-      transition={{
-        duration: 0.22,
-        ease: "easeOut",
-      }}
+      variants={pageTransition}
+      initial="initial"
+      animate="animate"
+      transition={pageTransitionConfig}
     >
       {children}
     </motion.main>
