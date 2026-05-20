@@ -85,8 +85,8 @@ importers:
         specifier: ^4.4.1
         version: 4.4.1(@typescript-eslint/eslint-plugin@8.59.3(@typescript-eslint/parser@8.59.3(eslint@9.39.4(jiti@1.21.7))(typescript@5.9.3))(eslint@9.39.4(jiti@1.21.7))(typescript@5.9.3))(eslint@9.39.4(jiti@1.21.7))
       jscpd:
-        specifier: ^4.1.1
-        version: 4.1.1
+        specifier: ^4.2.3
+        version: 4.2.3
       jsdom:
         specifier: ^29.1.1
         version: 29.1.1
@@ -443,20 +443,20 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
-  '@jscpd/badge-reporter@4.1.1':
-    resolution: {integrity: sha512-vRTrzYpmc8SlNLcE0YTO3wE8uZ2BeEPX5Jo17zITuuhOwQ/T9qamXBk504/6Y/gkt21lon/jb7dnEFE59TrCEw==}
+  '@jscpd/badge-reporter@4.2.3':
+    resolution: {integrity: sha512-yNvbwWl/NwogHT5XrHyqXgF9yVZeLWA2QOhGqYTopvgi7LsSbDumpOqOcJMHP9Z4RalhMfahh+dVXFSI7tMcaA==}
 
-  '@jscpd/core@4.1.1':
-    resolution: {integrity: sha512-oRGAA+jwm9PNOm4gpIbeWAi1ryPq4usKBtPPzMLJUn/egmh4W1T0RvwLwAuFJTbhy+o0hgqlS8X3OMkCOFKaHg==}
+  '@jscpd/core@4.2.3':
+    resolution: {integrity: sha512-VQ2gH+tiI51ty3PBRD4HClNNgyX/VH9cs0dcFKuywxDzLQ64jYp7vhJPcqnyiVX9tVEIAa12sucRHQP/VHwugA==}
 
-  '@jscpd/finder@4.1.1':
-    resolution: {integrity: sha512-6QTmZ8ruvYBUnAs3FXxF8zqT/x6MNfjDAw6PiYPdIG58G4GeIRLMNdjw7kFDjQo07FTnHKidToKNek3dN2jKAQ==}
+  '@jscpd/finder@4.2.3':
+    resolution: {integrity: sha512-ZpjviFAg6zLojQHS+owvrn8DG1OY1d4835Je4LUKzbMurndmQDhvRRFDkN9V6xPn6gvRaMVkJHN2tyljsnUjWA==}
 
-  '@jscpd/html-reporter@4.1.1':
-    resolution: {integrity: sha512-mlwmHjAlDbyXVy4Wdjsb0V4cj8xnKeW3nNLPV4VSkRhZcYBFdBlMznyMuFqzkhKLQeWv6Ux9JdB3AW+IoStQ9w==}
+  '@jscpd/html-reporter@4.2.3':
+    resolution: {integrity: sha512-kp1pqJXCKwyRu5mJK5IvXdFQEDHWQDb7svLFlbVXGI0dVH1y1XNl8mrIrSoRw+0AySxhDkuSyIlQOSDC2GRwQg==}
 
-  '@jscpd/tokenizer@4.1.1':
-    resolution: {integrity: sha512-1Qg8kcUzWyn+JJTv18P7MsNgpMDaKvnQrrV4onpiVVy1tcgolK8TN2fho247JedK5MjfGzeX+RU+s5SSp011dA==}
+  '@jscpd/tokenizer@4.2.3':
+    resolution: {integrity: sha512-RvjD7/hwqtcQC9MWOl31odTti6kGCFxZ77DKEhwyMn+r6oVEUFbXgcGvzn0GC/wuTl7f3j5MF9JNMeTneOFwYA==}
 
   '@napi-rs/wasm-runtime@0.2.12':
     resolution: {integrity: sha512-ZVWUcfwY4E/yPitQJl481FjFo3K22D6qF0DuFH6Y/nbnE11GY5uguDxZMGXPQ8WQ0128MXQD7TnfHyK4oWoIJQ==}
@@ -2108,11 +2108,11 @@ packages:
     resolution: {integrity: sha512-qQKT4zQxXl8lLwBtHMWwaTcGfFOZviOJet3Oy/xmGk2gZH677CJM9EvtfdSkgWcATZhj/55JZ0rmy3myCT5lsA==}
     hasBin: true
 
-  jscpd-sarif-reporter@4.1.1:
-    resolution: {integrity: sha512-ipT2Qr9WTEb/r51FMdHy/U1Z1HTChzpxj8/9csqq2eIizEBeY8vRk8xw9m9blBa/WajsmQmnwuCdZiHYe0YNLg==}
+  jscpd-sarif-reporter@4.2.3:
+    resolution: {integrity: sha512-rM0LM5S0kdASLCtDsr1s51rJOPf8nubaxaWQUTWVVPda1UMPymXbELG+A3Rgpoa4D4QFUFfXqz60Jn/W+vlFtA==}
 
-  jscpd@4.1.1:
-    resolution: {integrity: sha512-Z+BkeNF1lEO1RQlon59rDx0uzmE3VRqi+4hjTnGj7GDkwYjwdVqFW8tiVvQ3dJ2myUQSrT3mAsFWDMlFEArJXA==}
+  jscpd@4.2.3:
+    resolution: {integrity: sha512-/1BEga1E1cY56/sdQOzU/PFtnea+n1beqG8/Xx4HopG9c5rkUO8ptnu9En8Xf1ILGW6KSWidV4vLQTm2FGYvpw==}
     hasBin: true
 
   jsdom@29.1.1:
@@ -2540,6 +2540,10 @@ packages:
     resolution: {integrity: sha512-SoSL4+OSEtR99LHFZQiJLkT59C5B1amGO1NzTwj7TT1qCUgUO6hxOvzkOYxD+vMrXBM3XJIKzokoERdqQq/Zmg==}
     engines: {node: ^10 || ^12 || >=14}
 
+  postcss@8.5.15:
+    resolution: {integrity: sha512-FfR8sjd4em2T6fb3I2MwAJU7HWVMr9zba+enmQeeWFfCbm+UOC/0X4DS8XtpUTMwWMGbjKYP7xjfNekzyGmB3A==}
+    engines: {node: ^10 || ^12 || >=14}
+
   prelude-ls@1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
@@ -2548,10 +2552,6 @@ packages:
     resolution: {integrity: sha512-7igPTM53cGHMW8xWuVTydi2KO233VFiTNyF5hLJqpilHfmn8C8gPf+PS7dUT64YcXFbiMGZxS9pCSxL/Dxm/Jw==}
     engines: {node: '>=14'}
     hasBin: true
-
-  prismjs@1.30.0:
-    resolution: {integrity: sha512-DEvV2ZF2r2/63V+tK8hQvrR2ZGn10srHbXviTlcv7Kpzw8jWiNTqbVgjO3IY8RxrrOUF8VPMQQFysYYYv0YZxw==}
-    engines: {node: '>=6'}
 
   promise@7.3.1:
     resolution: {integrity: sha512-nolQXZ/4L+bP/UGlkfaIujX9BKxGwmQ9OT4mOt5yvy8iK1h3wqTEJCijzGANTCCl9nWjY41juyAn2K3Q1hLLTg==}
@@ -3414,20 +3414,20 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@jscpd/badge-reporter@4.1.1':
+  '@jscpd/badge-reporter@4.2.3':
     dependencies:
       badgen: 3.3.2
       colors: 1.4.0
       fs-extra: 11.3.5
 
-  '@jscpd/core@4.1.1':
+  '@jscpd/core@4.2.3':
     dependencies:
       eventemitter3: 5.0.4
 
-  '@jscpd/finder@4.1.1':
+  '@jscpd/finder@4.2.3':
     dependencies:
-      '@jscpd/core': 4.1.1
-      '@jscpd/tokenizer': 4.1.1
+      '@jscpd/core': 4.2.3
+      '@jscpd/tokenizer': 4.2.3
       blamer: 1.0.7
       bytes: 3.1.2
       cli-table3: 0.6.5
@@ -3437,16 +3437,15 @@ snapshots:
       markdown-table: 2.0.0
       pug: 3.0.4
 
-  '@jscpd/html-reporter@4.1.1':
+  '@jscpd/html-reporter@4.2.3':
     dependencies:
       colors: 1.4.0
       fs-extra: 11.3.5
       pug: 3.0.4
 
-  '@jscpd/tokenizer@4.1.1':
+  '@jscpd/tokenizer@4.2.3':
     dependencies:
-      '@jscpd/core': 4.1.1
-      prismjs: 1.30.0
+      '@jscpd/core': 4.2.3
       spark-md5: 3.0.2
 
   '@napi-rs/wasm-runtime@0.2.12':
@@ -5068,23 +5067,23 @@ snapshots:
     dependencies:
       argparse: 2.0.1
 
-  jscpd-sarif-reporter@4.1.1:
+  jscpd-sarif-reporter@4.2.3:
     dependencies:
       colors: 1.4.0
       fs-extra: 11.3.5
       node-sarif-builder: 3.4.0
 
-  jscpd@4.1.1:
+  jscpd@4.2.3:
     dependencies:
-      '@jscpd/badge-reporter': 4.1.1
-      '@jscpd/core': 4.1.1
-      '@jscpd/finder': 4.1.1
-      '@jscpd/html-reporter': 4.1.1
-      '@jscpd/tokenizer': 4.1.1
+      '@jscpd/badge-reporter': 4.2.3
+      '@jscpd/core': 4.2.3
+      '@jscpd/finder': 4.2.3
+      '@jscpd/html-reporter': 4.2.3
+      '@jscpd/tokenizer': 4.2.3
       colors: 1.4.0
       commander: 5.1.0
       fs-extra: 11.3.5
-      jscpd-sarif-reporter: 4.1.1
+      jscpd-sarif-reporter: 4.2.3
 
   jsdom@29.1.1:
     dependencies:
@@ -5545,11 +5544,15 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
+  postcss@8.5.15:
+    dependencies:
+      nanoid: 3.3.12
+      picocolors: 1.1.1
+      source-map-js: 1.2.1
+
   prelude-ls@1.2.1: {}
 
   prettier@3.8.3: {}
-
-  prismjs@1.30.0: {}
 
   promise@7.3.1:
     dependencies:
@@ -6149,7 +6152,7 @@ snapshots:
     dependencies:
       lightningcss: 1.32.0
       picomatch: 4.0.4
-      postcss: 8.5.14
+      postcss: 8.5.15
       rolldown: 1.0.0
       tinyglobby: 0.2.16
     optionalDependencies:

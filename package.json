@@ -58,7 +58,7 @@
     "eslint-config-next": "^15.1.6",
     "eslint-plugin-security": "^4.0.0",
     "eslint-plugin-unused-imports": "^4.4.1",
-    "jscpd": "^4.1.1",
+    "jscpd": "^4.2.3",
     "jsdom": "^29.1.1",
     "knip": "^6.13.1",
     "postcss": "^8.4.49",
